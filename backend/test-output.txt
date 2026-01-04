@@ -1,0 +1,539 @@
+﻿
+> ownrex-backend@1.0.0 test
+> jest --coverage
+
+node.exe : PASS test/unit/utils/helpers.test.ts (6.355 s)
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\babaei\AppData\Roaming ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS test/unit/...st.ts (6.355 s) 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  helpers
+    generateRequestId
+      ΓêÜ should generate unique request IDs (21 ms)
+    generateCompletionId
+      ΓêÜ should generate unique completion IDs (1 ms)
+    generateEmbeddingId
+      ΓêÜ should generate unique embedding IDs (1 ms)
+    getCurrentTimestamp
+      ΓêÜ should return current Unix timestamp in seconds (1 ms)
+    createCacheKey
+      ΓêÜ should create consistent cache keys for same input (1 ms)
+      ΓêÜ should create different keys for different inputs
+      ΓêÜ should create same key regardless of property order
+    truncate
+      ΓêÜ should not truncate short strings (1 ms)
+      ΓêÜ should truncate long strings with ellipsis (1 ms)
+      ΓêÜ should handle edge cases (1 ms)
+    isNonEmptyString
+      ΓêÜ should return true for non-empty strings (1 ms)
+      ΓêÜ should return false for empty or whitespace strings
+      ΓêÜ should return false for non-strings (1 ms)
+    isValidArray
+      ΓêÜ should return true for non-empty arrays (1 ms)
+      ΓêÜ should return false for empty arrays
+      ΓêÜ should return false for non-arrays (1 ms)
+    extractBearerToken
+      ΓêÜ should extract bearer token from valid header
+      ΓêÜ should return null for invalid headers (1 ms)
+    formatBytes
+      ΓêÜ should format bytes correctly (1 ms)
+    sanitizeForLogging
+      ΓêÜ should truncate long strings (1 ms)
+      ΓêÜ should remove newlines (1 ms)
+      ΓêÜ should stringify objects
+    safeJsonParse
+      ΓêÜ should parse valid JSON (1 ms)
+      ΓêÜ should return default for invalid JSON (1 ms)
+    isValidModelName
+      ΓêÜ should accept valid model names (1 ms)
+      ΓêÜ should reject invalid model names
+    formatSSE
+      ΓêÜ should format SSE data correctly
+    formatSSEDone
+      ΓêÜ should return SSE done message
+
+PASS test/unit/middleware/validator.test.ts (6.381 s)
+  Validator Middleware
+    validateChatCompletion
+      ΓêÜ should pass valid chat completion request (29 ms)
+      ΓêÜ should pass request without model (will use default) (1 ms)
+      ΓêÜ should reject empty messages array (14 ms)
+      ΓêÜ should reject invalid message role (5 ms)
+      ΓêÜ should validate temperature range (3 ms)
+      ΓêÜ should accept valid tool calls (2 ms)
+    validateCompletion
+      ΓêÜ should pass valid completion request (3 ms)
+      ΓêÜ should accept array prompts (1 ms)
+      ΓêÜ should reject missing prompt (2 ms)
+    validateEmbedding
+      ΓêÜ should pass valid embedding request (1 ms)
+      ΓêÜ should accept array inputs (10 ms)
+      ΓêÜ should reject missing input (1 ms)
+      ΓêÜ should validate encoding_format (2 ms)
+
+PASS test/unit/services/prompt.service.test.ts (6.342 s)
+  PromptService
+    getSystemPrompt
+      ΓêÜ should return default system prompt (31 ms)
+      ΓêÜ should return code generation prompt (5 ms)
+      ΓêÜ should return code review prompt (1 ms)
+    enhanceMessages
+      ΓêÜ should add system message if not present (1 ms)
+      ΓêÜ should not add system message if already present (1 ms)
+      ΓêÜ should use custom system prompt from context (1 ms)
+    estimateTokenCount
+      ΓêÜ should estimate tokens for messages (1 ms)
+      ΓêÜ should include overhead for message structure
+    truncateMessages
+      ΓêÜ should not truncate if within limit (1 ms)
+      ΓêÜ should preserve system message when truncating (6 ms)
+    validateMessages
+      ΓêÜ should validate correct messages
+      ΓêÜ should reject empty array
+      ΓêÜ should reject messages with invalid role (1 ms)
+      ΓêÜ should reject messages without content (1 ms)
+      ΓêÜ should allow null content for assistant with tool_calls
+    getContextWindow
+      ΓêÜ should return context window for known models (1 ms)
+      ΓêÜ should return default for unknown models
+    getMaxOutputTokens
+      ΓêÜ should return max output tokens for known models
+
+PASS test/unit/middleware/auth.test.ts (6.327 s)
+  Auth Middleware
+    authMiddleware
+      ΓêÜ should call next when auth is disabled (22 ms)
+      ΓêÜ should call next with valid API key (2 ms)
+      ΓêÜ should return 401 for missing authorization header (8 ms)
+      ΓêÜ should return 401 for invalid API key (2 ms)
+      ΓêÜ should return 401 for invalid authorization format (8 ms)
+    optionalAuthMiddleware
+      ΓêÜ should call next when no auth header (1 ms)
+      ΓêÜ should validate when auth header is present (2 ms)
+
+2026-01-04 13:38:00 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{}}
+PASS test/unit/services/token.service.test.ts (6.549 s)
+  TokenService
+    validateApiKey
+      ΓêÜ should validate configured API key (22 ms)
+      ΓêÜ should reject invalid API keys (2 ms)
+      ΓêÜ should allow all keys when auth is disabled (2 ms)
+    validateAuthHeader
+      ΓêÜ should validate Bearer token (1 ms)
+      ΓêÜ should reject missing header when auth is enabled (2 ms)
+      ΓêÜ should reject invalid format (1 ms)
+    registerToken
+      ΓêÜ should register new tokens (4 ms)
+      ΓêÜ should register tokens with expiration (1 ms)
+    revokeToken
+      ΓêÜ should revoke registered tokens (2 ms)
+      ΓêÜ should return false for non-existent tokens (1 ms)
+    generateApiKey
+      ΓêÜ should generate unique API keys (2 ms)
+    createApiKey
+      ΓêÜ should create and register new API key (1 ms)
+    getValidTokens
+      ΓêÜ should return list of valid tokens (1 ms)
+    clearTokens
+      ΓêÜ should clear all tokens and reinitialize default (2 ms)
+
+PASS test/unit/services/openai.service.test.ts (6.601 s)
+  OpenAIService
+    getInstance
+      ΓêÜ should return singleton instance (22 ms)
+    createChatCompletion
+      ΓêÜ should call OpenAI chat completions API (5 ms)
+      ΓêÜ should throw error on API failure (52 ms)
+    createCompletion
+      ΓêÜ should call OpenAI completions API (2 ms)
+    createEmbedding
+      ΓêÜ should call OpenAI embeddings API (10 ms)
+    listModels
+      ΓêÜ should list available models (3 ms)
+    retrieveModel
+      ΓêÜ should retrieve specific model (2 ms)
+    checkHealth
+      ΓêÜ should return true when API is available (2 ms)
+      ΓêÜ should return false when API fails (1 ms)
+
+FAIL test/unit/services/cache.service.test.ts (6.714 s)
+  CacheService
+    get/set
+      ├ù should store and retrieve values (23 ms)
+      ΓêÜ should return null for non-existent keys (2 ms)
+      ΓêÜ should return null for expired entries (67 ms)
+    has
+      ├ù should return true for existing keys (2 ms)
+      ΓêÜ should return false for non-existent keys (1 ms)
+      ΓêÜ should return false for expired keys (61 ms)
+    delete
+      ├ù should remove existing entries (2 ms)
+      ΓêÜ should return false for non-existent entries (1 ms)
+    clear
+      ΓêÜ should remove all entries (2 ms)
+    clearPrefix
+      ├ù should remove entries matching prefix (1 ms)
+    getStats
+      ├ù should return cache statistics (1 ms)
+    createChatCacheKey
+      ΓêÜ should create consistent keys for chat requests (1 ms)
+    createEmbeddingCacheKey
+      ΓêÜ should create consistent keys for embedding requests (1 ms)
+    getOrSet
+      ├ù should return cached value if exists (3 ms)
+      ├ù should fetch and cache if not exists (1 ms)
+
+  ΓùÅ CacheService ΓÇ║ get/set ΓÇ║ should store and retrieve values
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: {"value": "test"}
+    Received: null
+
+    [0m [90m 25 |[39m       [36mconst[39m result [33m=[39m 
+cacheService[33m.[39m[36mget[39m([32m'key1'[39m)[33m;[39m
+     [90m 26 |[39m       
+    [31m[1m>[22m[39m[90m 27 |[39m       
+expect(result)[33m.[39mtoEqual({ value[33m:[39m [32m'test'[39m 
+})[33m;[39m
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 28 |[39m     })[33m;[39m
+     [90m 29 |[39m
+     [90m 30 |[39m     it([32m'should return null for non-existent 
+keys'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (test/unit/services/cache.service.test.ts:27:22)
+
+  ΓùÅ CacheService ΓÇ║ has ΓÇ║ should return true for existing keys
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 46 |[39m     it([32m'should return true for existing 
+keys'[39m[33m,[39m () [33m=>[39m {
+     [90m 47 |[39m       
+cacheService[33m.[39m[36mset[39m([32m'exists'[39m[33m,[39m 
+[32m'value'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 48 |[39m       expect(cacheService[33m.[39mhas
+([32m'exists'[39m))[33m.[39mtoBe([36mtrue[39m)[33m;[39m
+     [90m    |[39m                                          
+[31m[1m^[22m[39m
+     [90m 49 |[39m     })[33m;[39m
+     [90m 50 |[39m
+     [90m 51 |[39m     it([32m'should return false for non-existent 
+keys'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (test/unit/services/cache.service.test.ts:48:42)
+
+  ΓùÅ CacheService ΓÇ║ delete ΓÇ║ should remove existing entries
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    [0m [90m 65 |[39m       [36mconst[39m deleted [33m=[39m 
+cacheService[33m.[39m[36mdelete[39m([32m'toDelete'[39m)[33m;[39m
+     [90m 66 |[39m       
+    [31m[1m>[22m[39m[90m 67 |[39m       
+expect(deleted)[33m.[39mtoBe([36mtrue[39m)[33m;[39m
+     [90m    |[39m                       [31m[1m^[22m[39m
+     [90m 68 |[39m       expect(cacheService[33m.[39m[36mget[39m([32m'to
+Delete'[39m))[33m.[39mtoBeNull()[33m;[39m
+     [90m 69 |[39m     })[33m;[39m
+     [90m 70 |[39m[0m
+
+      at Object.<anonymous> (test/unit/services/cache.service.test.ts:67:23)
+
+  ΓùÅ CacheService ΓÇ║ clearPrefix ΓÇ║ should remove entries matching prefix
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: 0
+
+    [0m [90m 94 |[39m       [36mconst[39m count [33m=[39m 
+cacheService[33m.[39mclearPrefix([32m'chat:'[39m)[33m;[39m
+     [90m 95 |[39m       
+    [31m[1m>[22m[39m[90m 96 |[39m       
+expect(count)[33m.[39mtoBe([35m2[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 97 |[39m       expect(cacheService[33m.[39m[36mget[39m([32m'ch
+at:1'[39m))[33m.[39mtoBeNull()[33m;[39m
+     [90m 98 |[39m       expect(cacheService[33m.[39m[36mget[39m([32m'ch
+at:2'[39m))[33m.[39mtoBeNull()[33m;[39m
+     [90m 99 |[39m       expect(cacheService[33m.[39m[36mget[39m([32m'em
+bed:1'[39m))[33m.[39mtoEqual([32m'value3'[39m)[33m;[39m[0m
+
+      at Object.<anonymous> (test/unit/services/cache.service.test.ts:96:21)
+
+  ΓùÅ CacheService ΓÇ║ getStats ΓÇ║ should return cache statistics
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: 0
+
+    [0m [90m 108 |[39m       [36mconst[39m stats [33m=[39m 
+cacheService[33m.[39mgetStats()[33m;[39m
+     [90m 109 |[39m       
+    [31m[1m>[22m[39m[90m 110 |[39m       
+expect(stats[33m.[39msize)[33m.[39mtoBe([35m2[39m)[33m;[39m
+     [90m     |[39m                          [31m[1m^[22m[39m
+     [90m 111 |[39m       
+expect(stats[33m.[39menabled)[33m.[39mtoBe([36mtrue[39m)[33m;[39m
+     [90m 112 |[39m       expect([36mtypeof[39m 
+stats[33m.[39mdefaultTTL)[33m.[39mtoBe([32m'number'[39m)[33m;[39m
+     [90m 113 |[39m     })[33m;[39m[0m
+
+      at Object.<anonymous> (test/unit/services/cache.service.test.ts:110:26)
+
+  ΓùÅ CacheService ΓÇ║ getOrSet ΓÇ║ should return cached value if exists
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "existing"
+    Received: "new"
+
+    [0m [90m 143 |[39m       [36mconst[39m result [33m=[39m 
+[36mawait[39m cacheService[33m.[39mgetOrSet([32m'cached'[39m[33m,[39m 
+fetchFn)[33m;[39m
+     [90m 144 |[39m       
+    [31m[1m>[22m[39m[90m 145 |[39m       
+expect(result)[33m.[39mtoBe([32m'existing'[39m)[33m;[39m
+     [90m     |[39m                      [31m[1m^[22m[39m
+     [90m 146 |[39m       
+expect(fetchFn)[33m.[39mnot[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m 147 |[39m     })[33m;[39m
+     [90m 148 |[39m[0m
+
+      at Object.<anonymous> (test/unit/services/cache.service.test.ts:145:22)
+
+  ΓùÅ CacheService ΓÇ║ getOrSet ΓÇ║ should fetch and cache if not exists
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "fetched"
+    Received: null
+
+    [0m [90m 153 |[39m       
+expect(result)[33m.[39mtoBe([32m'fetched'[39m)[33m;[39m
+     [90m 154 |[39m       
+expect(fetchFn)[33m.[39mtoHaveBeenCalled()[33m;[39m
+    [31m[1m>[22m[39m[90m 155 |[39m       expect(cacheService[33m.[39m[
+36mget[39m([32m'new'[39m))[33m.[39mtoBe([32m'fetched'[39m)[33m;[39m
+     [90m     |[39m                                       
+[31m[1m^[22m[39m
+     [90m 156 |[39m     })[33m;[39m
+     [90m 157 |[39m   })[33m;[39m
+     [90m 158 |[39m })[33m;[39m[0m
+
+      at Object.<anonymous> (test/unit/services/cache.service.test.ts:155:39)
+
+2026-01-04 13:38:01 [[31merror[39m]: Model listing failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de167e896de34-YVR","connection":"keep-alive","content-length":"241","content-type":"application/json","date":"Sun, 04 Jan 2026 21:38:01 GMT","openai-processing-ms":"1","openai-version":"2020-10-01","server":"cloudflare","set-cookie":"__cf_bm=R07fHlGwPUADFQLHhh0nVTgSDdoiLAHklxWZqCiVMB0-1767562681-1.0.1.1-HOoOGWCj1O1JoNENGTEqYYrbxXf.8KKnNWbMWqlr.R2zhdXUwXjidCTtj8eiZPK2b2MwonaEEhfErXTNBPQIWI_h0fUxHEkgBs4wsFC7FNA; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=tr_7THLcB.GWyJjy.XpkC76.SLexFTYAJoVraUSdQ1E-1767562681701-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","www-authenticate":"Bearer realm=\"OpenAI API\"","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"3","x-openai-proxy-wasm":"v0.1","x-request-id":"a86f301061ddbc6ff69574558a6a6863"},"request_id":"a86f301061ddbc6ff69574558a6a6863","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1685e8efc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:01 GMT","server":"cloudflare","set-cookie":"__cf_bm=EhNbLIlVyA0HIxqoqs87Xz1ORGo58ryFHzIXtc.5oYg-1767562681-1.0.1.1-lN1hJZ2qEerSOCjs8W8RlHJpx859kqr74jDPEDde8RWfIw4SvuY8FPTmMY17o.3Mm7YpEPaaBNUOmsJgYFo.tbrXjhIzI7fIIVUMMeJ9Uek; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=Cy9hc6k0_qo5dfrboklQ6JMwquliNspOesF4Yv_Pwok-1767562681702-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_1cfa081bdc3b44ac87815e42eed1f37e"},"request_id":"req_1cfa081bdc3b44ac87815e42eed1f37e","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1685df6d4c5-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:01 GMT","server":"cloudflare","set-cookie":"__cf_bm=u0P9m6TtvDiOJP_66ewdodWUctE_phdnrSpEFE_aiNA-1767562681-1.0.1.1-JvNpY3oY17pdEJkCHW1LtOr.xzpCNniUMuSqVbi6dEmgog19UZLbve.uJVcCtPievqzghLkKT6vDmxuN2m0omccFWQzGlEjFtL55EzxrsGs; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=03eJwm0TICzk6XBGcuV.P1_EdC786Xv.sJWYOOIcIGo-1767562681712-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_58ad2cc9dba94c28abb6781246ae4c09"},"request_id":"req_58ad2cc9dba94c28abb6781246ae4c09","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m]: Embedding creation failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16838e97101-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:01 GMT","server":"cloudflare","set-cookie":"__cf_bm=BS1UyQ8hP8UKVshojdH4W5DL7Yheq_j.H1osnQ0NiOA-1767562681-1.0.1.1-2thZOWWWaDoWVdW9u2mTL9DL7xciRcXsPlVlURQYxxKjWV9C0awZSLgn2B7a2eCLIf6l2vAWkznVEQVdqcAeJPHfyif9RmyKI_j8H.KU5Js; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=X0uXcuWjHv4Ay2kjVQD0XY4kTyQmpjY.7muxAWroP0s-1767562681710-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_e8d8ffd8b82c40b19d6c1a86851c8055"},"request_id":"req_e8d8ffd8b82c40b19d6c1a86851c8055","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m]: Model retrieval failed for: gpt-4 {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de168da6bde34-YVR","connection":"keep-alive","content-length":"241","content-type":"application/json","date":"Sun, 04 Jan 2026 21:38:01 GMT","openai-processing-ms":"1","openai-version":"2020-10-01","server":"cloudflare","set-cookie":"__cf_bm=oCPdrIK.EZoTxsTmHjQQ8E_reNRH6FmLxuHrutU4V70-1767562681-1.0.1.1-dVLV1q.8ShHuqyzPrDeohJUn4ndOeTkvSdPo03.gIO_eCpB7YFf3wLNRx1rLTtkdCxyJLWZcCimS3vQtz1.276tJSqnFPLVLv6MNzTd2uk0; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=5sxA6x21sLGNbZGfT4PJUu0knT82DRDhoJ0tWi5Pu_Y-1767562681815-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","www-authenticate":"Bearer realm=\"OpenAI API\"","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"3","x-openai-proxy-wasm":"v0.1","x-request-id":"7c220a8d5d6df4a9c32925762bd5c48a"},"request_id":"7c220a8d5d6df4a9c32925762bd5c48a","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m]: Streaming chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1690f7fd4c5-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:01 GMT","server":"cloudflare","set-cookie":"__cf_bm=1XVm1vGiSPBEIZ.EyCdUtCH7pM8KKxEHQiUa6I.q_g8-1767562681-1.0.1.1-1q2f6hdh4J7.exZIPjWbRLRepGYNdScLuiMv1PNml_lMU.2l0.P_LHDLdg8U_9YzZwcfBwtle8E.7KfvdgX124Bce8L1obuB8p8RxPjvVpE; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=5oI9ICNallZHckCnvS9FyNp7SQqjzNNtDSnychHNgqs-1767562681818-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_c34b41aaf46e4fd8a23a3dd933b0fce4"},"request_id":"req_c34b41aaf46e4fd8a23a3dd933b0fce4","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m]: Embedding creation failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de168f9517101-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:01 GMT","server":"cloudflare","set-cookie":"__cf_bm=efnMCtrPr94mKVbaptJkaq3PKA4KDU2vxdYpKCc7NIw-1767562681-1.0.1.1-nbIbRFvbx4Q5s7hrhn1m1GxquNikc2hhdLhK6iwdQ2LycX.l7ZCEDJciS3HL9sWV2ys8BYELFnVdKGANFu90ytwhi9TZK4vIRiee565yZRI; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=9rxV9Ht7HPwtTf0v2WklCCrmlDmzNM5gc5CWo34xeOo-1767562681824-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_447543e4b66948e7ab4b61713fac70d0"},"request_id":"req_447543e4b66948e7ab4b61713fac70d0","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m] [req_45c9b2d1a51949d9b5b8ae538004a6ce]: Streaming error {"service":"ownrex-backend","error":{"message":"401 Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"api_error","code":"openai_error","statusCode":401}}
+2026-01-04 13:38:01 [[31merror[39m]: Embedding creation failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16989b27101-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:01 GMT","server":"cloudflare","set-cookie":"__cf_bm=nTkQmyopVKep0YgGNd212AJhzI7L5mCWirx3ktgA54o-1767562681-1.0.1.1-5vtIUXejZDTDWWvq8N9GB0Tq.hnU.elmOyc9rT376.DbA87dKbZdVHjlTZ9uvmnNX5eOFh50FABPkYL60PT_q4w3TtQFFmN2TCfaHucuE6I; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=Me3QHRKbvxXgeYxk9u0_m1GCtqxhBSTNWdhFwpRzjSE-1767562681888-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_5ac7599fe8c54068936c0c429dc2109f"},"request_id":"req_5ac7599fe8c54068936c0c429dc2109f","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de169a8c3d4c5-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:01 GMT","server":"cloudflare","set-cookie":"__cf_bm=kcY4qijIgxTu2gFBa9MeG7RvnDtzt8mP.4DdiwaaEqY-1767562681-1.0.1.1-ojkWBX8ewPvNigdgzyMxJQKbs_JZ92DGJz0kohnKyELcj4Uchxi3rZV0CHgCBkTjV90Rvt.5gQDt8EsLquJvaY6WkSR6X7o5UjXHgBJSun8; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=_9iAlb.bUYtt1NIwGJBW86sPqLCOFta6rd7C28vfriM-1767562681922-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_0421b0b0bb9e421bb9611ac7d5921b21"},"request_id":"req_0421b0b0bb9e421bb9611ac7d5921b21","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:01 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de169dc8b8437-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:01 GMT","server":"cloudflare","set-cookie":"__cf_bm=bWVXEnk6N_F4TYu755VVi1xBtTlcP_YZokFvOWon0ck-1767562681-1.0.1.1-7jI7B2YMkihG2aJOyRCY0Wb04aTMHud7MHHA3o0x4UIFPZCXwtkkrT17oZT2gXu5bEg37FnK0HjJNIIKP4mYOicDri725ZywCiOKV.U0Oq8; path=/; expires=Sun, 04-Jan-26 22:08:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=_yJcsoA.q2O_i7S_C962z.ARRLgOmka_5XL4AC8edPA-1767562681972-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_b08411476cab4528b79888190eb6e3b9"},"request_id":"req_b08411476cab4528b79888190eb6e3b9","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16a3a87fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=6XaStYBK_gPgVGx7a05_H6gkDHDPhug32_RYqeVhuos-1767562682-1.0.1.1-oQgvkqkQPkHa5KL3PFwMhRk3QUP8zC_f0v3cP3QR8Bfd4f4e0IuJAgSY21AIS_X29fFmaNidO83t00b9QYdWobc2gOBCs8AywUppSAnS2uA; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=HDmiypA5XdLwrUOg0MI4qOeuqX8DAwuJiK9tMa1iNSo-1767562682022-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_1f3f96911b5a40edafa310ba0c6e2c90"},"request_id":"req_1f3f96911b5a40edafa310ba0c6e2c90","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+PASS test/integration/embeddings.test.ts (8.217 s)
+  Embeddings API Integration
+    POST /v1/embeddings
+      ΓêÜ should accept valid embedding request (291 ms)
+      ΓêÜ should reject missing input (8 ms)
+      ΓêÜ should accept array input (92 ms)
+      ΓêÜ should accept encoding_format parameter (60 ms)
+      ΓêÜ should reject invalid encoding_format (8 ms)
+
+PASS test/integration/models.test.ts (8.39 s)
+  Models API Integration
+    GET /v1/models
+      ΓêÜ should return models list (289 ms)
+    GET /v1/models/:model
+      ΓêÜ should return specific model info (111 ms)
+    Health endpoints
+      ΓêÜ GET /health should return health status (77 ms)
+      ΓêÜ GET /health/live should return live status (7 ms)
+      ΓêÜ GET /health/stats should return statistics (6 ms)
+
+PASS test/integration/chat.test.ts (8.268 s)
+  Chat API Integration
+    POST /v1/chat/completions
+      ΓêÜ should accept valid chat request (264 ms)
+      ΓêÜ should reject invalid request body (9 ms)
+      ΓêÜ should reject missing messages (7 ms)
+      ΓêÜ should handle streaming parameter (91 ms)
+      ΓêÜ should accept optional parameters (100 ms)
+      ΓêÜ should reject invalid temperature (6 ms)
+
+2026-01-04 13:38:02 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16a9d148437-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=9Wxv7Dw7bE45pGBhuTIa8vqMDWiRL9tk_N2lIxnTVfk-1767562682-1.0.1.1-CKdFD_YP.Jmw1vOCwx9uSfCdAPZhOHH517Dz2LQvZyvskut659INJCfx_4rXjhmKldoCLIx_o_EOxkd6HeWlgEm_K7TwZwP7MdqRBaDlrc8; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=AWDos_96FNB24imcD4KHLYCDKGchyVgmfpFJr.oEuhQ-1767562682093-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_deafdafcb1584a34a8ae0fc67e5c52ff"},"request_id":"req_deafdafcb1584a34a8ae0fc67e5c52ff","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16acb84fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=x5Bsf3FvdLR620QxDQWN54gK2BFjhX_Cz9ACAN7F044-1767562682-1.0.1.1-i7_PmP1Vir_P5OE9q80Ys0tPRbqfR7r1HIIiN_Qm7zT7tdn2sD25G0.wLpsDpp4sMWK6BMqAc2UA1VI8Yeu3Bwk_Y8l5grrntwbKkgYBDuQ; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=sr22VwawzjRK_Gzd2X3GkQ.g8KXUQbfXa2AcXf_NeLU-1767562682132-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_e18d81bae94b4e14bfc052312649285c"},"request_id":"req_e18d81bae94b4e14bfc052312649285c","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16b3d6d8437-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=awkyS4sm9GDzkNmE3Ujv8GVZnSwvG_Vue4DGYL4GnGU-1767562682-1.0.1.1-luUA2XcRrVce3UkQamrTKq6GT3xqiteW97V.9vPMkmOmYh5h6ppbCoeIfVLFyVQ5RlRoWbnkYb6fWMvsjWaWbX5bi7BTcKPW2EVhZ_DYuRo; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=C4oEjveAHutahERsDM_0mPu74CHTfC1CN2j_HqWkFJk-1767562682200-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_d44ea93d1d7e4936ba2cae5c4a250ae3"},"request_id":"req_d44ea93d1d7e4936ba2cae5c4a250ae3","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16b8ce7fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=hFeVmS.UjyeqfQlmN.OJjdVoD1gTtDEXikR93_m18w4-1767562682-1.0.1.1-PP7Eh3CUO6T2oUMCEGTpgT581.00jyoESykcI1Az5VZS6SO9u7Z4dggTct8f3FB2O4W75deIhZ7M5yIxg0MAMCKjbX9rB3c2gIxqMBUZ93U; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=oF9Y0JnSLSwHSkmsbomeuE4Zl.y4zVlI6bToeOaIMNk-1767562682211-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_ef215ec82a684ff39cf59340e8858323"},"request_id":"req_ef215ec82a684ff39cf59340e8858323","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16bedc4fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=JbNc8.5RmPXOsJmCfSHtwx4vRCDeiwtYKf83DK7Isgs-1767562682-1.0.1.1-QezGBI0NKzbDZ1NqTaM0beM4.yNk3KHnntegoIsm3u6ZeURDV8vIaANlqF8VTAen73figK8NhtxRMUMe3s2V.Lxydym.JhbzCpXTyblPNuM; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=cAcMEWsmfnpRfLsjj50ZbVIB1D3EKp9yjs11Id52MqU-1767562682309-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_ee940529f7f34422b60d09876f38a9ea"},"request_id":"req_ee940529f7f34422b60d09876f38a9ea","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+PASS test/integration/completions.test.ts (8.651 s)
+  Completions API Integration
+    POST /v1/completions
+      ΓêÜ should accept valid completion request (233 ms)
+      ΓêÜ should reject missing prompt (9 ms)
+      ΓêÜ should accept array prompt (97 ms)
+      ΓêÜ should accept optional parameters (104 ms)
+
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16c8f36fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=2dipr5ZaopxtXnZ8ffheaq8LlxeuCeFEjmmuMmvyA4Q-1767562682-1.0.1.1-GZUx42Yxb1.rlZngKmcyyVngcgVs6Vd7xUX62gEAzwWQZPlkPm_o4Vk7aiRKREo2hfPNesqqzgn7O2fxGwJ8LmMi1r3F63vU4Yqn099o6n8; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=uj_meub1FdLZdoi3n.kZY23QRgoqx41lXada6DVfz.I-1767562682362-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_191e9c1ca38b4e1e9f0a0e2d3cd9e394"},"request_id":"req_191e9c1ca38b4e1e9f0a0e2d3cd9e394","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16cdfc6fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=kBCgQkmNjAXc2QADW_cRoYHQkJVL7yi0lcdnFD3eFlA-1767562682-1.0.1.1-zaLd.ADXLoBsd4lBCbtBfhK5_TY63XE6fdMb0deW7ieQRzjBde5dvPF3DMSQ2vomV.z1LGV6zGWPcazl9QK_bVlAdbaSEMV_UcbgzSMxOEo; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=xcvObS4UoX9PdbP85EePB4Scj3QDRSMmo3HTKFXGxjE-1767562682455-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_2dae4db84f0e4f49ab1f404a9a217ffd"},"request_id":"req_2dae4db84f0e4f49ab1f404a9a217ffd","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16d68bcfc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=8JeNK9sX43ygk9P.WI35ds.DYPsP3s77kY9_nGu5U9E-1767562682-1.0.1.1-ZV9tXedv8ElE8yvbPpYNaYPe2HIvf_A_SpbXUgealGwidOsYXj5myaYmnT2a9l8re5FgOsq5pOuF4WyViVUs_PQYOYV3moxcEVQubUIUiuA; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=G.vdKmrMHbsoP1SOM09PqpcnMF4Imuof73NSrkgT.U0-1767562682494-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_3dd8cbc954b84935bf20068db2d676fc"},"request_id":"req_3dd8cbc954b84935bf20068db2d676fc","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16db94dfc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=NpKX.Ao7yJ.0FU1DU.SgV40I7yz5fD7CyCBuEbOUlmI-1767562682-1.0.1.1-IuOhlme3_hlw0c9MmAb7ZQS9NgywpCyj4njbV8B2NilHWUfn_Yv_WiVhpACKslDlMpx9Rr40kxXqQ0AAIoEIPS4coSkUVCb1rSjwoh1JGg4; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=LBtsc1.jRkxnxdQQCiqO.erj1W2z6UBvUnch5.xYmeA-1767562682551-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_4b53c04e83224e51bd57b7db5343b8ee"},"request_id":"req_4b53c04e83224e51bd57b7db5343b8ee","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16e09e8fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=PNfrTmHLog3euIo1z3xiaggzlIEYtTcwJFsYMB4P36w-1767562682-1.0.1.1-vybiGKYT2yN2e1Ac4F8GvWF2EJzvyi3udNuuMoqEugeMz._6WS9E9VHo9y.LIiyn.AvNeCqsdw8fnoyEtJsbUOxMYT8QnvF_opyem91w0kM; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=gNobrDeRAdIWD5tsz45igSwM6SaIDsi4tBHCujx75bw-1767562682637-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_4947800261e546128a3ff581576c3a95"},"request_id":"req_4947800261e546128a3ff581576c3a95","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16e8aeffc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=3h4txIMvKO96S8q8sZH1zayw_b1MWVWe6Y9UZilojpo-1767562682-1.0.1.1-YQX3bsNQKr6ouVNWENSAAkHN69mgWOKXrNfcQZdYT3cU26aTWEUYITlETcj62tpOSjjnffQBUpvK1hKy9s4f49uDlQ.Lp4c9g6wQ6_OH4yg; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=ahjcL0U1M7sLdYX.BreCREInv.2Cmi1B4R8lw1oWdHc-1767562682688-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"2","x-openai-proxy-wasm":"v0.1","x-request-id":"req_25588eba15894e13a3270fd331a7829a"},"request_id":"req_25588eba15894e13a3270fd331a7829a","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16eebfbfc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=K7BPSE3Vf64sf8UVw2xT3mFg3T_iRsJ0zcEUY2NUP_0-1767562682-1.0.1.1-.PvI35lbGvUVcZP.tONCQY5RMrY7FbSfx_g662RIBoN9ulb_Z5mbkqSjh6OTa9r.f3pr_tAQ5gmsqhkGIhL3lvJIb5pzo1IdS7sXflmd5uk; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=ur8OIZmzEn6zf923wFWuQJEhiegNIDCaEc4ifWnsIic-1767562682756-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_8f41e3a5afa79dce955d4e518c296aad"},"request_id":"req_8f41e3a5afa79dce955d4e518c296aad","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m]: Streaming chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16f5d72fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=JjCaOba7UZf.2o9rNN0crfdjBaCrvDi5aRVd41I_haY-1767562682-1.0.1.1-GTT9DVRRHQKFcx.kVaV95mQB0gTy.xfFQtZZUnvTLnUT6w4hs661afbd9BkAPytcfX9RbMkBOcgD5sCtOOGFv0KVDa2tNikGtewBoAiyae0; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=_csD03DeS0tOzl3590E9GJGx9NMq0E3ZxTK_WF.T6H8-1767562682850-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_1398647b66294310b2eeaac6eed91c5b"},"request_id":"req_1398647b66294310b2eeaac6eed91c5b","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:02 [[31merror[39m] [req_1e9d092cc4e34d5ba89081d23abd22f5]: Streaming error {"service":"ownrex-backend","error":{"message":"401 Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"api_error","code":"openai_error","statusCode":401}}
+2026-01-04 13:38:02 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de16feeadfc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:02 GMT","server":"cloudflare","set-cookie":"__cf_bm=MpQgb0UGmDKNy26ZZ31jgym017f89Eh4ZXk.l0yYHZk-1767562682-1.0.1.1-SAEeSQKmuRXM9vJkmhp3fr6amKRBDuyPvw0x0i66NYi.OI1E7sQqT4WsKFSu2vvTrJXPAOW7ztMJcg7_gzCYnW5WQiqnXZwnowR5.00DpfQ; path=/; expires=Sun, 04-Jan-26 22:08:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=aG5I21elkJDfgkzv6wJIh5nb.5M3mZDaQ1aNtgS41iU-1767562682936-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_df895bb177a647d7b2be267efe14e26c"},"request_id":"req_df895bb177a647d7b2be267efe14e26c","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1707887fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=FXuvUJ8EYt68SLrZLV8CIo84ybK7qUiJ9x8jJ57t8Cg-1767562683-1.0.1.1-LbNyxdLinuxm9RH6cizWhpu14g1AMlXKqBY1fzZaHqijc35bTTIxoY1DcFPuW8e3iYgmy9XBRPtSX5aIia0jbNwys4xwbaH0iLtKy22iMOw; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=aDc5vtPa0fu.LB9JGgfDKWX4L44o990VUNPt8BcLGuk-1767562683040-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_869ab9ec8c704afea18d1a98112e9e01"},"request_id":"req_869ab9ec8c704afea18d1a98112e9e01","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1711a24fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=deVMLgMrComUI91KaqcK._JfeoYoA1K8qW7pz9NzAUE-1767562683-1.0.1.1-4Gvl18p5eujg10nW3P49JuhOWNarZd.SoGMyVF7wotsF00VYK.jYj2ZQACY90YG_WlNyU2eCzczBLtijj6T5dXDtDNt3JnU7C8UFRcKJ_3c; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=5UKNcA2uAtG65dXsYAuhZS8a9RTnjWPOxndQOkg1uws-1767562683110-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_87d028a0abc648629b8970dc19831a65"},"request_id":"req_87d028a0abc648629b8970dc19831a65","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1718b23fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=LGI.huyVdsmFw2ZNDBmVsGYEwtTI1QDjJxW3MMm3Cag-1767562683-1.0.1.1-e2R216foJ4_Fbst26quRviLB6mK7dT3y1517NTfNmeQrjsIcHS2t3X_.lrk1NNbpEzuL1T6SOlxNQ4CmbXCRdnqJ3bV6kjgMCfjhxD4ZCv0; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=K6bBeqNu3zR.nfrrK7yJM1gTA0bYwRqpCKr60CGqrh8-1767562683183-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_acf01638ace342f281386ec12a3ec220"},"request_id":"req_acf01638ace342f281386ec12a3ec220","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1720bf7fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=1zD3vjLzoYAYF3_ky8apjB_._YZ66hYiL6VvgMaokvw-1767562683-1.0.1.1-BVvrFSzzWdeLZSlfaSfPmGAi1opKN1rwPXONNmNHoc6elhrBXyGXK1aA0HoLmgN2ubkXmfVrqH8seix4NKsGH188S8qGcA.81tJr3MdjVQI; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=tZgkTfpUi8S6OwtedvO7IiGR5sChXXfmSteAQoB.JLY-1767562683259-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_5a86aa1e5eb14a5bb35f801e00ef2aaa"},"request_id":"req_5a86aa1e5eb14a5bb35f801e00ef2aaa","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1728d3dfc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=OyBOgjIcC6HgDD1rEZtEMBlym_GTDSqmYhn2ick7NoU-1767562683-1.0.1.1-u0iu8mxqdc7FlAyjCeNYXvgJyyI75q2l4Q44zTivYfUnrnuhA9FnmaVhAoj4ZA1DweXtWRiAnEuLvmoeIp71wiZw6_xi5PVJGSRHZQ7PXvU; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=kIxnGUJ67ZGEwZzSQjBZPO7CpNQmNbbqZXgwOJXthg4-1767562683351-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_a5c260948b594406ab372e2c9ed361ee"},"request_id":"req_a5c260948b594406ab372e2c9ed361ee","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1731e14fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=BX25.992Mr4KoKAJpolZBOXtaO3lGQsgNM_55Qu3V00-1767562683-1.0.1.1-JcUrwCJYrf6DoOjYBYo1DZ4slvF30WBFrXqa8rH6us9rIQ18m938h7i_evJ4CPuvSHWp0aHZfefIYSopNM7D70RwTwDbAVgUNRCWSVRKVmc; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=7h7QQbxC83iROkD8ZeXiqjmULWmRJG93Is4HX1k.Afk-1767562683446-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_90abf9cbd409459192749339149ef084"},"request_id":"req_90abf9cbd409459192749339149ef084","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1739f0bfc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=g8EJUOYJiGcpYNuoLULX4BFUl5Q9SGSuk8L.Vaj8MX4-1767562683-1.0.1.1-wLavaX_1dVSOSGFlSdftUx4ozreUVtZpDsNpBi3M7EqgEwcZFaJOK010Yj5m9FnRZfZoO28RE.ls.4jkUFGaLrAPjfaTFoxNaXvX3j.pPmU; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=Gf_jia7e0KL5Q9jfbdYgLAmXXngqPzlLpTFqPfEcDYA-1767562683528-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"2","x-openai-proxy-wasm":"v0.1","x-request-id":"req_c3390a9c22c64c63822cf9d7f103bb4e"},"request_id":"req_c3390a9c22c64c63822cf9d7f103bb4e","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1742fedfc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=lQQNp42ZFPNWsT.v0MjhVGijF64PDXNNklrlLRyufZk-1767562683-1.0.1.1-PHqKvPNKTgROOjHdiT2bLZCISc8XezWKhwlmGqwldx0VR_CNa8J2IazQp1yfnTKT_.8O4F18gK7_f2CwSg70YGSLXiHCddVvF5s..bGoNrc; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=cm1KJ6YLs6POslZUzSKl2dhklbbrNb0fLuxu8Oux414-1767562683618-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_a96d4a22eb2d4b0d9ac4f401d8e64464"},"request_id":"req_a96d4a22eb2d4b0d9ac4f401d8e64464","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Streaming completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de174a8fcfc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=Er.NEZPiQO33S1VZ8dJbOdLN_NK3UUWmQALWkK5mKH8-1767562683-1.0.1.1-_76r2Hp3xvYSDSceqkxm0uyn5IHBxwVHKwVixxa7DldMUfdxG37zpqTvjBSpKD1owBYu4SgvGzD.njF3T_wW.DRzEArqipUYboN4WXvdusw; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=dlrFZtNd9nwTdbz7y8dd4ksA6ung8ZxppVRJRrLrkDk-1767562683684-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_776323ed76d641978843892e3d49ca8a"},"request_id":"req_776323ed76d641978843892e3d49ca8a","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m] [req_8e076322e9f447c38eafa4593183ff48]: Streaming error {"service":"ownrex-backend","error":{"message":"401 Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"api_error","code":"openai_error","statusCode":401}}
+2026-01-04 13:38:03 [[31merror[39m]: Embedding creation failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de17519c0fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=JMbrmvko6IhEd03zsE9492a..P9aHINICy5ACB02YSA-1767562683-1.0.1.1-Gt7rtm0dBk5pnQIn0LhqSncj_VBZJT_QyNoIx5vQzJ_ItcPM.ipaqKntO1V.CLIePl5CBfOCBKwZ02C4JLzuNYiw4CyoxOsm1L93pbkY4FI; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=e5tCHlKWAvVDmXsHYz1ytjOnW5ZsmbC8m3OhwG1cYJg-1767562683775-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_46d7488d8b2c40e29fe66df4bd1537d2"},"request_id":"req_46d7488d8b2c40e29fe66df4bd1537d2","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Embedding creation failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de175bab2fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=H_YYln.hS3x4wqap03bGVcxNupaqhsK6.h2HC48bZOc-1767562683-1.0.1.1-hs3aZWYuGRTqTMRCIIBnLtwk3xeIqn6k_TZI0h4sQDNL94tUuRDJyMmf1eAJMVDiEPVUYwZBdTSg01HPTfDhtSSmpAbxM0cPauQ5nOo6ouk; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=FR78fQa6HJzfoOkQlZEhAoG5vwx9pVF5ZghKSlrWjAU-1767562683830-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_73816070ccd6496b93cd1ccb38e990b5"},"request_id":"req_73816070ccd6496b93cd1ccb38e990b5","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Embedding creation failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1761b64fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=oGm0o7Y0Ui0kXyWRzXNSS5E1.d_UdOZEPH2_ohVRvrU-1767562683-1.0.1.1-dxnKwyn87L9BYO_ah3ZTiFrRUMBUpqbJj_eaSNu3UPFGeWTq0wZnVYlZiZP6f3aa5PDLvKtWKypCy1fAljCDhz_KPOcws2BF32TSlLhVeKY; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=k85B_7vxoAOWpCJEalokRwSKFkCetTXJBn5yZErv2Ng-1767562683925-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_bd866d72c1bb4961951bbd21f915ccc7"},"request_id":"req_bd866d72c1bb4961951bbd21f915ccc7","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:03 [[31merror[39m]: Embedding creation failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1769c43fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:03 GMT","server":"cloudflare","set-cookie":"__cf_bm=136Z0utugkQwPO8BDUIU1tcht0HYhaSY6e_5_6UTEos-1767562683-1.0.1.1-i4zQy8O5ek_K8PFf4S0y9RjZ6m.AQni_WkR2zK.wTRvvxhrRiOd5qLfhHK.1gSzj5Ndt2FKRq7cps7aWxffLcKlltoirr1y3kWd_ka0VjJs; path=/; expires=Sun, 04-Jan-26 22:08:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=Pc7s6TUbcPquqY5bxOmIKPeBcybpLRmFgLsXU_u.ToA-1767562683964-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"2","x-openai-proxy-wasm":"v0.1","x-request-id":"req_b0e0afd66ccb41869018a0b09237cc8f"},"request_id":"req_b0e0afd66ccb41869018a0b09237cc8f","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Embedding creation failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de176fce3fc2c-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:04 GMT","server":"cloudflare","set-cookie":"__cf_bm=xt_uuhmCPj8K3lOMjETlO0mj4iG2gr3l6sPqWDL_WmY-1767562684-1.0.1.1-6hz6Nu.zXizQLqiCPoeNG3G_HXQnMuddoPQlws1yWsn2ITY3DSFUKk_0DHbo0t1tWCoO5_whElAt_yrwru6n8pBVUSPNUbBBhwx6useEEp4; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=qxipaRbii.842bB8CUVdUmwp4teGGaT5mCQKHwx3ByE-1767562684048-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_10481fb153524c1cbe1eaf3456ce26d4"},"request_id":"req_10481fb153524c1cbe1eaf3456ce26d4","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Model listing failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1776ddbfc2c-YVR","connection":"keep-alive","content-length":"241","content-type":"application/json","date":"Sun, 04 Jan 2026 21:38:04 GMT","openai-processing-ms":"2","openai-version":"2020-10-01","server":"cloudflare","set-cookie":"__cf_bm=vm8_lAAAPiWIjNfFeNOF5CFN4cdOrBaf6OyfELUcn1w-1767562684-1.0.1.1-OFGtX2lZSqMCBvGhrUj.AZCvJa6I38wyNJZSzR98yfQz2JzlA3bcAybuc4XMVI8XiWfqWCzjeBUF0wX9HkLBY55Ef4fTBrLPK1oaZ1HtSaw; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=KqslzICQodqLxJDBZ5SX5I_Umx.IRdhqX4oZtnq1xRg-1767562684147-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","www-authenticate":"Bearer realm=\"OpenAI API\"","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"4","x-openai-proxy-wasm":"v0.1","x-request-id":"119a1002c30cd872fdfa65553a3e9f7e"},"request_id":"119a1002c30cd872fdfa65553a3e9f7e","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Model retrieval failed for: gpt-4 {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1780f14fc2c-YVR","connection":"keep-alive","content-length":"241","content-type":"application/json","date":"Sun, 04 Jan 2026 21:38:04 GMT","openai-processing-ms":"3","openai-version":"2020-10-01","server":"cloudflare","set-cookie":"__cf_bm=zHZHplbkS98ljW2ZB.NzUd6EZdhy.iFJlybeaFljgLc-1767562684-1.0.1.1-aIkYIgoGLyFjBgmoruEhP13q_5k010vpUEXajIUMevxn88841cHhtXYPmIQ29wohFga4llE2BoY5c5Zg.1rc7uvqNGNzaUoJKLdSAbt.AgM; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=cZh_Shf8p4TAay9sgYTJ.5gqXOM.Zha_g35APhXZzJQ-1767562684217-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","www-authenticate":"Bearer realm=\"OpenAI API\"","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"7","x-openai-proxy-wasm":"v0.1","x-request-id":"803d9c75f6edc7b5c658accc36673fd2"},"request_id":"803d9c75f6edc7b5c658accc36673fd2","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Model retrieval failed for: non-existent-model {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de1787fdcfc2c-YVR","connection":"keep-alive","content-length":"241","content-type":"application/json","date":"Sun, 04 Jan 2026 21:38:04 GMT","openai-processing-ms":"1","openai-version":"2020-10-01","server":"cloudflare","set-cookie":"__cf_bm=WgJ_lWa.keANwUYmNDqx8X5TgegSTgj.b87KdDwLokk-1767562684-1.0.1.1-vpC0oWk0WZOvyB8jCyYTbfh6u2zQbBnf0vwcjRuZvJW4j5EU_io4ol6dAeBe15BTHl33bODwwD5bp5lpGJpnaBywUt.k_DCq1n5MPN.IjdE; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=yD3tLR1lvaTdGrfyxxhjyExlbeWFdFPL3g_fTT6n2zw-1767562684304-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","www-authenticate":"Bearer realm=\"OpenAI API\"","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"3","x-openai-proxy-wasm":"v0.1","x-request-id":"914ecd6371d2411cb5922c3256494728"},"request_id":"914ecd6371d2411cb5922c3256494728","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Model listing failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de178f89ffc2c-YVR","connection":"keep-alive","content-length":"241","content-type":"application/json","date":"Sun, 04 Jan 2026 21:38:04 GMT","openai-processing-ms":"3","openai-version":"2020-10-01","server":"cloudflare","set-cookie":"__cf_bm=3kB71JJd51opN_v3DubWkeP0YZ2R99o7ZXFECrfV51I-1767562684-1.0.1.1-ttfOzCUJ20mLlJPl2cSHGHeJDtlhMXm8cE4wkgb4S26hmaD9GKNQ.YJXbc92JpzjxiFnrlkZn.LaZmFuAPKoa4s1MoxfIksPKi.shP8bsUs; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=fE.sDod8nuKfDCRI1NyS0dFSZ8iV9fd5ftecLjuht4Y-1767562684398-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","www-authenticate":"Bearer realm=\"OpenAI API\"","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"6","x-openai-proxy-wasm":"v0.1","x-request-id":"19223009c7d407d8c675f5f57b310c6e"},"request_id":"19223009c7d407d8c675f5f57b310c6e","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Model listing failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de17999adfc2c-YVR","connection":"keep-alive","content-length":"241","content-type":"application/json","date":"Sun, 04 Jan 2026 21:38:04 GMT","openai-processing-ms":"5","openai-version":"2020-10-01","server":"cloudflare","set-cookie":"__cf_bm=aWbkdkzFINZEvz4OzuXws0d8p82qCZrywUqUUDqEpAU-1767562684-1.0.1.1-3qz4JsCRPm2w2nCRol3aO1jLPeoH4PgZ4Gutm6TumeeDNR88uMSSJGTWERkoA33nQardm.s_Yl.kNUMoTNANA17SmEI.adS2T_lLGRDYYig; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=1B4voq.xHiyyTnXyz6cfXdTEWmnAgN5c36yrZeiq1Zw-1767562684464-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","www-authenticate":"Bearer realm=\"OpenAI API\"","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"10","x-openai-proxy-wasm":"v0.1","x-request-id":"ff552ca039cd9ce468460028e01a2fe6"},"request_id":"ff552ca039cd9ce468460028e01a2fe6","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m] [unknown]: Unexpected error
+SyntaxError: Unexpected token 'i', "invalid json" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at createStrictSyntaxError (C:\Users\babaei\Desktop\Research\Ai4SE4AI\adaptive-agentic-rag-vscode-copilot-chat\backend\node_modules\body-parser\lib\types\json.js:169:10)
+    at parse (C:\Users\babaei\Desktop\Research\Ai4SE4AI\adaptive-agentic-rag-vscode-copilot-chat\backend\node_modules\body-parser\lib\types\json.js:86:15)
+    at C:\Users\babaei\Desktop\Research\Ai4SE4AI\adaptive-agentic-rag-vscode-copilot-chat\backend\node_modules\body-parser\lib\read.js:128:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)
+    at invokeCallback (C:\Users\babaei\Desktop\Research\Ai4SE4AI\adaptive-agentic-rag-vscode-copilot-chat\backend\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\babaei\Desktop\Research\Ai4SE4AI\adaptive-agentic-rag-vscode-copilot-chat\backend\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\babaei\Desktop\Research\Ai4SE4AI\adaptive-agentic-rag-vscode-copilot-chat\backend\node_modules\raw-body\index.js:287:7)
+    at IncomingMessage.emit (node:events:518:28)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+2026-01-04 13:38:04 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de17bc8c84d45-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:04 GMT","server":"cloudflare","set-cookie":"__cf_bm=czwJ6CNEavlzRUY30xyQhSCZv75LKpxHoW6ARvXLfc4-1767562684-1.0.1.1-Q2Dju3JrByjCgjlSJVv9YZ80TI3uQgD4UILQhLvaTIq7x9Ga1lImQwDlcJ83YZMy1ZwtZ7rdiu6IUSjfjXP9K6YmT66Xbj0asP3b1KgnwE8; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=3AHlzLhSPKOM7fwHJnhKS2I6tnsgeC_vAqsnC.UJ7M0-1767562684817-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_540b9f3d8f964ceebc40f8313d36dfd7"},"request_id":"req_540b9f3d8f964ceebc40f8313d36dfd7","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de17c3e57497b-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:04 GMT","server":"cloudflare","set-cookie":"__cf_bm=oJ01muWs..0yMiNAbZBJvsQdNV7X8ZdsyKUfmJMdA7s-1767562684-1.0.1.1-_ZsJRfmHNvyNdBH70o2BvWTfYdkqA98A6VYmP7uPhiylm7cDzOb55_0Ixxomk6lcKQLD_6Ks9C1X8DaGK4RKLdPGQvOrAZ.ghlrhqDpyMho; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=BeUgPKMTQOOJ9jw9Ell_XeL93zUzQPGMPlT8U.XpaKs-1767562684863-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_d1e2d11d7ad746839b0679a3bf0aee3a"},"request_id":"req_d1e2d11d7ad746839b0679a3bf0aee3a","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de17c397a4d45-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:04 GMT","server":"cloudflare","set-cookie":"__cf_bm=z25p878mNy0FaHT5ukq5Z44bVd2vBmWDReZnWsoXbtI-1767562684-1.0.1.1-yWVQXp0TmU0iwNsIcvuImCDmglJ1QrlMFBFjeyBrFwU91blqy8xamD4b3A81HGsJdeuo9w5nRkTIxZuyKZy06.58b2sKHgvV_6ne9myPsag; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=XBEG84GXtwQiAF2d0AwE3LWM9SlOw59Mmhwy8aVeItE-1767562684874-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_a89fa28da06049cb9c3540fefbe00a9c"},"request_id":"req_a89fa28da06049cb9c3540fefbe00a9c","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de17c3c5d2914-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:04 GMT","server":"cloudflare","set-cookie":"__cf_bm=pgyquFxaqv80QTdvdEAL8IID2tk3TjO_LwzQXaW7bqc-1767562684-1.0.1.1-vr_EKy7YS4WOCLkmKtV2XTUXFB0GSLikR_KPAcdlVcpSBsYnv3lYaT8y.QQWbqFNr.zY4RGXxed8o4KH8uAk35Gs6AxIoxrKEQpnz46Wtgo; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=ND6kVN39AYhGsy2wGnwgv0WxHbUuB9N7dxmtHt_6R70-1767562684877-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"0","x-openai-proxy-wasm":"v0.1","x-request-id":"req_5b9535d16fff4373b4074cde2a1fe106"},"request_id":"req_5b9535d16fff4373b4074cde2a1fe106","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de17c3c1d2ae2-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:04 GMT","server":"cloudflare","set-cookie":"__cf_bm=BAFw7oRjyyGJn0.BpAR22tMKvhXF23K_81ZbYxd6StU-1767562684-1.0.1.1-bXDCNBHbZFS.6QflBSY.b43nhp9A2Ep.EOhH9pdT4hPfh7usimJELT69897NXylCDUIAADsVaGBdIedUAYRNW39i.FPzqp1lznTaazzuMcU; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=a74Q0JIDgr_S_1hUDwUJcXfx7mafc04yM2JcBNpjxUI-1767562684895-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_c37973fcd4b8456d9dbb9f7f45dfe139"},"request_id":"req_c37973fcd4b8456d9dbb9f7f45dfe139","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+2026-01-04 13:38:04 [[31merror[39m]: Chat completion failed {"service":"ownrex-backend","error":{"status":401,"headers":{"alt-svc":"h3=\":443\"; ma=86400","cf-cache-status":"DYNAMIC","cf-ray":"9b8de17c3fd22c5d-YVR","connection":"keep-alive","content-length":"262","content-type":"application/json; charset=utf-8","date":"Sun, 04 Jan 2026 21:38:04 GMT","server":"cloudflare","set-cookie":"__cf_bm=8YEuxI9E4A7I8tc8Oyi92luUF79VQcpQiky96nSF.lU-1767562684-1.0.1.1-Wpv0kwXeDZyqEDn8PXpXncxYfKnFgJdQGUWrD2Klv97jZfsM_fIcrHaBEvastamNDn_lu7trm_Q1bz_GpnVHTA0YQbOBSr.pykYp3kVprs0; path=/; expires=Sun, 04-Jan-26 22:08:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None, _cfuvid=jbaOkydqTiyvDp4hFUzALrwbKrbxQ1.k2txe_hPgzqA-1767562684904-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None","strict-transport-security":"max-age=31536000; includeSubDomains; preload","vary":"Origin","x-content-type-options":"nosniff","x-envoy-upstream-service-time":"1","x-openai-proxy-wasm":"v0.1","x-request-id":"req_134d5843819d46a6ae3b24d08b84bd9d"},"request_id":"req_134d5843819d46a6ae3b24d08b84bd9d","error":{"message":"Incorrect API key provided: test-api-key. You can find your API key at https://platform.openai.com/account/api-keys.","type":"invalid_request_error","param":null,"code":"invalid_api_key"},"code":"invalid_api_key","param":null,"type":"invalid_request_error"}}
+PASS test/e2e/extension-communication.test.ts (11.298 s)
+  Extension-Backend Communication E2E Tests
+    Authentication Flow
+      ΓêÜ 1. Should accept request without auth when disabled (251 ms)
+      ΓêÜ 2. Should include request ID in response headers (110 ms)
+      ΓêÜ 3. Should accept custom request ID header (106 ms)
+      ΓêÜ 4. Should handle Bearer token format (87 ms)
+      ΓêÜ 5. Should handle API key in header (121 ms)
+    Chat Completions
+      ΓêÜ 6. Should accept minimal chat request (69 ms)
+      ΓêÜ 7. Should accept system and user messages (100 ms)
+      ΓêÜ 8. Should accept multi-turn conversation (50 ms)
+      ΓêÜ 9. Should accept temperature parameter (93 ms)
+      ΓêÜ 10. Should accept max_tokens parameter (39 ms)
+      ΓêÜ 11. Should accept top_p parameter (56 ms)
+      ΓêÜ 12. Should accept stop sequences (85 ms)
+      ΓêÜ 13. Should accept presence_penalty (50 ms)
+      ΓêÜ 14. Should accept frequency_penalty (68 ms)
+      ΓêÜ 15. Should handle stream parameter (98 ms)
+    Code Completions
+      ΓêÜ 16. Should accept minimal completion request (87 ms)
+      ΓêÜ 17. Should accept model parameter (102 ms)
+      ΓêÜ 18. Should accept array prompts (68 ms)
+      ΓêÜ 19. Should accept suffix parameter (77 ms)
+      ΓêÜ 20. Should accept max_tokens for completions (77 ms)
+      ΓêÜ 21. Should accept temperature for completions (93 ms)
+      ΓêÜ 22. Should accept echo parameter (87 ms)
+      ΓêÜ 23. Should accept n parameter for multiple completions (84 ms)
+      ΓêÜ 24. Should accept stop for completions (88 ms)
+      ΓêÜ 25. Should handle stream for completions (67 ms)
+    Embeddings
+      ΓêÜ 26. Should accept string input (91 ms)
+      ΓêÜ 27. Should accept array input (61 ms)
+      ΓêÜ 28. Should accept model parameter (88 ms)
+      ΓêÜ 29. Should accept encoding_format parameter (51 ms)
+      ΓêÜ 30. Should accept dimensions parameter (75 ms)
+    Models
+      ΓêÜ 31. Should list models (97 ms)
+      ΓêÜ 32. Should retrieve specific model (78 ms)
+      ΓêÜ 33. Should handle non-existent model (79 ms)
+      ΓêÜ 34. Should return JSON content type (92 ms)
+      ΓêÜ 35. Should accept Accept header (69 ms)
+    Error Handling
+      ΓêÜ 36. Should reject empty messages array (4 ms)
+      ΓêÜ 37. Should reject missing messages (3 ms)
+      ΓêÜ 38. Should reject invalid message role (5 ms)
+      ΓêÜ 39. Should reject invalid temperature (4 ms)
+      ΓêÜ 40. Should reject missing prompt (3 ms)
+      ΓêÜ 41. Should reject missing embedding input (3 ms)
+      ΓêÜ 42. Should return error object format (4 ms)
+      ΓêÜ 43. Should handle 404 for unknown endpoints (3 ms)
+      ΓêÜ 44. Should handle invalid JSON body (6 ms)
+      ΓêÜ 45. Should include error type in response (4 ms)
+    Performance
+      ΓêÜ 46. Should respond to health check quickly (88 ms)
+      ΓêÜ 47. Should handle concurrent health requests (152 ms)
+      ΓêÜ 48. Should include timing in stats (3 ms)
+      ΓêÜ 49. Should handle large message arrays (67 ms)
+      ΓêÜ 50. Should handle multiple concurrent chat requests (87 ms)
+
+-----------------------|---------|----------|---------|---------|----------------------------------------------------------
+File                   | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                        
+-----------------------|---------|----------|---------|---------|----------------------------------------------------------
+All files              |   78.26 |    60.07 |   78.08 |   78.46 |                                                          
+ src                   |   96.55 |        0 |     100 |   96.55 |                                                          
+  server.ts            |   96.55 |        0 |     100 |   96.55 | 50                                                       
+ src/config            |   97.43 |    83.33 |     100 |   97.29 |                                                          
+  constants.ts         |     100 |      100 |     100 |     100 |                                                          
+  index.ts             |   95.83 |    83.33 |     100 |   95.45 | 63                                                       
+ src/middleware        |   85.36 |       55 |   85.71 |   85.36 |                                                          
+  auth.ts              |     100 |      100 |     100 |     100 |                                                          
+  errorHandler.ts      |   78.57 |    58.82 |     100 |   78.57 | 45,93-109                                                
+  rateLimiter.ts       |   84.21 |       75 |      75 |   84.21 | 35,40-45                                                 
+  requestLogger.ts     |      70 |    33.33 |   66.66 |      70 | 84-104                                                   
+  validator.ts         |     100 |      100 |     100 |     100 |                                                          
+ src/routes            |   69.45 |    46.66 |   72.72 |   69.45 |                                                          
+  chat.ts              |    62.5 |    54.54 |      50 |    62.5 | 43-51,59-71,91-114,126-142                               
+  completions.ts       |   75.55 |       80 |      50 |   75.55 | 53-72,84-89                                              
+  embeddings.ts        |   62.16 |    33.33 |     100 |   62.16 | 39-50,62-77                                              
+  health.ts            |   71.42 |    33.33 |      75 |   71.42 | 26,65-88                                                 
+  index.ts             |     100 |      100 |     100 |     100 |                                                          
+  models.ts            |   65.85 |        0 |     100 |   65.85 | 29-32,38-41,65-68,74-77                                  
+ src/services          |   77.71 |    59.12 |   78.94 |   78.16 |                                                          
+  cache.service.ts     |   54.43 |    29.41 |   86.66 |   54.05 | 32,62-75,84-93,102,113-121,138-140,166-177,205           
+  openai.service.ts    |   95.29 |       65 |   93.33 |   95.29 | 35,105,161,253                                           
+  prompt.service.ts    |   82.27 |    71.42 |   83.33 |   82.89 | 131,134,189,202-227,242                                  
+  telemetry.service.ts |   59.32 |    31.81 |   47.61 |   59.64 | 65,74-81,101,106-108,117-118,123-130,141,155-163,203-208 
+  token.service.ts     |   96.49 |    81.25 |     100 |   96.42 | 88,126                                                   
+ src/utils             |   79.31 |     62.5 |   71.05 |   79.85 |                                                          
+  errors.ts            |   87.09 |    30.76 |   63.63 |   87.09 | 64,70,76,91                                              
+  helpers.ts           |      80 |    81.25 |      80 |   81.25 | 48,63,117-131,144                                        
+  logger.ts            |   72.72 |    72.72 |   57.14 |   72.72 | 30-43,65-83,116-118                                      
+-----------------------|---------|----------|---------|---------|----------------------------------------------------------
+Test Suites: 1 failed, 11 passed, 12 total
+Tests:       7 failed, 167 passed, 174 total
+Snapshots:   0 total
+Time:        13.42 s
+Ran all test suites.
