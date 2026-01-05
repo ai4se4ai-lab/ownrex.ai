@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import * as zlib from 'zlib';
 import { getLogger } from '../utils/logger';
 

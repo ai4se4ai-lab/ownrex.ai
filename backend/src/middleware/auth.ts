@@ -3,11 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { getConfig } from '../config';
 import { tokenService } from '../services/token.service';
 import { AuthenticationError } from '../utils/errors';
 import { getLogger } from '../utils/logger';
-import { getConfig } from '../config';
 
 const logger = getLogger();
 
