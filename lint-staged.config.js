@@ -12,16 +12,16 @@ const removeIgnoredFiles = async (files) => {
 			return eslint.isPathIgnored(file);
 		})
 	);
-	const filteredFiles = files.filter((_, i) => !isIgnored[i]);
-	return filteredFiles.join(' ');
+	return files.filter((_, i) => !isIgnored[i]);
 };
 
 module.exports = {
 	'!({.esbuild.ts,test/simulation/fixtures/**,test/scenarios/**,.vscode/extensions/**,**/vscode.proposed.*})*{.ts,.js,.tsx}': async (files) => {
 		const filesToLint = await removeIgnoredFiles(files);
+		const filesString = filesToLint.join(' ');
 		return [
-			`npm run tsfmt -- ${filesToLint}`,
-			`eslint --max-warnings=0 ${filesToLint}`
+			`npm run tsfmt -- ${filesString}`,
+			`eslint --max-warnings=0 ${filesString}`
 		];
 	},
 };
