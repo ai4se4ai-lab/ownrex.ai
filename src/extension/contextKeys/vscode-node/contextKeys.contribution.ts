@@ -4,8 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 import { commands, extensions, window } from 'vscode';
 import { IAuthenticationService, MinimalModeError } from '../../../platform/authentication/common/authentication';
-import { ChatDisabledError, ContactSupportError, EnterpriseManagedError, NotSignedUpError, SubscriptionExpiredError } from '../../../platform/authentication/vscode-node/copilotTokenManager';
-import { SESSION_LOGIN_MESSAGE } from '../../../platform/authentication/vscode-node/session';
 import { ConfigKey, IConfigurationService } from '../../../platform/configuration/common/configurationService';
 import { IEnvService } from '../../../platform/env/common/envService';
 import { ILogService } from '../../../platform/log/common/logService';
@@ -15,6 +13,7 @@ import { TelemetryData } from '../../../platform/telemetry/common/telemetryData'
 import { Disposable } from '../../../util/vs/base/common/lifecycle';
 import { autorun } from '../../../util/vs/base/common/observableInternal';
 import { GHPR_EXTENSION_ID } from '../../chatSessions/vscode/chatSessionsUriHandler';
+import { isOwnrexEnabled } from '../../../platform/authentication/node/ownrexServices';
 
 const welcomeViewContextKeys = {
 	Activated: 'github.copilot-chat.activated',
@@ -117,34 +116,37 @@ export class ContextKeysContribution extends Disposable {
 		const allKeys = Object.values(welcomeViewContextKeys);
 		let error: unknown | undefined = undefined;
 		let key: string | undefined;
+
 		try {
 			await this._authenticationService.getCopilotToken();
 			key = welcomeViewContextKeys.Activated;
+			this._logService.info('[context keys] Ownrex.ai activated successfully');
 		} catch (e: any) {
 			error = e;
 			const reason = e.message || e;
 			const data = TelemetryData.createAndMarkAsIssued({ reason });
 			this._telemetryService.sendGHTelemetryErrorEvent('activationFailed', data.properties, data.measurements);
-			const message =
-				reason === 'GitHubLoginFailed'
-					? SESSION_LOGIN_MESSAGE
-					: `GitHub Copilot could not connect to server. Extension activation failed: "${reason}"`;
-			this._logService.error(message);
-		}
 
-		if (error instanceof NotSignedUpError) {
-			key = welcomeViewContextKeys.IndividualDisabled;
-		} else if (error instanceof SubscriptionExpiredError) {
-			key = welcomeViewContextKeys.IndividualExpired;
-		} else if (error instanceof EnterpriseManagedError) {
-			key = welcomeViewContextKeys.EnterpriseDisabled;
-		} else if (error instanceof ContactSupportError) {
-			key = welcomeViewContextKeys.ContactSupport;
-		} else if (error instanceof ChatDisabledError) {
-			key = welcomeViewContextKeys.CopilotChatDisabled;
-		} else if (this._fetcherService.isFetcherError(error)) {
-			key = welcomeViewContextKeys.Offline;
-			this._scheduleOfflineCheck();
+			if (isOwnrexEnabled()) {
+				// Ownrex mode - simplified error handling
+				const message = `Ownrex.ai could not connect to backend. Please ensure the backend is running at localhost:8000. Error: "${reason}"`;
+				this._logService.error(message);
+
+				// Check if it's a network error
+				if (this._fetcherService.isFetcherError(error)) {
+					key = welcomeViewContextKeys.Offline;
+					this._scheduleOfflineCheck();
+				}
+			} else {
+				// Legacy GitHub Copilot error handling (kept for compatibility)
+				const message = `Extension activation failed: "${reason}"`;
+				this._logService.error(message);
+
+				if (this._fetcherService.isFetcherError(error)) {
+					key = welcomeViewContextKeys.Offline;
+					this._scheduleOfflineCheck();
+				}
+			}
 		}
 
 		if (key) {
@@ -214,7 +216,18 @@ export class ContextKeysContribution extends Disposable {
 	private async _updatePermissiveSessionContext() {
 		let hasPermissiveSession = false;
 		let missingPermissiveSession = false;
-		if (!this._authenticationService.isMinimalMode) {
+
+		if (isOwnrexEnabled()) {
+			// Ownrex mode - we always have a "permissive" session if we have a token
+			try {
+				const token = await this._authenticationService.getCopilotToken();
+				hasPermissiveSession = !!token;
+			} catch (error) {
+				hasPermissiveSession = false;
+			}
+			missingPermissiveSession = !hasPermissiveSession;
+		} else if (!this._authenticationService.isMinimalMode) {
+			// Legacy GitHub mode
 			try {
 				hasPermissiveSession = !!(await this._authenticationService.getGitHubSession('permissive', { silent: true }));
 			} catch (error) {

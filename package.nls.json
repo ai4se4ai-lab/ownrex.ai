@@ -35,7 +35,7 @@
 	"github.copilot.viewsWelcome.individual.expired": "Your Ownrex.ai session has expired.\n\n[Review Settings](https://github.com/ai4se4ai-lab/ownrex.ai)",
 	"github.copilot.viewsWelcome.enterprise": "Contact your organization administrator to enable Ownrex.ai.",
 	"github.copilot.viewsWelcome.offline": {
-		"message": "You are currently offline. Please connect to the internet to use Ownrex.ai.\n\n[Retry Connection](command:github.copilot.refreshToken)",
+		"message": "Cannot connect to Ownrex.ai backend. Please ensure the backend is running at localhost:8000.\n\n[Test Connection](command:ownrex.testConnection)\n[Open Settings](command:ownrex.openSettings)",
 		"comment": [
 			"{Locked='['}",
 			"{Locked='](command:github.copilot.refreshToken)'}"
@@ -80,7 +80,7 @@
 	"github.copilot.command.applySuggestionWithCopilot": "Apply Suggestion",
 	"github.copilot.command.explainTerminalLastCommand": "Explain Last Terminal Command",
 	"github.copilot.command.collectWorkspaceIndexDiagnostics": "Collect Workspace Index Diagnostics",
-	"github.copilot.command.triggerPermissiveSignIn": "Login to GitHub with Full Permissions",
+	"github.copilot.command.triggerPermissiveSignIn": "Set Ownrex.ai API Key",
 	"github.copilot.command.resetCloudAgentWorkspaceConfirmations": "Reset Cloud Agent Workspace Confirmations",
 	"github.copilot.git.generateCommitMessage": "Generate Commit Message",
 	"github.copilot.git.resolveMergeConflicts": "Resolve Conflicts with AI",
@@ -194,10 +194,10 @@
 	"github.copilot.command.openWalkthrough": "Open Walkthrough",
 	"github.copilot.walkthrough.title": "Ownrex.ai",
 	"github.copilot.walkthrough.description": "Your AI pair programmer to write code faster and smarter",
-	"github.copilot.walkthrough.signIn.title": "Sign in to get started",
-	"github.copilot.walkthrough.signIn.description": "To get started with Ownrex.ai, sign in with your account.\nMake sure you're using the correct account. You can also sign in later using the account menu.\n\n[Sign In](command:github.copilot.signIn)",
-	"github.copilot.walkthrough.signIn.media.altText": "Sign in via this walkthrough or VS Code's account menu",
-	"github.copilot.walkthrough.setup.signIn.title": "Sign in to use Ownrex.ai",
+	"github.copilot.walkthrough.signIn.title": "Configure Ownrex.ai to get started",
+	"github.copilot.walkthrough.signIn.description": "To get started with Ownrex.ai, configure your API key and backend settings.\nMake sure your Ownrex.ai backend is running at localhost:8000.\n\n[Set API Key](command:ownrex.setApiKey)",
+	"github.copilot.walkthrough.signIn.media.altText": "Configure Ownrex.ai via settings or the command palette",
+	"github.copilot.walkthrough.setup.signIn.title": "Configure Ownrex.ai",
 	"github.copilot.walkthrough.setup.signIn.description": "You can use Ownrex.ai to generate code across multiple files, fix errors, ask questions about your code and much more using natural language.\n\n[Get Started with Ownrex.ai](command:workbench.action.chat.triggerSetupForceSignIn)",
 	"github.copilot.walkthrough.setup.signUp.title": "Get started with Ownrex.ai",
 	"github.copilot.walkthrough.setup.signUp.description": "You can use Ownrex.ai to generate code across multiple files, fix errors, ask questions about your code and much more using natural language.\n\n[Get Started with Ownrex.ai](command:workbench.action.chat.triggerSetupForceSignIn)",

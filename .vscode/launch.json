@@ -7,7 +7,8 @@
 			"name": "Launch Copilot Extension",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--enable-proposed-api=Ai4SE4AI-Lab.ownrex-ai-chat"
 			],
 			"smartStep": true,
 			"sourceMaps": true,
@@ -30,7 +31,8 @@
 			"name": "Launch Copilot Extension - Watch Mode",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--enable-proposed-api=Ai4SE4AI-Lab.ownrex-ai-chat"
 			],
 			"smartStep": true,
 			"sourceMaps": true,
@@ -59,6 +61,7 @@
 			"attachSimplePort": 5870,
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--enable-proposed-api=Ai4SE4AI-Lab.ownrex-ai-chat"
 			],
 			"smartStep": true,
 			"sourceMaps": true,
@@ -268,7 +271,8 @@
 			"name": "Launch Copilot Extension - TS Server in Debug Mode",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--enable-proposed-api=Ai4SE4AI-Lab.ownrex-ai-chat"
 			],
 			"smartStep": true,
 			"sourceMaps": true,
@@ -323,7 +327,8 @@
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"--extensionTestsPath=${workspaceFolder}/src/extension/completions-core/vscode-node/extension/test/run",
-				"--disable-extensions"
+				"--disable-extensions",
+				"--enable-proposed-api=Ai4SE4AI-Lab.ownrex-ai-chat"
 			],
 			"env": {
 				"TSX_TSCONFIG_PATH": "${workspaceFolder}/tsconfig.json",

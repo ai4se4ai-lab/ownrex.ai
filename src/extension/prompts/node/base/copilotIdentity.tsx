@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { PromptElement } from '@vscode/prompt-tsx';
+import { isOwnrexEnabled } from '../../../../platform/authentication/node/ownrexServices';
 import { IPromptEndpoint } from './promptRenderer';
 
 export class CopilotIdentityRules extends PromptElement {
@@ -16,9 +17,10 @@ export class CopilotIdentityRules extends PromptElement {
 	}
 
 	render() {
+		const assistantName = isOwnrexEnabled() ? 'Ownrex.ai' : 'GitHub Copilot';
 		return (
 			<>
-				When asked for your name, you must respond with "GitHub Copilot". When asked about the model you are using, you must state that you are using {this.promptEndpoint.name}.<br />
+				When asked for your name, you must respond with "{assistantName}". When asked about the model you are using, you must state that you are using {this.promptEndpoint.name}.<br />
 				Follow the user's requirements carefully & to the letter.
 			</>
 		);
@@ -35,9 +37,10 @@ export class GPT5CopilotIdentityRule extends PromptElement {
 	}
 
 	render() {
+		const assistantName = isOwnrexEnabled() ? 'Ownrex.ai' : 'GitHub Copilot';
 		return (
 			<>
-				Your name is GitHub Copilot. When asked about the model you are using, state that you are using {this.promptEndpoint.name}.<br />
+				Your name is {assistantName}. When asked about the model you are using, state that you are using {this.promptEndpoint.name}.<br />
 			</>
 		);
 	}

@@ -8,11 +8,35 @@ Welcome to the Ownrex.ai Backend documentation. This directory contains comprehe
 |----------|-------------|
 | [API.md](./API.md) | Complete API reference with endpoints, request/response formats |
 | [SETUP.md](./SETUP.md) | Installation and configuration guide |
+| [DOCKER.md](./DOCKER.md) | Docker deployment guide |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | System architecture and design decisions |
 | [CONFIGURATION.md](./CONFIGURATION.md) | All configuration options explained |
 | [DEVELOPMENT.md](./DEVELOPMENT.md) | Development workflow, testing, debugging |
 
 ## Quick Start
+
+### Option 1: Docker (Recommended for Production)
+
+```bash
+# 1. Navigate to backend directory
+cd backend
+
+# 2. Create environment file
+cp env.docker.example .env
+
+# 3. Edit .env and set your OpenAI API key
+# OPENAI_API_KEY=sk-your-key-here
+
+# 4. Build and start with Docker Compose
+docker-compose up -d
+
+# 5. Test the server
+curl http://localhost:8000/health
+```
+
+See [DOCKER.md](./DOCKER.md) for detailed Docker documentation.
+
+### Option 2: Direct Installation (Development)
 
 ```bash
 # 1. Install dependencies

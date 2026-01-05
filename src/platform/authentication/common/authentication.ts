@@ -135,8 +135,19 @@ export interface IAuthenticationService {
 	 * @param force will force a refresh of the token, even if not expired
 	 * @returns a Copilot token or throws an error if none is found.
 	 * @note For best practice of handling of the user's authentication state, you should react to {@link onDidAuthenticationChange}.
+	 * @deprecated For Ownrex.ai, use getBackendTokenInfo() instead. This method is kept for backward compatibility.
 	 */
 	getCopilotToken(force?: boolean): Promise<CopilotToken>;
+
+	/**
+	 * Get backend token information directly from the backend API.
+	 * This is the preferred method for Ownrex.ai integration.
+	 *
+	 * @param force will force a refresh of the token, even if not expired
+	 * @returns BackendTokenInfo from the backend API
+	 * @note This method fetches token information from the backend (GET /v1/token)
+	 */
+	getBackendTokenInfo?(force?: boolean): Promise<import('./backendTokenService').BackendTokenInfo>;
 
 	/**
 	 * Drop the current Copilot token as we received an HTTP error while trying

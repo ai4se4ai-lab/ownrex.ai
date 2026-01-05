@@ -32,8 +32,19 @@ export interface ICopilotTokenManager {
 	 * telemetry consent has been obtained. If this is not checked by the token manager
 	 * implementation itself, then anything constructing or initialising it should not
 	 * do so without checking this. force will force a refresh of the token, even not expired
+	 * @deprecated For Ownrex.ai, use getBackendTokenInfo() instead. This method is kept for backward compatibility.
 	 */
 	getCopilotToken(force?: boolean): Promise<CopilotToken>;
+
+	/**
+	 * Get backend token information directly from the backend API.
+	 * This is the preferred method for Ownrex.ai integration.
+	 *
+	 * @param force will force a refresh of the token, even if not expired
+	 * @returns BackendTokenInfo from the backend API
+	 * @note This method fetches token information from the backend (GET /v1/token)
+	 */
+	getBackendTokenInfo?(force?: boolean): Promise<import('./backendTokenService').BackendTokenInfo>;
 
 	/**
 	 * Drop the current Copilot token as we received an HTTP error while trying

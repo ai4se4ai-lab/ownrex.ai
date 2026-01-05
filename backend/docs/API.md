@@ -276,6 +276,98 @@ GET /health/stats
 
 ---
 
+### Token Information
+
+Get token information for the authenticated API key.
+
+**Endpoint**: `GET /v1/token` or `GET /v1/auth/token`
+
+**Authentication**: Requires `Authorization: Bearer <api-key>` header
+
+**Response**:
+
+```json
+{
+  "token": "api-key",
+  "endpoints": {
+    "api": "http://localhost:8000",
+    "proxy": "http://localhost:8000",
+    "telemetry": "http://localhost:8000",
+    "origin-tracker": "http://localhost:8000"
+  },
+  "chat_enabled": true,
+  "code_quote_enabled": false,
+  "copilotignore_enabled": false,
+  "individual": true,
+  "sku": "ownrex_free",
+  "expires_at": 1234567890,
+  "refresh_in": 3600,
+  "timestamp": "2024-01-15T10:30:00.000Z"
+}
+```
+
+**Response Fields**:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| token | string | The API key token |
+| endpoints | object | Backend endpoint URLs |
+| chat_enabled | boolean | Whether chat features are enabled |
+| code_quote_enabled | boolean | Whether code quote features are enabled |
+| copilotignore_enabled | boolean | Whether copilotignore is enabled |
+| individual | boolean | Whether this is an individual account |
+| sku | string | Subscription SKU (e.g., "ownrex_free") |
+| expires_at | number | Unix timestamp when token expires |
+| refresh_in | number | Seconds until token should be refreshed |
+| timestamp | string | ISO timestamp of response |
+
+---
+
+### Telemetry
+
+Application Insights telemetry endpoint for receiving usage tracking data from the extension.
+
+**Endpoint**: `POST /v2/track`
+
+**Content-Type**: `application/x-json-stream` (gzipped) or `application/json`
+
+**Request Format**:
+- Gzipped newline-delimited JSON (NDJSON)
+- Each line is a separate JSON object representing a telemetry event
+- Standard Application Insights format
+
+**Response**: `204 No Content`
+
+**Example Request**:
+```
+POST /v2/track
+Content-Type: application/x-json-stream
+Content-Encoding: gzip
+
+[gzipped JSON data]
+```
+
+**Example Telemetry Event** (after decompression):
+```json
+{"name":"copilot/chat","time":"2024-01-15T10:30:00.000Z","iKey":"...","tags":{...},"data":{...}}
+{"name":"copilot/completion","time":"2024-01-15T10:30:01.000Z","iKey":"...","tags":{...},"data":{...}}
+```
+
+**Health Check**: `GET /v2/track`
+
+Returns endpoint status:
+```json
+{
+  "status": "ok",
+  "message": "Telemetry endpoint is available",
+  "timestamp": "2024-01-15T10:30:00.000Z"
+}
+```
+
+**Note**: This endpoint accepts telemetry data from the Application Insights SDK used by the VSCode extension. The endpoint URL is configured via the `/v1/token` endpoint's `endpoints.telemetry` field.
+
+---
+
 ## Error Responses
 
 All errors follow this format:

@@ -23,7 +23,7 @@
 	"icon": "assets/copilot.png",
 	"pricing": "Trial",
 	"engines": {
-		"vscode": "^1.108.0",
+		"vscode": "^1.95.0",
 		"npm": ">=9.0.0",
 		"node": ">=22.14.0"
 	},
@@ -97,11 +97,13 @@
 		"aiSettingsSearch",
 		"chatParticipantAdditions",
 		"chatEditing",
+		"defaultChatParticipant",
 		"defaultChatParticipant@4",
 		"contribSourceControlInputBoxMenu",
 		"authLearnMore",
 		"testObserver",
 		"aiTextSearchProvider@2",
+		"chatParticipantPrivate",
 		"chatParticipantPrivate@11",
 		"chatProvider@4",
 		"contribDebugCreateConfiguration",
@@ -1248,7 +1250,7 @@
 			{
 				"id": "github.copilot.default",
 				"name": "GitHubCopilot",
-				"fullName": "GitHub Copilot",
+				"fullName": "Ownrex.ai",
 				"description": "%copilot.description%",
 				"isDefault": true,
 				"locations": [
@@ -1284,7 +1286,7 @@
 			{
 				"id": "github.copilot.editingSession",
 				"name": "GitHubCopilot",
-				"fullName": "GitHub Copilot",
+				"fullName": "Ownrex.ai",
 				"description": "%copilot.edits.description%",
 				"isDefault": true,
 				"locations": [
@@ -1774,12 +1776,27 @@
 				"when": "github.copilot.interactiveSession.switchToReleaseChannel"
 			}
 		],
-		"commands": [
-			{
-				"command": "github.copilot.chat.triggerPermissiveSignIn",
-				"title": "%github.copilot.command.triggerPermissiveSignIn%"
-			},
-			{
+	"commands": [
+		{
+			"command": "ownrex.setApiKey",
+			"title": "Ownrex.ai: Set API Key",
+			"category": "Ownrex.ai"
+		},
+		{
+			"command": "ownrex.testConnection",
+			"title": "Ownrex.ai: Test Backend Connection",
+			"category": "Ownrex.ai"
+		},
+		{
+			"command": "ownrex.openSettings",
+			"title": "Ownrex.ai: Open Settings",
+			"category": "Ownrex.ai"
+		},
+		{
+			"command": "github.copilot.chat.triggerPermissiveSignIn",
+			"title": "%github.copilot.command.triggerPermissiveSignIn%"
+		},
+		{
 				"command": "github.copilot.cli.sessions.delete",
 				"title": "%github.copilot.command.deleteAgentSession%",
 				"icon": "$(close)",

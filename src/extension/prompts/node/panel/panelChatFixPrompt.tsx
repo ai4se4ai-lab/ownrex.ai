@@ -13,6 +13,7 @@ import { Capabilities } from '../base/capabilities';
 import { InstructionMessage } from '../base/instructionMessage';
 import { ResponseTranslationRules } from '../base/responseTranslationRules';
 import { SafetyRules } from '../base/safetyRules';
+import { isOwnrexEnabled } from '../../../../platform/authentication/node/ownrexServices';
 import { Diagnostics } from '../inline/diagnosticsContext';
 import { ChatToolReferences, ChatVariablesAndQuery } from './chatVariables';
 import { CodeBlockFormattingRules } from './codeBlockFormattingRules';
@@ -40,7 +41,7 @@ export class PanelChatFixPrompt extends PromptElement<PanelChatFixPromptProps> {
 			<>
 				<SystemMessage priority={1000}>
 					You are an AI programming assistant.<br />
-					When asked for your name, you must respond with "GitHub Copilot".<br />
+					When asked for your name, you must respond with {isOwnrexEnabled() ? '"Ownrex.ai"' : '"GitHub Copilot"'}.<br />
 					Follow the user's requirements carefully & to the letter.<br />
 					<SafetyRules />
 					<br />

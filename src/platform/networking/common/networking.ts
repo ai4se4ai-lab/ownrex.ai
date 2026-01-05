@@ -356,6 +356,7 @@ function networkRequest(
 		request.signal = abort.signal;
 	}
 	if (typeof endpoint.urlOrRequestMetadata === 'string') {
+		console.log(`[networkRequest] Using direct URL: ${endpoint.urlOrRequestMetadata}`);
 		const requestPromise = fetcher.fetch(endpoint.urlOrRequestMetadata, request).catch(reason => {
 			if (canRetryOnceNetworkError(reason)) {
 				// disconnect and retry the request once if the connection was reset
@@ -371,6 +372,7 @@ function networkRequest(
 		});
 		return requestPromise;
 	} else {
+		console.log(`[networkRequest] Using CAPIClient with RequestMetadata:`, endpoint.urlOrRequestMetadata);
 		return capiClientService.makeRequest(request, endpoint.urlOrRequestMetadata as RequestMetadata);
 	}
 }

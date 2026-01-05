@@ -1,0 +1,52 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist
+build
+*.tsbuildinfo
+
+# Tests
+test
+tests
+**/*.test.ts
+**/*.spec.ts
+coverage
+
+# Development files
+.env
+.env.local
+.env.development
+.env.test
+*.log
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation (keep in image if needed, but exclude from build context)
+docs
+*.md
+!README.md
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Other
+.DS_Store
+Thumbs.db
+*.orig
+

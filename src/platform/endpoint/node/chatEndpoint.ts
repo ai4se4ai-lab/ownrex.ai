@@ -31,6 +31,7 @@ import { ICAPIClientService } from '../common/capiClient';
 import { isAnthropicFamily } from '../common/chatModelCapabilities';
 import { IDomainService } from '../common/domainService';
 import { CustomModel, IChatModelInformation, ModelPolicy, ModelSupportedEndpoint } from '../common/endpointProvider';
+import { isOwnrexEnabled } from '../../authentication/node/ownrexServices';
 import { createMessagesRequestBody, processResponseFromMessagesEndpoint } from './messagesApi';
 import { createResponsesRequestBody, processResponseFromChatEndpoint } from './responsesApi';
 
@@ -181,7 +182,37 @@ export class ChatEndpoint implements IChatEndpoint {
 	}
 
 	public get urlOrRequestMetadata(): string | RequestMetadata {
-		// Use override or respect setting.
+		// When Ownrex is enabled, use direct URL to backend instead of going through CAPIClient
+		if (isOwnrexEnabled()) {
+			const token = this._authService.copilotToken;
+
+			// If token is not available, try to get it synchronously from store
+			// This is a fallback - ideally the token should already be in the store
+			if (!token?.endpoints?.api) {
+				// Try to get backend URL from configuration as fallback
+				const backendUrl = this._configurationService.getConfig<string>('ownrex.backendUrl' as unknown) || 'http://localhost:8000';
+				const baseUrl = backendUrl.replace(/\/$/, '');
+				const url = this.useResponsesApi
+					? `${baseUrl}/v1/responses`
+					: this.useMessagesApi
+						? `${baseUrl}/v1/messages`
+						: `${baseUrl}/v1/chat/completions`;
+				console.log(`[ChatEndpoint] Ownrex enabled - using direct URL from config: ${url}`);
+				return url;
+			}
+
+			// Token is available, use it
+			const baseUrl = token.endpoints.api.replace(/\/$/, ''); // Remove trailing slash
+			const url = this.useResponsesApi
+				? `${baseUrl}/v1/responses`
+				: this.useMessagesApi
+					? `${baseUrl}/v1/messages`
+					: `${baseUrl}/v1/chat/completions`;
+			console.log(`[ChatEndpoint] Ownrex enabled - using direct URL from token: ${url}`);
+			return url;
+		}
+
+		// Use override or respect setting for GitHub Copilot
 		// TODO unlikely but would break if it changes in the middle of a request being constructed
 		return this.modelMetadata.urlOrRequestMetadata ??
 			(this.useResponsesApi ? { type: RequestType.ChatResponses } :

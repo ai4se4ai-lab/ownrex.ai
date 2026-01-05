@@ -1,180 +1,210 @@
-/**
- * Ownrex Token Manager
- * Replaces GitHub-based authentication with simple API key authentication for Ownrex.ai backend
- */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 
 import { Disposable } from '../../../util/vs/base/common/lifecycle';
-import { ICopilotTokenManager, CopilotToken, TokenInfo, TokenInfoOrError } from '../common/authentication';
-import { IConfigurationService, ConfigKey } from '../../configuration/common/configurationService';
+import { Emitter, Event } from '../../../util/vs/base/common/event';
+import { ICopilotTokenManager } from '../common/copilotTokenManager';
+import { IConfigurationService } from '../../configuration/common/configurationService';
 import { ILogService } from '../../log/common/logService';
-import { createServiceIdentifier } from '../../../util/vs/platform/instantiation/common/instantiation';
+import { IBackendTokenService, BackendTokenInfo } from '../common/backendTokenService';
+import { createServiceIdentifier } from '../../../util/common/services';
 
-export interface IOwnrexTokenManager {
-  readonly _serviceBrand: undefined;
-  getCopilotToken(force?: boolean): Promise<CopilotToken>;
-  checkCopilotToken(): Promise<{ status: 'OK' } | { kind: 'failure'; reason: string }>;
-  getBackendUrl(): string;
-  getApiKey(): string;
+export interface IOwnrexTokenManager extends ICopilotTokenManager {
+	getBackendUrl(): string;
+	getApiKey(): string;
+	getBackendTokenInfo(force?: boolean): Promise<BackendTokenInfo>;
+	checkCopilotToken(): Promise<{ status: 'OK' } | { kind: 'failure'; reason: string }>;
 }
 
 export const IOwnrexTokenManager = createServiceIdentifier<IOwnrexTokenManager>('IOwnrexTokenManager');
 
 /**
  * Ownrex Token Manager Implementation
- * Uses simple API key authentication instead of GitHub OAuth
+ * Fetches token information from the backend API
  */
 export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManager {
-  declare readonly _serviceBrand: undefined;
+	declare readonly _serviceBrand: undefined;
 
-  private cachedToken: CopilotToken | null = null;
-  private tokenExpiresAt: number = 0;
+	private readonly _onDidCopilotTokenRefresh = this._register(new Emitter<void>());
+	readonly onDidCopilotTokenRefresh: Event<void> = this._onDidCopilotTokenRefresh.event;
 
-  constructor(
-    @IConfigurationService private readonly configurationService: IConfigurationService,
-    @ILogService private readonly logService: ILogService
-  ) {
-    super();
-    this.logService.info('[OwnrexTokenManager] Initialized');
-  }
+	private cachedTokenInfo: BackendTokenInfo | null = null;
+	private tokenExpiresAt: number = 0; // Unix timestamp in seconds
 
-  /**
-   * Get the Ownrex backend URL from configuration
-   */
-  getBackendUrl(): string {
-    // Try to get from Ownrex-specific config first
-    const ownrexUrl = this.configurationService.getConfig<string>('ownrex.backendUrl' as any);
-    if (ownrexUrl) {
-      return ownrexUrl;
-    }
+	constructor(
+		@IConfigurationService private readonly configurationService: IConfigurationService,
+		@ILogService private readonly logService: ILogService,
+		@IBackendTokenService private readonly backendTokenService: IBackendTokenService
+	) {
+		super();
+		this.logService.info('[OwnrexTokenManager] Initialized - using Ownrex.ai backend API');
+	}
 
-    // Fall back to environment variable
-    if (typeof process !== 'undefined' && process.env.OWNREX_BACKEND_URL) {
-      return process.env.OWNREX_BACKEND_URL;
-    }
+	/**
+	 * Get the Ownrex backend URL from configuration
+	 */
+	getBackendUrl(): string {
+		// Try to get from Ownrex-specific config first
+		const ownrexUrl = this.configurationService.getConfig<string>('ownrex.backendUrl' as unknown);
+		if (ownrexUrl) {
+			return ownrexUrl;
+		}
 
-    // Default to localhost
-    return 'http://localhost:8000';
-  }
+		// Fall back to environment variable
+		if (typeof process !== 'undefined' && process.env.OWNREX_BACKEND_URL) {
+			return process.env.OWNREX_BACKEND_URL;
+		}
 
-  /**
-   * Get the API key from configuration
-   */
-  getApiKey(): string {
-    // Try to get from Ownrex-specific config first
-    const apiKey = this.configurationService.getConfig<string>('ownrex.apiKey' as any);
-    if (apiKey) {
-      return apiKey;
-    }
+		// Default to localhost
+		return 'http://localhost:8000';
+	}
 
-    // Fall back to environment variable
-    if (typeof process !== 'undefined' && process.env.OWNREX_API_KEY) {
-      return process.env.OWNREX_API_KEY;
-    }
+	/**
+	 * Get the API key from configuration
+	 */
+	getApiKey(): string {
+		// Try to get from Ownrex-specific config first
+		const apiKey = this.configurationService.getConfig<string>('ownrex.apiKey' as unknown);
+		if (apiKey) {
+			return apiKey;
+		}
 
-    // Default key for development
-    return 'ownrex-default-key';
-  }
+		// Fall back to environment variable
+		if (typeof process !== 'undefined' && process.env.OWNREX_API_KEY) {
+			return process.env.OWNREX_API_KEY;
+		}
 
-  /**
-   * Get a Copilot token (creates one from API key configuration)
-   */
-  async getCopilotToken(force?: boolean): Promise<CopilotToken> {
-    const now = Date.now();
+		// Default key for development
+		return 'ownrex-default-key';
+	}
 
-    // Return cached token if still valid and not forced refresh
-    if (!force && this.cachedToken && this.tokenExpiresAt > now) {
-      return this.cachedToken;
-    }
+	/**
+	 * Get backend token information from the backend API
+	 */
+	async getBackendTokenInfo(force?: boolean): Promise<BackendTokenInfo> {
+		const now = Math.floor(Date.now() / 1000); // Current time in seconds
 
-    const apiKey = this.getApiKey();
-    const backendUrl = this.getBackendUrl();
+		// Return cached token if still valid and not forced refresh
+		if (!force && this.cachedTokenInfo && this.tokenExpiresAt > now) {
+			this.logService.debug('[OwnrexTokenManager] Returning cached token info');
+			return this.cachedTokenInfo;
+		}
 
-    this.logService.info(`[OwnrexTokenManager] Creating token for backend: ${backendUrl}`);
+		const apiKey = this.getApiKey();
+		const backendUrl = this.getBackendUrl();
 
-    // Create token info structure compatible with CopilotToken
-    const tokenInfo: TokenInfo = {
-      token: apiKey,
-      expires_at: Math.floor((now + 86400000) / 1000), // 24 hours from now (Unix timestamp)
-      refresh_in: 3600, // Refresh in 1 hour
-      endpoints: {
-        api: backendUrl,
-        proxy: backendUrl,
-        telemetry: backendUrl,
-        'origin-tracker': backendUrl
-      },
-      sku: 'ownrex_free',
-      tracking_id: `ownrex_${Date.now()}`,
-      annotations_enabled: false,
-      chat_enabled: true,
-      codesearch: false,
-      code_quote_enabled: false,
-      copilotignore_enabled: false,
-      individual: true,
-      intellij_editor_fetcher: false,
-      limited_user_quotas: undefined,
-      organization_list: [],
-      prompt_8k: true,
-      public_suggestions: 'disabled',
-      snippy_load_test_enabled: false,
-      telemetry: 'disabled',
-      vsc_electron_fetcher: true,
-      vsc_panel: true
-    };
+		this.logService.info(`[OwnrexTokenManager] Fetching token info from backend: ${backendUrl}`);
 
-    // Create and cache the token
-    this.cachedToken = new CopilotToken(tokenInfo);
-    this.tokenExpiresAt = now + 86400000; // Cache for 24 hours
+		try {
+			// Fetch token info from backend
+			const tokenInfo = await this.backendTokenService.getTokenInfo(apiKey, backendUrl);
 
-    return this.cachedToken;
-  }
+			// Cache the token info
+			this.cachedTokenInfo = tokenInfo;
+			// Use expires_at from backend, or default to 24 hours
+			this.tokenExpiresAt = tokenInfo.expires_at || (now + 86400);
 
-  /**
-   * Check if the token is valid
-   */
-  async checkCopilotToken(): Promise<{ status: 'OK' } | { kind: 'failure'; reason: string }> {
-    try {
-      const token = await this.getCopilotToken();
-      
-      if (!token.token) {
-        return {
-          kind: 'failure',
-          reason: 'No API key configured'
-        };
-      }
+			this.logService.info('[OwnrexTokenManager] Token info fetched and cached successfully');
+			return tokenInfo;
+		} catch (error) {
+			this.logService.error(`[OwnrexTokenManager] Failed to fetch token info: ${error}`);
+			throw error;
+		}
+	}
 
-      // Optionally verify by calling the backend health endpoint
-      const backendUrl = this.getBackendUrl();
-      try {
-        const response = await fetch(`${backendUrl}/health`);
-        if (response.ok) {
-          return { status: 'OK' };
-        }
-        return {
-          kind: 'failure',
-          reason: `Backend health check failed: ${response.status}`
-        };
-      } catch (error) {
-        // If health check fails, still return OK if we have a token
-        // The backend might just not be running yet
-        this.logService.warn(`[OwnrexTokenManager] Backend health check failed: ${error}`);
-        return { status: 'OK' };
-      }
-    } catch (error) {
-      return {
-        kind: 'failure',
-        reason: `Token check failed: ${error}`
-      };
-    }
-  }
+	/**
+	 * Get a Copilot token (for compatibility - creates adapter from BackendTokenInfo)
+	 * @deprecated Use getBackendTokenInfo() instead
+	 */
+	async getCopilotToken(force?: boolean): Promise<unknown> {
+		// For now, return BackendTokenInfo as CopilotToken for compatibility
+		// This will be removed in later phases
+		const tokenInfo = await this.getBackendTokenInfo(force);
 
-  /**
-   * Dispose of resources
-   */
-  override dispose(): void {
-    this.cachedToken = null;
-    super.dispose();
-  }
+		// Create a minimal adapter object that provides the same interface
+		// This is a temporary compatibility layer
+		return {
+			token: tokenInfo.token,
+			endpoints: tokenInfo.endpoints,
+			sku: tokenInfo.sku,
+			chat_enabled: tokenInfo.chat_enabled,
+			code_quote_enabled: tokenInfo.code_quote_enabled,
+			copilotignore_enabled: tokenInfo.copilotignore_enabled,
+			individual: tokenInfo.individual,
+			isChatEnabled: () => tokenInfo.chat_enabled,
+			expires_at: tokenInfo.expires_at
+		};
+	}
+
+	/**
+	 * Check if the token is valid
+	 */
+	async checkCopilotToken(): Promise<{ status: 'OK' } | { kind: 'failure'; reason: string }> {
+		try {
+			const apiKey = this.getApiKey();
+
+			if (!apiKey || apiKey === 'ownrex-default-key') {
+				return {
+					kind: 'failure',
+					reason: 'No API key configured'
+				};
+			}
+
+			// Try to fetch token info from backend
+			try {
+				await this.getBackendTokenInfo();
+				return { status: 'OK' };
+			} catch (error) {
+				// If token fetch fails, try health endpoint as fallback
+				const backendUrl = this.getBackendUrl();
+				try {
+					const response = await fetch(`${backendUrl}/health`);
+					if (response.ok) {
+						return { status: 'OK' };
+					}
+					return {
+						kind: 'failure',
+						reason: `Backend health check failed: ${response.status}`
+					};
+				} catch (healthError) {
+					this.logService.warn(`[OwnrexTokenManager] Backend health check failed: ${healthError}`);
+					return {
+						kind: 'failure',
+						reason: `Cannot connect to backend: ${error}`
+					};
+				}
+			}
+		} catch (error) {
+			return {
+				kind: 'failure',
+				reason: `Token check failed: ${error}`
+			};
+		}
+	}
+
+	/**
+	 * Reset the token (e.g., after HTTP error)
+	 */
+	resetCopilotToken(_httpError?: number): void {
+		this.cachedTokenInfo = null;
+		this.tokenExpiresAt = 0;
+		// Clear backend service cache if available
+		if ('clearCache' in this.backendTokenService && typeof (this.backendTokenService as unknown).clearCache === 'function') {
+			(this.backendTokenService as unknown).clearCache();
+		}
+		this._onDidCopilotTokenRefresh.fire();
+		this.logService.info('[OwnrexTokenManager] Token reset');
+	}
+
+	/**
+	 * Dispose of resources
+	 */
+	override dispose(): void {
+		this.cachedTokenInfo = null;
+		super.dispose();
+	}
 }
 
 export default OwnrexTokenManager;
-

@@ -3,6 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+/**
+ * @deprecated This class is deprecated. Use BackendTokenInfo from backendTokenService instead.
+ * The backend token API (GET /v1/token) is now the single source of truth for token information.
+ * This class is kept for backward compatibility during the migration period.
+ */
+
 import { CopilotUserQuotaInfo } from '../../chat/common/chatQuotaService';
 
 /**

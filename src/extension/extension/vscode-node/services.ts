@@ -10,6 +10,11 @@ import { StaticGitHubAuthenticationService } from '../../../platform/authenticat
 import { createStaticGitHubTokenProvider, getOrCreateTestingCopilotTokenManager } from '../../../platform/authentication/node/copilotTokenManager';
 import { AuthenticationService } from '../../../platform/authentication/vscode-node/authenticationService';
 import { VSCodeCopilotTokenManager } from '../../../platform/authentication/vscode-node/copilotTokenManager';
+import { OwnrexAuthenticationService } from '../../../platform/authentication/vscode-node/ownrexAuthenticationService';
+import { OwnrexTokenManager } from '../../../platform/authentication/node/ownrexTokenManager';
+import { isOwnrexEnabled } from '../../../platform/authentication/node/ownrexServices';
+import { IBackendTokenService } from '../../../platform/authentication/common/backendTokenService';
+import { BackendTokenServiceImpl } from '../../../platform/authentication/node/backendTokenServiceImpl';
 import { IChatAgentService } from '../../../platform/chat/common/chatAgents';
 import { IChatMLFetcher } from '../../../platform/chat/common/chatMLFetcher';
 import { IChunkingEndpointClient } from '../../../platform/chunking/common/chunkingEndpointClient';
@@ -127,6 +132,11 @@ export function registerServices(builder: IInstantiationServiceBuilder, extensio
 
 	registerCommonServices(builder, extensionContext);
 
+	// Register BackendTokenService for Ownrex.ai
+	if (isOwnrexEnabled()) {
+		builder.define(IBackendTokenService, new SyncDescriptor(BackendTokenServiceImpl));
+	}
+
 	builder.define(IAutomodeService, new SyncDescriptor(AutomodeService));
 	builder.define(IConversationStore, new ConversationStore());
 	builder.define(IDiffService, new DiffServiceImpl());
@@ -144,16 +154,19 @@ export function registerServices(builder: IInstantiationServiceBuilder, extensio
 	const internalAIKey = extensionContext.extension.packageJSON.internalAIKey ?? '';
 	const internalLargeEventAIKey = extensionContext.extension.packageJSON.internalLargeStorageAriaKey ?? '';
 	const ariaKey = extensionContext.extension.packageJSON.ariaKey ?? '';
+	setupTelemetry(builder, extensionContext, internalAIKey, internalLargeEventAIKey, ariaKey);
+
 	if (isTestMode || isScenarioAutomation) {
-		setupTelemetry(builder, extensionContext, internalAIKey, internalLargeEventAIKey, ariaKey);
 		// If we're in testing mode, then most code will be called from an actual test,
 		// and not from here. However, some objects will capture the `accessor` we pass
 		// here and then re-use it later. This is particularly the case for those objects
 		// which implement VSCode interfaces so can't be changed to take `accessor` in their
 		// method parameters.
 		builder.define(ICopilotTokenManager, getOrCreateTestingCopilotTokenManager(env.devDeviceId));
+	} else if (isOwnrexEnabled()) {
+		// Use Ownrex.ai backend - decoupled from GitHub Copilot
+		builder.define(ICopilotTokenManager, new SyncDescriptor(OwnrexTokenManager));
 	} else {
-		setupTelemetry(builder, extensionContext, internalAIKey, internalLargeEventAIKey, ariaKey);
 		builder.define(ICopilotTokenManager, new SyncDescriptor(VSCodeCopilotTokenManager));
 	}
 
@@ -161,6 +174,13 @@ export function registerServices(builder: IInstantiationServiceBuilder, extensio
 		builder.define(IAuthenticationService, new SyncDescriptor(StaticGitHubAuthenticationService, [createStaticGitHubTokenProvider()]));
 		builder.define(IEndpointProvider, new SyncDescriptor(ScenarioAutomationEndpointProviderImpl, [collectFetcherTelemetry]));
 		builder.define(IIgnoreService, new SyncDescriptor(NullIgnoreService));
+	} else if (isOwnrexEnabled()) {
+		// Use Ownrex.ai services - decoupled from GitHub Copilot
+		// The OwnrexAuthenticationService handles authentication via Bearer token
+		// The ProductionEndpointProvider uses endpoints from the CopilotToken, which OwnrexTokenManager configures
+		builder.define(IAuthenticationService, new SyncDescriptor(OwnrexAuthenticationService));
+		builder.define(IEndpointProvider, new SyncDescriptor(ProductionEndpointProvider, [collectFetcherTelemetry]));
+		builder.define(IIgnoreService, new SyncDescriptor(VsCodeIgnoreService));
 	} else {
 		builder.define(IAuthenticationService, new SyncDescriptor(AuthenticationService));
 		builder.define(IEndpointProvider, new SyncDescriptor(ProductionEndpointProvider, [collectFetcherTelemetry]));
