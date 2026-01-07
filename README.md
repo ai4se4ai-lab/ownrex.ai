@@ -54,6 +54,62 @@ Your code is yours. We follow responsible practices to ensure that your code sni
 
 To get the latest security fixes, please use the latest version of the extension and VS Code.
 
+## Development
+
+### Prerequisites
+
+- Node.js >= 22.14.0
+- npm >= 9.0.0
+- Visual Studio Code >= 1.95.0
+
+### Building and Running the Extension
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+   Note: If you encounter build errors related to native modules (like `sqlite3`), you can install with `--ignore-scripts` flag:
+   ```bash
+   npm install --ignore-scripts
+   ```
+
+2. **Build the extension:**
+   ```bash
+   npm run compile    # Development build
+   # or
+   npm run build      # Production build
+   ```
+
+3. **Run the extension:**
+
+   **Option A: Using VS Code (Recommended)**
+   - Open the project in VS Code
+   - Press `F5` or go to Run and Debug (`Ctrl+Shift+D`)
+   - Select "Run Extension" from the dropdown
+   - A new Extension Development Host window will open with the extension loaded
+
+   **Option B: Using Command Line**
+   ```bash
+   code --extensionDevelopmentPath="<path-to-extension-folder>"
+   ```
+
+   For example:
+   ```bash
+   code --extensionDevelopmentPath="C:\Users\babaei\Desktop\Research\Ai4SE4AI\ownrex.ai"
+   ```
+
+   Or on Unix/Mac:
+   ```bash
+   code --extensionDevelopmentPath="$(pwd)"
+   ```
+
+4. **Development with Watch Mode:**
+   ```bash
+   npm run watch
+   ```
+   This will automatically rebuild the extension when you make changes. Then press `F5` in VS Code to launch the extension.
+
 ### Resources & next steps
 * **Get started with [Ownrex.ai on GitHub](https://github.com/ai4se4ai-lab/ownrex.ai)**
 * **[Feedback](https://github.com/ai4se4ai-lab/ownrex.ai/issues)**: We'd love to get your help in making Ownrex.ai better!
