@@ -74,9 +74,9 @@ This document summarizes all the branding changes made to rebrand the extension 
 ## What Still Uses Original Names (By Design)
 
 ### Technical Implementation (Backend)
-The following retain `github.copilot` namespace for compatibility:
-- Configuration keys (`github.copilot.*`)
-- Command IDs (`github.copilot.*`)
+The following retain `ownrex.ai` namespace for compatibility:
+- Configuration keys (`ownrex.ai.*`)
+- Command IDs (`ownrex.ai.*`)
 - Context keys
 - Internal API references
 
@@ -99,7 +99,7 @@ Replace `assets/copilot.png` with your Ownrex.ai logo:
 ### 2. **Optional: Update Internal Namespaces** ⚙️
 If you want complete rebranding, search and replace:
 ```
-github.copilot → ownrex.ai
+ownrex.ai → ownrex.ai
 ```
 
 This will require extensive testing as it changes:

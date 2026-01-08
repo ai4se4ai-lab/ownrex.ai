@@ -7,10 +7,10 @@ import type { WorkspaceConfiguration } from 'vscode';
 import * as vscode from 'vscode';
 import { distinct } from '../../../util/vs/base/common/arrays';
 import { ICopilotTokenStore } from '../../authentication/common/copilotTokenStore';
+import { IEnvService } from '../../env/common/envService';
 import { packageJson } from '../../env/common/packagejson';
 import { IExperimentationService } from '../../telemetry/common/nullExperimentationService';
 import { AbstractConfigurationService, BaseConfig, Config, ConfigKey, ConfigValueValidators, CopilotConfigPrefix, ExperimentBasedConfig, ExperimentBasedConfigType, globalConfigRegistry, InspectConfigResult } from '../common/configurationService';
-import { IEnvService } from '../../env/common/envService';
 
 // Helper to avoid JSON.stringify quoting strings
 function stringOrStringify(value: any) {
@@ -100,16 +100,16 @@ export class ConfigurationServiceImpl extends AbstractConfigurationService {
 
 		let configuredValue: T | undefined;
 		if (key.advancedSubKey) {
-			// This is a `github.copilot.advanced.*` setting
+			// This is a `ownrex.ai.advanced.*` setting
 
 			// First, let's try to read it using the flat style
-			// e.g. "github.copilot.advanced.debug.useElectronFetcher": false
+			// e.g. "ownrex.ai.advanced.debug.useElectronFetcher": false
 			const advancedConfigFlatStyleValue = config.get<T>(key.id);
 			if (advancedConfigFlatStyleValue !== undefined) {
 				configuredValue = advancedConfigFlatStyleValue;
 			} else {
 				// If that doesn't work, fall back to the object style
-				// e.g. "github.copilot.advanced": { "debug.useElectronFetcher": false }
+				// e.g. "ownrex.ai.advanced": { "debug.useElectronFetcher": false }
 				const advancedConfig = config.get<Record<string, any>>('advanced');
 				configuredValue = advancedConfig?.[key.advancedSubKey];
 			}
@@ -212,12 +212,12 @@ export class ConfigurationServiceImpl extends AbstractConfigurationService {
 
 	setConfig<T>(key: BaseConfig<T>, value: T): Thenable<void> {
 		if (key.advancedSubKey) {
-			// This is a `github.copilot.advanced.*` setting
+			// This is a `ownrex.ai.advanced.*` setting
 
 			// We support two styles when reading these settings:
-			// 1. Flat style: "github.copilot.advanced.debug.useElectronFetcher": false
+			// 1. Flat style: "ownrex.ai.advanced.debug.useElectronFetcher": false
 			//    This is the style our team likes to use, but this is not the correct way according to how the setting is registered in package.json.
-			// 2. Object style: "github.copilot.advanced": { "debug.useElectronFetcher": false }
+			// 2. Object style: "ownrex.ai.advanced": { "debug.useElectronFetcher": false }
 			//    This is the style that the package.json schema expects, and is the correct way to write these settings.
 
 			// Unfortunately, the configuration API of vscode is unable to write the flat style setting, it refuses to write them.

@@ -209,7 +209,7 @@ export class AgentIntentInvocation extends EditCodeIntentInvocation implements I
 
 		const summarizeThresholdOverride = this.configurationService.getConfig<number | undefined>(ConfigKey.Advanced.SummarizeAgentConversationHistoryThreshold);
 		if (typeof summarizeThresholdOverride === 'number' && summarizeThresholdOverride < 100) {
-			throw new Error(`Setting github.copilot.${ConfigKey.Advanced.SummarizeAgentConversationHistoryThreshold.id} is too low`);
+			throw new Error(`Setting ownrex.ai.${ConfigKey.Advanced.SummarizeAgentConversationHistoryThreshold.id} is too low`);
 		}
 
 		// Reserve extra space when tools are involved due to token counting issues

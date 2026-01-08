@@ -89,22 +89,29 @@ export class ConversationFeature implements IExtensionContribution {
 
 		const activationBlockerDeferred = new DeferredPromise<void>();
 		this.activationBlocker = activationBlockerDeferred.p;
+
+		// For Ownrex.ai, activate immediately to prevent VS Code's chat setup agent from timing out
+		// The extension should work even if the token isn't available yet
+		// This ensures chat participants are registered immediately so VS Code recognizes the extension as ready
+		this.activated = true;
+		activationBlockerDeferred.complete();
+		this.logService.info(`ConversationFeature: Ownrex.ai activated immediately - chat participants registered`);
+
 		if (authenticationService.copilotToken) {
 			this.logService.debug(`ConversationFeature: Copilot token already available`);
-			this.activated = true;
-			activationBlockerDeferred.complete();
+			this.enabled = authenticationService.copilotToken.isChatEnabled() ?? true;
+		} else {
+			// Enable by default for Ownrex.ai - backend will handle authentication
+			this.enabled = true;
 		}
 
 		this._disposables.add(authenticationService.onDidAuthenticationChange(async () => {
 			const hasSession = !!authenticationService.copilotToken;
 			this.logService.debug(`ConversationFeature: onDidAuthenticationChange has token: ${hasSession}`);
 			if (hasSession) {
-				this.activated = true;
-			} else {
-				this.activated = false;
+				this.enabled = authenticationService.copilotToken?.isChatEnabled() ?? true;
 			}
-
-			activationBlockerDeferred.complete();
+			// Keep extension activated even if token is lost - backend will handle reconnection
 		}));
 	}
 
@@ -119,7 +126,7 @@ export class ConversationFeature implements IExtensionContribution {
 		this._enabled = value;
 
 		// Set context value that is used to show/hide th sidebar icon
-		vscode.commands.executeCommand('setContext', 'github.copilot.interactiveSession.disabled', !value);
+		vscode.commands.executeCommand('setContext', 'ownrex.ai.interactiveSession.disabled', !value);
 	}
 
 	get activated() {
@@ -216,12 +223,12 @@ export class ConversationFeature implements IExtensionContribution {
 		const disposables = new DisposableStore();
 
 		[
-			vscode.commands.registerCommand('github.copilot.interactiveSession.feedback', async () => {
+			vscode.commands.registerCommand('ownrex.ai.interactiveSession.feedback', async () => {
 				return vscode.env.openExternal(vscode.Uri.parse(FEEDBACK_URL));
 			}),
-			vscode.commands.registerCommand('github.copilot.terminal.explainTerminalLastCommand', async () => this.triggerTerminalChat({ query: `/${TerminalExplainIntent.intentName} #terminalLastCommand` })),
-			vscode.commands.registerCommand('github.copilot.terminal.fixTerminalLastCommand', async () => generateTerminalFixes(this.instantiationService)),
-			vscode.commands.registerCommand('github.copilot.terminal.generateCommitMessage', async () => {
+			vscode.commands.registerCommand('ownrex.ai.terminal.explainTerminalLastCommand', async () => this.triggerTerminalChat({ query: `/${TerminalExplainIntent.intentName} #terminalLastCommand` })),
+			vscode.commands.registerCommand('ownrex.ai.terminal.fixTerminalLastCommand', async () => generateTerminalFixes(this.instantiationService)),
+			vscode.commands.registerCommand('ownrex.ai.terminal.generateCommitMessage', async () => {
 				const workspaceFolders = vscode.workspace.workspaceFolders;
 
 				if (!workspaceFolders?.length) {
@@ -245,7 +252,7 @@ export class ConversationFeature implements IExtensionContribution {
 					vscode.window.activeTerminal?.sendText(message, false);
 				}
 			}),
-			vscode.commands.registerCommand('github.copilot.git.generateCommitMessage', async (rootUri: vscode.Uri | undefined, _: vscode.SourceControlInputBoxValueProviderContext[], cancellationToken: vscode.CancellationToken | undefined) => {
+			vscode.commands.registerCommand('ownrex.ai.git.generateCommitMessage', async (rootUri: vscode.Uri | undefined, _: vscode.SourceControlInputBoxValueProviderContext[], cancellationToken: vscode.CancellationToken | undefined) => {
 				const repository = this.gitCommitMessageService.getRepository(rootUri);
 				if (!repository) {
 					return;
@@ -256,14 +263,14 @@ export class ConversationFeature implements IExtensionContribution {
 					repository.inputBox.value = commitMessage;
 				}
 			}),
-			vscode.commands.registerCommand('github.copilot.git.resolveMergeConflicts', async (...resourceStates: (vscode.Uri | vscode.SourceControlResourceState)[]) => {
+			vscode.commands.registerCommand('ownrex.ai.git.resolveMergeConflicts', async (...resourceStates: (vscode.Uri | vscode.SourceControlResourceState)[]) => {
 				const resources = resourceStates.filter(r => !!r).map(r => isUri(r) ? r : r.resourceUri);
 				await this.mergeConflictService.resolveMergeConflicts(resources, undefined);
 			}),
-			vscode.commands.registerCommand('github.copilot.devcontainer.generateDevContainerConfig', async (args: DevContainerConfigGeneratorArguments, cancellationToken = new vscode.CancellationTokenSource().token) => {
+			vscode.commands.registerCommand('ownrex.ai.devcontainer.generateDevContainerConfig', async (args: DevContainerConfigGeneratorArguments, cancellationToken = new vscode.CancellationTokenSource().token) => {
 				return this.devContainerConfigurationService.generateConfiguration(args, cancellationToken);
 			}),
-			vscode.commands.registerCommand('github.copilot.chat.openUserPreferences', async () => {
+			vscode.commands.registerCommand('ownrex.ai.chat.openUserPreferences', async () => {
 				const uri = URI.joinPath(this.extensionContext.globalStorageUri, 'copilotUserPreferences.md');
 				return vscode.commands.executeCommand('vscode.open', uri);
 			}),
@@ -342,11 +349,11 @@ export class ConversationFeature implements IExtensionContribution {
 					setLastCommandMatchResult(commandMatchResult);
 					return [
 						{
-							command: 'github.copilot.terminal.fixTerminalLastCommand',
+							command: 'ownrex.ai.terminal.fixTerminalLastCommand',
 							title: vscode.l10n.t('Fix using Copilot')
 						},
 						{
-							command: 'github.copilot.terminal.explainTerminalLastCommand',
+							command: 'ownrex.ai.terminal.explainTerminalLastCommand',
 							title: vscode.l10n.t('Explain using Copilot')
 						}
 					];
@@ -355,7 +362,7 @@ export class ConversationFeature implements IExtensionContribution {
 			vscode.window.registerTerminalQuickFixProvider('copilot-chat.generateCommitMessage', {
 				provideTerminalQuickFixes: (commandMatchResult, token) => {
 					return this.enabled ? [{
-						command: 'github.copilot.terminal.generateCommitMessage',
+						command: 'ownrex.ai.terminal.generateCommitMessage',
 						title: vscode.l10n.t('Generate Commit Message')
 					}] : [];
 				},
@@ -365,7 +372,7 @@ export class ConversationFeature implements IExtensionContribution {
 }
 
 function registerSearchIntentCommand(): IDisposable {
-	return vscode.commands.registerCommand('github.copilot.executeSearch', async (arg: FindInFilesArgs) => {
+	return vscode.commands.registerCommand('ownrex.ai.executeSearch', async (arg: FindInFilesArgs) => {
 		const show = arg.filesToExclude.length > 0 || arg.filesToInclude.length > 0;
 		vscode.commands.executeCommand('workbench.view.search.focus').then(() =>
 			vscode.commands.executeCommand('workbench.action.search.toggleQueryDetails', { show })

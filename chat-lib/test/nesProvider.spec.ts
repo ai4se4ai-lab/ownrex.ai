@@ -153,7 +153,7 @@ describe('NESProvider Facade', () => {
 			logTarget,
 		});
 		nextEditProvider.updateTreatmentVariables({
-			'config.github.copilot.chat.advanced.inlineEdits.xtabProvider.defaultModelConfigurationString': '{ "modelName": "xtab-test" }',
+			'config.ownrex.ai.chat.advanced.inlineEdits.xtabProvider.defaultModelConfigurationString': '{ "modelName": "xtab-test" }',
 		});
 
 		doc.applyEdit(StringEdit.insert(11, '3D'));

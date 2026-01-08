@@ -49,16 +49,65 @@ export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManage
 		// Try to get from Ownrex-specific config first
 		const ownrexUrl = this.configurationService.getConfig<string>('ownrex.backendUrl' as unknown);
 		if (ownrexUrl) {
-			return ownrexUrl;
+			// Validate and sanitize URL
+			const sanitized = this._sanitizeUrl(ownrexUrl);
+			if (sanitized) {
+				return sanitized;
+			}
+			this.logService.warn(`[OwnrexTokenManager] Invalid backend URL in config: ${ownrexUrl}, using default`);
 		}
 
 		// Fall back to environment variable
 		if (typeof process !== 'undefined' && process.env.OWNREX_BACKEND_URL) {
-			return process.env.OWNREX_BACKEND_URL;
+			const sanitized = this._sanitizeUrl(process.env.OWNREX_BACKEND_URL);
+			if (sanitized) {
+				return sanitized;
+			}
+			this.logService.warn(`[OwnrexTokenManager] Invalid backend URL in env: ${process.env.OWNREX_BACKEND_URL}, using default`);
 		}
 
 		// Default to localhost
 		return 'http://localhost:8000';
+	}
+
+	/**
+	 * Sanitize and validate a URL string
+	 */
+	private _sanitizeUrl(url: string | undefined): string | undefined {
+		if (!url || typeof url !== 'string') {
+			return undefined;
+		}
+
+		// Trim whitespace
+		url = url.trim();
+
+		// Remove any invalid characters that could cause URI parsing errors
+		// Ensure it starts with http:// or https://
+		if (!/^https?:\/\//i.test(url)) {
+			// If it doesn't start with http:// or https://, try to fix it
+			if (url.startsWith('//')) {
+				url = 'http:' + url;
+			} else if (!url.includes('://')) {
+				// Assume http:// if no scheme
+				url = 'http://' + url;
+			} else {
+				// Invalid scheme, return undefined
+				return undefined;
+			}
+		}
+
+		// Remove trailing slash for consistency
+		url = url.replace(/\/$/, '');
+
+		// Basic validation - check for invalid characters in scheme
+		try {
+			// Try to create a URL object to validate
+			new URL(url);
+			return url;
+		} catch (e) {
+			this.logService.warn(`[OwnrexTokenManager] URL validation failed: ${url}`, e);
+			return undefined;
+		}
 	}
 
 	/**

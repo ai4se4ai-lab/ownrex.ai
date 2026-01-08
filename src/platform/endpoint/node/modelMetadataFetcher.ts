@@ -12,6 +12,7 @@ import { Disposable } from '../../../util/vs/base/common/lifecycle';
 import { generateUuid } from '../../../util/vs/base/common/uuid';
 import { IInstantiationService, ServicesAccessor } from '../../../util/vs/platform/instantiation/common/instantiation';
 import { IAuthenticationService } from '../../authentication/common/authentication';
+import { isOwnrexEnabled } from '../../authentication/node/ownrexServices';
 import { ConfigKey, IConfigurationService } from '../../configuration/common/configurationService';
 import { IEnvService } from '../../env/common/envService';
 import { ILogService } from '../../log/common/logService';
@@ -21,8 +22,9 @@ import { IRequestLogger } from '../../requestLogger/node/requestLogger';
 import { IExperimentationService } from '../../telemetry/common/nullExperimentationService';
 import { ITelemetryService } from '../../telemetry/common/telemetry';
 import { ICAPIClientService } from '../common/capiClient';
-import { ChatEndpointFamily, IChatModelInformation, ICompletionModelInformation, IEmbeddingModelInformation, IModelAPIResponse, isChatModelInformation, isCompletionModelInformation, isEmbeddingModelInformation } from '../common/endpointProvider';
+import { ChatEndpointFamily, IChatModelInformation, ICompletionModelInformation, IEmbeddingModelInformation, IModelAPIResponse, isChatModelInformation, isCompletionModelInformation, isEmbeddingModelInformation, IChatModelCapabilities } from '../common/endpointProvider';
 import { ModelAliasRegistry } from '../common/modelAliasRegistry';
+import { TokenizerType } from '../../../util/common/tokenizer';
 
 export interface IModelMetadataFetcher {
 
@@ -127,6 +129,26 @@ export class ModelMetadataFetcher extends Disposable implements IModelMetadataFe
 				}
 			}
 		}
+
+		// For Ownrex, if no models were fetched (backend unavailable), ensure we have at least a fallback model
+		if (chatModels.length === 0 && isOwnrexEnabled()) {
+			this._logService.warn('[ModelMetadataFetcher] No models available after fetch. Attempting to create fallback model from configuration.');
+			try {
+				// Force create a fallback model
+				await this._fetchModels(true);
+				// Try again after forced fetch
+				for (const [, models] of this._familyMap) {
+					for (const model of models) {
+						if (isChatModelInformation(model)) {
+							chatModels.push(model);
+						}
+					}
+				}
+			} catch (e) {
+				this._logService.error(e, '[ModelMetadataFetcher] Failed to create fallback model even after retry');
+			}
+		}
+
 		return chatModels;
 	}
 
@@ -235,9 +257,206 @@ export class ModelMetadataFetcher extends Disposable implements IModelMetadataFe
 			return;
 		}
 		const requestStartTime = Date.now();
-
-		const copilotToken = (await this._authService.getCopilotToken()).token;
 		const requestId = generateUuid();
+
+		// Handle Ownrex.ai backend
+		if (isOwnrexEnabled()) {
+			try {
+				const copilotToken = await this._authService.getCopilotToken();
+				const backendUrl = copilotToken.endpoints?.api || this._configService.getConfig<string>('ownrex.backendUrl' as unknown) || 'http://localhost:8000';
+				const baseUrl = backendUrl.replace(/\/$/, '');
+				const modelsUrl = `${baseUrl}/v1/models`;
+				const defaultModel = this._configService.getConfig<string>('ownrex.defaultModel' as unknown) || 'gpt-3.5-turbo';
+
+				this._logService.info(`[ModelMetadataFetcher] Fetching models from Ownrex backend: ${modelsUrl}`);
+
+				// Try to fetch from backend
+				const response = await this._fetcher.fetch(modelsUrl, {
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${copilotToken.token}`,
+						'Content-Type': 'application/json',
+					},
+				});
+
+				this._lastFetchTime = Date.now();
+
+				if (response.status >= 200 && response.status < 300) {
+					const responseData = await response.json();
+					const openaiModels = responseData.data || [];
+
+					this._familyMap.clear();
+
+					// Transform OpenAI models to CAPI format
+					const data: IModelAPIResponse[] = openaiModels.map((openaiModel: any) => {
+						const modelId = openaiModel.id || defaultModel;
+						const isDefault = modelId === defaultModel || modelId.includes('gpt-4');
+
+						// Determine family based on model ID
+						let family = 'gpt-4.1';
+						if (modelId.includes('gpt-3.5')) {
+							family = 'copilot-fast';
+						} else if (modelId.includes('gpt-4-turbo') || modelId.includes('gpt-4o')) {
+							family = 'gpt-4.1';
+						} else if (modelId.includes('gpt-4')) {
+							family = 'gpt-4.1';
+						}
+
+						const capabilities: IChatModelCapabilities = {
+							type: 'chat',
+							family: family,
+							tokenizer: TokenizerType.O200K, // Most modern OpenAI models use O200K tokenizer
+							limits: {
+								max_prompt_tokens: 128000,
+								max_output_tokens: 4096,
+								max_context_window_tokens: 128000,
+							},
+							supports: {
+								tool_calls: true,
+								parallel_tool_calls: true,
+								streaming: true,
+								vision: modelId.includes('vision') || modelId.includes('gpt-4o'),
+							},
+						};
+
+						return {
+							id: modelId,
+							name: openaiModel.id || modelId,
+							model_picker_enabled: true,
+							is_chat_default: isDefault,
+							is_chat_fallback: modelId === defaultModel,
+							version: '1.0',
+							capabilities: capabilities,
+						} as IModelAPIResponse;
+					});
+
+					// If no models from backend, create one from configuration
+					if (data.length === 0) {
+						this._logService.warn(`[ModelMetadataFetcher] No models from backend, creating from configuration: ${defaultModel}`);
+						const capabilities: IChatModelCapabilities = {
+							type: 'chat',
+							family: defaultModel.includes('gpt-3.5') ? 'copilot-fast' : 'gpt-4.1',
+							tokenizer: TokenizerType.O200K, // Most modern OpenAI models use O200K tokenizer
+							limits: {
+								max_prompt_tokens: 128000,
+								max_output_tokens: 4096,
+								max_context_window_tokens: 128000,
+							},
+							supports: {
+								tool_calls: true,
+								parallel_tool_calls: true,
+								streaming: true,
+								vision: false,
+							},
+						};
+
+						data.push({
+							id: defaultModel,
+							name: defaultModel,
+							model_picker_enabled: true,
+							is_chat_default: true,
+							is_chat_fallback: true,
+							version: '1.0',
+							capabilities: capabilities,
+						} as IModelAPIResponse);
+					}
+
+					this._requestLogger.logModelListCall(requestId, { type: RequestType.Models, isModelLab: false }, data);
+					for (let model of data) {
+						model = await this._hydrateResolvedModel(model);
+						const isCompletionModel = isCompletionModelInformation(model);
+						// The base model is whatever model is deemed "fallback" by the server
+						if (model.is_chat_fallback && !isCompletionModel) {
+							this._copilotBaseModel = model;
+						}
+						const family = model.capabilities.family;
+						const familyMap = isCompletionModel ? this._completionsFamilyMap : this._familyMap;
+						if (!familyMap.has(family)) {
+							familyMap.set(family, []);
+						}
+						familyMap.get(family)?.push(model);
+					}
+					this._lastFetchError = undefined;
+					this._onDidModelRefresh.fire();
+					this._logService.info(`[ModelMetadataFetcher] Fetched ${data.length} models from Ownrex backend in ${Date.now() - requestStartTime}ms`);
+
+					if (this.collectFetcherTelemetry) {
+						this._instantiationService.invokeFunction(this.collectFetcherTelemetry, undefined);
+					}
+					return;
+				} else {
+					this._logService.warn(`[ModelMetadataFetcher] Backend returned ${response.status}, creating model from configuration`);
+					// Fall through to create from configuration
+				}
+			} catch (e) {
+				this._logService.warn(`[ModelMetadataFetcher] Failed to fetch from backend, creating from configuration: ${e}`);
+				// Fall through to create from configuration
+			}
+
+			// Create model from configuration as fallback
+			try {
+				const defaultModel = this._configService.getConfig<string>('ownrex.defaultModel' as unknown) || 'gpt-3.5-turbo';
+				this._logService.info(`[ModelMetadataFetcher] Creating model from configuration: ${defaultModel}`);
+
+				this._familyMap.clear();
+
+				const capabilities: IChatModelCapabilities = {
+					type: 'chat',
+					family: defaultModel.includes('gpt-3.5') ? 'copilot-fast' : 'gpt-4.1',
+					tokenizer: TokenizerType.O200K, // Most modern OpenAI models use O200K tokenizer
+					limits: {
+						max_prompt_tokens: 128000,
+						max_output_tokens: 4096,
+						max_context_window_tokens: 128000,
+					},
+					supports: {
+						tool_calls: true,
+						parallel_tool_calls: true,
+						streaming: true,
+						vision: false,
+					},
+				};
+
+				const model: IModelAPIResponse = {
+					id: defaultModel,
+					name: defaultModel,
+					model_picker_enabled: true,
+					is_chat_default: true,
+					is_chat_fallback: true,
+					version: '1.0',
+					capabilities: capabilities,
+				};
+
+				const hydratedModel = await this._hydrateResolvedModel(model);
+				this._copilotBaseModel = hydratedModel;
+				const family = hydratedModel.capabilities.family;
+				if (!this._familyMap.has(family)) {
+					this._familyMap.set(family, []);
+				}
+				this._familyMap.get(family)?.push(hydratedModel);
+
+				this._lastFetchError = undefined;
+				this._lastFetchTime = Date.now();
+				this._onDidModelRefresh.fire();
+				this._logService.info(`[ModelMetadataFetcher] Created model from configuration in ${Date.now() - requestStartTime}ms`);
+
+				if (this.collectFetcherTelemetry) {
+					this._instantiationService.invokeFunction(this.collectFetcherTelemetry, undefined);
+				}
+				return;
+			} catch (e) {
+				this._logService.error(e, `[ModelMetadataFetcher] Failed to create model from configuration (${requestId})`);
+				this._lastFetchError = e;
+				this._lastFetchTime = 0;
+				if (this.collectFetcherTelemetry) {
+					this._instantiationService.invokeFunction(this.collectFetcherTelemetry, e);
+				}
+				return;
+			}
+		}
+
+		// Original CAPI code path
+		const copilotToken = (await this._authService.getCopilotToken()).token;
 		const requestMetadata = { type: RequestType.Models, isModelLab: this._isModelLab };
 
 		try {

@@ -32,18 +32,29 @@ export class ObservableGit extends Disposable {
 			return;
 		}
 
-		const repos = observableFromEvent(this, (e) => gitApi.onDidOpenRepository(e), () => gitApi.repositories);
+		const repos = observableFromEvent(this, (e) => gitApi.onDidOpenRepository(e), () => gitApi.repositories ?? []);
 
-		await waitForState(repos, (repos) => repos.length > 0, undefined);
+		await waitForState(repos, (repos) => Array.isArray(repos) && repos.length > 0, undefined);
 		if (this._store.isDisposed) {
 			return;
 		}
 
-		mapObservableArrayCached(this, repos, (repo, store) => {
-			const stateChangeObservable = observableFromEvent(listener => repo.state.onDidChange(listener), () => repo.state.HEAD?.name);
-			store.add(autorunWithStore((reader, _store) => {
-				this.branch.set(stateChangeObservable.read(reader), undefined);
-			}));
-		}, repo => repo.rootUri.toString()).recomputeInitiallyAndOnChange(this._store);
+		try {
+			mapObservableArrayCached(this, repos, (repo, store) => {
+				const stateChangeObservable = observableFromEvent(listener => repo.state.onDidChange(listener), () => repo.state.HEAD?.name);
+				store.add(autorunWithStore((reader, _store) => {
+					this.branch.set(stateChangeObservable.read(reader), undefined);
+				}));
+			}, repo => {
+				try {
+					return repo.rootUri.toString();
+				} catch (e) {
+					// Fallback to fsPath or a safe identifier if URI.toString() fails
+					return repo.rootUri.fsPath || `repo-${repo.rootUri.path}`;
+				}
+			}).recomputeInitiallyAndOnChange(this._store);
+		} catch (error) {
+			// Log error but don't crash - initialization failure should be handled gracefully
+		}
 	}
 }

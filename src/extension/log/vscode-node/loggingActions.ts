@@ -66,7 +66,7 @@ export class LoggingActionsContrib {
 		@IFetcherService private readonly fetcherService: IFetcherService,
 		@ILogService private logService: ILogService,
 	) {
-		this._context.subscriptions.push(vscode.commands.registerCommand('github.copilot.debug.collectDiagnostics', async () => {
+		this._context.subscriptions.push(vscode.commands.registerCommand('ownrex.ai.debug.collectDiagnostics', async () => {
 			const document = await vscode.workspace.openTextDocument({ language: 'markdown' });
 			const editor = await vscode.window.showTextDocument(document);
 			const electronConfig = getShadowedConfig<boolean>(this.configurationService, this.experimentationService, ConfigKey.Shared.DebugUseElectronFetcher, ConfigKey.TeamInternal.DebugExpUseElectronFetcher);
@@ -87,9 +87,9 @@ export class LoggingActionsContrib {
 
 User Settings:
 \`\`\`json${getNetworkSettings()}
-  "github.copilot.advanced.debug.useElectronFetcher": ${electronConfig},
-  "github.copilot.advanced.debug.useNodeFetcher": ${nodeConfig},
-  "github.copilot.advanced.debug.useNodeFetchFetcher": ${nodeFetchConfig}
+  "ownrex.ai.advanced.debug.useElectronFetcher": ${electronConfig},
+  "ownrex.ai.advanced.debug.useNodeFetcher": ${nodeConfig},
+  "ownrex.ai.advanced.debug.useNodeFetchFetcher": ${nodeFetchConfig}
 \`\`\`${getProxyEnvVariables()}
 `);
 			const proxyAgent = loadVSCodeModule<ProxyAgent>('@vscode/proxy-agent');

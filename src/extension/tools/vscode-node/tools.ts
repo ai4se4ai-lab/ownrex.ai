@@ -10,9 +10,9 @@ import { Disposable } from '../../../util/vs/base/common/lifecycle';
 import { autorun } from '../../../util/vs/base/common/observableInternal';
 import { URI } from '../../../util/vs/base/common/uri';
 import { getContributedToolName } from '../common/toolNames';
+import { isVscodeLanguageModelTool } from '../common/toolsRegistry';
 import { IToolsService } from '../common/toolsService';
 import { IToolGroupingCache, IToolGroupingService } from '../common/virtualTools/virtualToolTypes';
-import { isVscodeLanguageModelTool } from '../common/toolsRegistry';
 import '../node/allTools';
 import './allTools';
 
@@ -31,12 +31,12 @@ export class ToolsContribution extends Disposable {
 			}
 		}
 
-		this._register(vscode.commands.registerCommand('github.copilot.debug.resetVirtualToolGroups', async () => {
+		this._register(vscode.commands.registerCommand('ownrex.ai.debug.resetVirtualToolGroups', async () => {
 			await toolGrouping.clear();
 			vscode.window.showInformationMessage(l10n.t('Tool groups have been reset. They will be regenerated on the next agent request.'));
 		}));
 
-		this._register(vscode.commands.registerCommand('github.copilot.chat.tools.memory.openFolder', async () => {
+		this._register(vscode.commands.registerCommand('ownrex.ai.chat.tools.memory.openFolder', async () => {
 			const storageUri = this.extensionContext.storageUri;
 			if (!storageUri) {
 				vscode.window.showErrorMessage(l10n.t('No workspace is currently open. Memory operations require an active workspace.'));

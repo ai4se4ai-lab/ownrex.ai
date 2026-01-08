@@ -8,6 +8,7 @@ import { Raw } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
 import { IAuthenticationService } from '../../../platform/authentication/common/authentication';
 import { CopilotToken } from '../../../platform/authentication/common/copilotToken';
+import { isOwnrexEnabled } from '../../../platform/authentication/node/ownrexServices';
 import { IBlockedExtensionService } from '../../../platform/chat/common/blockedExtensionService';
 import { ChatFetchResponseType, ChatLocation, getErrorDetailsFromChatFetchError } from '../../../platform/chat/common/commonTypes';
 import { getTextPart } from '../../../platform/chat/common/globalStringUtils';
@@ -28,6 +29,7 @@ import { ITelemetryService } from '../../../platform/telemetry/common/telemetry'
 import { isEncryptedThinkingDelta } from '../../../platform/thinking/common/thinking';
 import { BaseTokensPerCompletion } from '../../../platform/tokenizer/node/tokenizer';
 import { TelemetryCorrelationId } from '../../../util/common/telemetryCorrelationId';
+import { TokenizerType } from '../../../util/common/tokenizer';
 import { Emitter } from '../../../util/vs/base/common/event';
 import { Disposable, MutableDisposable } from '../../../util/vs/base/common/lifecycle';
 import { isBoolean, isDefined, isNumber, isString, isStringArray } from '../../../util/vs/base/common/types';
@@ -98,19 +100,84 @@ export class LanguageModelAccess extends Disposable implements IExtensionContrib
 			// Auth changed which means models could've changed. Fire the event
 			this._onDidChange.fire();
 		}));
+
+		// For Ownrex, fire the change event immediately to trigger model registration
+		// This ensures VS Code can detect models are available and set languageModelReady to true
+		// VS Code checks for languageModelReady by looking for a default model (isDefault: true)
+		// If no default model is found, VS Code shows a generic warning about signing in to GitHub
+		// even though we're using our own backend. This is a VS Code limitation - it doesn't know
+		// about custom backends and shows a generic error message.
+		if (isOwnrexEnabled()) {
+			// Fire event asynchronously to allow provider registration to complete first
+			setTimeout(() => {
+				this._onDidChange.fire();
+				this._logService.info('[LanguageModelAccess] Fired initial change event for Ownrex to trigger model registration');
+			}, 0);
+		}
 	}
 
 	private async _provideLanguageModelChatInfo(options: { silent: boolean }, token: vscode.CancellationToken): Promise<vscode.LanguageModelChatInformation[]> {
 		const session = await this._getToken();
-		if (!session) {
+
+		// For Ownrex, continue even if token is not available - models will be created from config
+		const isOwnrex = isOwnrexEnabled();
+		if (!session && !isOwnrex) {
 			this._currentModels = [];
 			return [];
 		}
 
 		const models: vscode.LanguageModelChatInformation[] = [];
-		const chatEndpoints = (await this._endpointProvider.getAllChatEndpoints()).filter(e => e.showInModelPicker || e.model === 'gpt-4o-mini');
-		const autoEndpoint = await this._automodeService.resolveAutoModeEndpoint(undefined, chatEndpoints);
-		chatEndpoints.push(autoEndpoint);
+		let allChatEndpoints = await this._endpointProvider.getAllChatEndpoints();
+
+		// For Ownrex, don't filter out endpoints - we need all models including fallback
+		// The filter was removing fallback models that don't have showInModelPicker set
+		let chatEndpoints = isOwnrex
+			? allChatEndpoints
+			: allChatEndpoints.filter(e => e.showInModelPicker || e.model === 'gpt-4o-mini');
+
+		// If no endpoints are available (e.g., backend unavailable, fetch failed), log a warning
+		if (chatEndpoints.length === 0 && isOwnrex) {
+			this._logService.warn('[LanguageModelAccess] No chat endpoints available. This may indicate the backend is unavailable or model fetching failed. The fallback mechanism should have created a model from configuration.');
+			// Try to force refresh models
+			try {
+				allChatEndpoints = await this._endpointProvider.getAllChatEndpoints();
+				chatEndpoints = isOwnrex
+					? allChatEndpoints
+					: allChatEndpoints.filter(e => e.showInModelPicker || e.model === 'gpt-4o-mini');
+				this._logService.info(`[LanguageModelAccess] After retry, found ${chatEndpoints.length} endpoints`);
+			} catch (e) {
+				this._logService.error(e, '[LanguageModelAccess] Failed to fetch endpoints on retry');
+			}
+		}
+
+		// Only create auto endpoint if we have at least one endpoint to work with
+		// Auto endpoint requires at least one endpoint to select from
+		let autoEndpoint: IChatEndpoint | undefined;
+		if (chatEndpoints.length > 0) {
+			try {
+				autoEndpoint = await this._automodeService.resolveAutoModeEndpoint(undefined, chatEndpoints);
+				chatEndpoints.push(autoEndpoint);
+			} catch (e) {
+				this._logService.error(e, '[LanguageModelAccess] Failed to create auto endpoint');
+				// Even if auto endpoint fails, we can still use the available endpoints
+			}
+		}
+
+		// For Ownrex, we MUST have at least one model available to prevent VS Code's readiness check from failing
+		// If we still have no endpoints, this is a critical error but we should log it and let the fallback handle it
+		if (chatEndpoints.length === 0) {
+			if (isOwnrex) {
+				this._logService.error('[LanguageModelAccess] CRITICAL: No chat endpoints available for Ownrex. This will cause languageModelReady to be false. Check backend connectivity and model configuration.');
+				// For Ownrex, we should still try to return something to prevent VS Code from showing the GitHub sign-in warning
+				// However, without endpoints, we can't create models, so we return empty and let the error be logged
+				this._currentModels = [];
+				return [];
+			} else {
+				this._logService.error('[LanguageModelAccess] No chat endpoints available. This is a critical error - the fallback mechanism should have created at least one model from configuration.');
+				this._currentModels = [];
+				return [];
+			}
+		}
 		let defaultChatEndpoint: IChatEndpoint | undefined;
 		const defaultExpModel = this._expService.getTreatmentVariable<string>('chat.defaultLanguageModel')?.replace('copilot/', '');
 		if (this._authenticationService.copilotToken?.isNoAuthUser) {
@@ -126,6 +193,32 @@ export class LanguageModelAccess extends Disposable implements IExtensionContrib
 		if (!defaultChatEndpoint) {
 			// Find a default set by CAPI
 			defaultChatEndpoint = chatEndpoints.find(e => e.isDefault) ?? chatEndpoints.find(e => e.showInModelPicker) ?? chatEndpoints[0];
+		}
+
+		// Ensure we always have a default endpoint - if none found, use the first available or auto endpoint
+		if (!defaultChatEndpoint && chatEndpoints.length > 0) {
+			defaultChatEndpoint = chatEndpoints[0];
+			this._logService.info(`[LanguageModelAccess] No explicit default endpoint found, using first available: ${defaultChatEndpoint.model}`);
+		}
+
+		// CRITICAL: For Ownrex, if we still don't have a default, use auto endpoint or first endpoint
+		// This ensures languageModelReady will be true
+		if (!defaultChatEndpoint && isOwnrex) {
+			if (autoEndpoint) {
+				defaultChatEndpoint = autoEndpoint;
+				this._logService.info(`[LanguageModelAccess] Using auto endpoint as default for Ownrex`);
+			} else if (chatEndpoints.length > 0) {
+				defaultChatEndpoint = chatEndpoints[0];
+				this._logService.info(`[LanguageModelAccess] Using first endpoint as default for Ownrex: ${defaultChatEndpoint.model}`);
+			}
+		}
+
+		// Log for debugging
+		this._logService.info(`[LanguageModelAccess] Found ${chatEndpoints.length} chat endpoints, default: ${defaultChatEndpoint?.model || 'none'}`);
+
+		// If we still don't have a default and we're in Ownrex mode, this is a critical error
+		if (!defaultChatEndpoint && isOwnrex) {
+			this._logService.error('[LanguageModelAccess] CRITICAL: No default endpoint available. Language models will not be ready. Check model fetching and fallback mechanism.');
 		}
 		const seenFamilies = new Set<string>();
 
@@ -223,6 +316,18 @@ export class LanguageModelAccess extends Disposable implements IExtensionContrib
 
 		this._currentModels = models;
 		this._chatEndpoints = chatEndpoints;
+
+		// Log final state for debugging
+		if (isOwnrex) {
+			const defaultModels = models.filter(m => m.isDefault);
+			this._logService.info(`[LanguageModelAccess] Returning ${models.length} models, ${defaultModels.length} marked as default. Default models: ${defaultModels.map(m => m.id).join(', ')}`);
+
+			// If no default model and we have models, log a warning
+			if (defaultModels.length === 0 && models.length > 0) {
+				this._logService.warn(`[LanguageModelAccess] WARNING: No default model found among ${models.length} models. This will cause languageModelReady to be false.`);
+			}
+		}
+
 		return models;
 	}
 
@@ -305,7 +410,8 @@ class LanguageModelAccessPromptBaseCountCache {
 	constructor(
 		@IVSCodeExtensionContext private readonly _extensionContext: IVSCodeExtensionContext,
 		@IInstantiationService private readonly _instantiationService: IInstantiationService,
-		@IEnvService private readonly _envService: IEnvService
+		@IEnvService private readonly _envService: IEnvService,
+		@ILogService private readonly _logService: ILogService
 	) { }
 
 	public async getBaseCount(endpoint: IChatEndpoint): Promise<number> {
@@ -329,8 +435,29 @@ class LanguageModelAccessPromptBaseCountCache {
 	}
 
 	private async _computeBaseCount(endpoint: IChatEndpoint): Promise<number> {
-		const baseCount = await PromptRenderer.create(this._instantiationService, endpoint, LanguageModelAccessPrompt, { noSafety: false, messages: [] }).countTokens();
-		return baseCount;
+		try {
+			// Ensure endpoint has a valid tokenizer before computing base count
+			if (!endpoint.tokenizer) {
+				this._logService.warn(`[LanguageModelAccess] Endpoint ${endpoint.model} has no tokenizer, defaulting to O200K for base count computation`);
+				// Create a proxy endpoint with default tokenizer for this computation
+				const endpointWithTokenizer = new Proxy(endpoint, {
+					get: (target, prop) => {
+						if (prop === 'tokenizer') {
+							return TokenizerType.O200K;
+						}
+						return Reflect.get(target, prop);
+					}
+				});
+				const baseCount = await PromptRenderer.create(this._instantiationService, endpointWithTokenizer, LanguageModelAccessPrompt, { noSafety: false, messages: [] }).countTokens();
+				return baseCount;
+			}
+			const baseCount = await PromptRenderer.create(this._instantiationService, endpoint, LanguageModelAccessPrompt, { noSafety: false, messages: [] }).countTokens();
+			return baseCount;
+		} catch (error) {
+			this._logService.error(error, `[LanguageModelAccess] Failed to compute base count for endpoint ${endpoint.model}, using default value`);
+			// Return a reasonable default base count if computation fails
+			return 100;
+		}
 	}
 
 }

@@ -154,7 +154,8 @@ export class ChatEndpoint implements IChatEndpoint {
 		this.name = modelMetadata.name;
 		this.version = modelMetadata.version;
 		this.family = modelMetadata.capabilities.family;
-		this.tokenizer = modelMetadata.capabilities.tokenizer;
+		// Default to O200K tokenizer if not specified (most modern models use this)
+		this.tokenizer = modelMetadata.capabilities.tokenizer ?? TokenizerType.O200K;
 		this.showInModelPicker = modelMetadata.model_picker_enabled;
 		this.isPremium = modelMetadata.billing?.is_premium;
 		this.multiplier = modelMetadata.billing?.multiplier;

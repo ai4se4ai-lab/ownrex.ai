@@ -222,7 +222,7 @@ export class PromptFileContextContribution extends Disposable {
 
 
 	private async getCopilotApi(): Promise<Copilot.ContextProviderApiV1 | undefined> {
-		const copilotExtension = vscode.extensions.getExtension('GitHub.copilot');
+		const copilotExtension = vscode.extensions.getExtension('ownrex.ai');
 		if (copilotExtension === undefined) {
 			this.logService.error('Copilot extension not found');
 			return undefined;

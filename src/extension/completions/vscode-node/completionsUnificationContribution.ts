@@ -28,7 +28,7 @@ export class CompletionsUnificationContribution extends Disposable {
 export function unificationStateObservable(owner: DebugOwner) {
 	return observableFromEvent(
 		owner,
-		l => (languages as languagesMaybeWithUnification).onDidChangeCompletionsUnificationState?.(l) ?? Disposable.None,
+		(languages as languagesMaybeWithUnification).onDidChangeCompletionsUnificationState ?? Event.None,
 		() => (languages as languagesMaybeWithUnification).inlineCompletionsUnificationState
 	);
 }

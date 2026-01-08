@@ -11,7 +11,7 @@ import { createStaticGitHubTokenProvider, getOrCreateTestingCopilotTokenManager 
 import { AuthenticationService } from '../../../platform/authentication/vscode-node/authenticationService';
 import { VSCodeCopilotTokenManager } from '../../../platform/authentication/vscode-node/copilotTokenManager';
 import { OwnrexAuthenticationService } from '../../../platform/authentication/vscode-node/ownrexAuthenticationService';
-import { OwnrexTokenManager } from '../../../platform/authentication/node/ownrexTokenManager';
+import { IOwnrexTokenManager, OwnrexTokenManager } from '../../../platform/authentication/node/ownrexTokenManager';
 import { isOwnrexEnabled } from '../../../platform/authentication/node/ownrexServices';
 import { IBackendTokenService } from '../../../platform/authentication/common/backendTokenService';
 import { BackendTokenServiceImpl } from '../../../platform/authentication/node/backendTokenServiceImpl';
@@ -165,7 +165,10 @@ export function registerServices(builder: IInstantiationServiceBuilder, extensio
 		builder.define(ICopilotTokenManager, getOrCreateTestingCopilotTokenManager(env.devDeviceId));
 	} else if (isOwnrexEnabled()) {
 		// Use Ownrex.ai backend - decoupled from GitHub Copilot
-		builder.define(ICopilotTokenManager, new SyncDescriptor(OwnrexTokenManager));
+		const ownrexTokenManagerDescriptor = new SyncDescriptor(OwnrexTokenManager);
+		builder.define(ICopilotTokenManager, ownrexTokenManagerDescriptor);
+		// Also register as IOwnrexTokenManager for services that depend on it directly
+		builder.define(IOwnrexTokenManager, ownrexTokenManagerDescriptor);
 	} else {
 		builder.define(ICopilotTokenManager, new SyncDescriptor(VSCodeCopilotTokenManager));
 	}

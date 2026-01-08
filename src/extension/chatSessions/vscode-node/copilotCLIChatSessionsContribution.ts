@@ -86,7 +86,7 @@ function isUntitledSessionId(sessionId: string): boolean {
 }
 
 export class CopilotCLISessionIsolationManager {
-	static COPILOT_CLI_DEFAULT_ISOLATION_MEMENTO_KEY = 'github.copilot.cli.sessionIsolation';
+	static COPILOT_CLI_DEFAULT_ISOLATION_MEMENTO_KEY = 'ownrex.ai.cli.sessionIsolation';
 	private _sessionIsolation: Map<string, boolean> = new Map();
 
 	constructor(
@@ -172,7 +172,7 @@ export class CopilotCLIChatSessionItemProvider extends Disposable implements vsc
 		const diskSessions = await Promise.all(sessions.map(async session => this._toChatSessionItem(session)));
 
 		const count = diskSessions.length;
-		this.commandExecutionService.executeCommand('setContext', 'github.copilot.chat.cliSessionsEmpty', count === 0);
+		this.commandExecutionService.executeCommand('setContext', 'ownrex.ai.chat.cliSessionsEmpty', count === 0);
 
 		return diskSessions;
 	}
@@ -997,7 +997,7 @@ export class CopilotCLIChatSessionParticipant extends Disposable {
 
 export function registerCLIChatCommands(copilotcliSessionItemProvider: CopilotCLIChatSessionItemProvider, copilotCLISessionService: ICopilotCLISessionService, copilotCLIWorktreeManagerService: IChatSessionWorktreeService, gitService: IGitService): IDisposable {
 	const disposableStore = new DisposableStore();
-	disposableStore.add(vscode.commands.registerCommand('github.copilot.cli.sessions.delete', async (sessionItem?: vscode.ChatSessionItem) => {
+	disposableStore.add(vscode.commands.registerCommand('ownrex.ai.cli.sessions.delete', async (sessionItem?: vscode.ChatSessionItem) => {
 		if (sessionItem?.resource) {
 			const id = SessionIdForCLI.parse(sessionItem.resource);
 			const worktreePath = copilotCLIWorktreeManagerService.getWorktreePath(id);
@@ -1032,7 +1032,7 @@ export function registerCLIChatCommands(copilotcliSessionItemProvider: CopilotCL
 			}
 		}
 	}));
-	disposableStore.add(vscode.commands.registerCommand('github.copilot.cli.sessions.resumeInTerminal', async (sessionItem?: vscode.ChatSessionItem) => {
+	disposableStore.add(vscode.commands.registerCommand('ownrex.ai.cli.sessions.resumeInTerminal', async (sessionItem?: vscode.ChatSessionItem) => {
 		if (sessionItem?.resource) {
 			await copilotcliSessionItemProvider.resumeCopilotCLISessionInTerminal(sessionItem);
 		}
@@ -1096,7 +1096,7 @@ export function registerCLIChatCommands(copilotcliSessionItemProvider: CopilotCL
 		copilotcliSessionItemProvider.notifySessionsChange();
 	};
 
-	disposableStore.add(vscode.commands.registerCommand('github.copilot.chat.applyCopilotCLIAgentSessionChanges', applyChanges));
-	disposableStore.add(vscode.commands.registerCommand('github.copilot.chat.applyCopilotCLIAgentSessionChanges.apply', applyChanges));
+	disposableStore.add(vscode.commands.registerCommand('ownrex.ai.chat.applyCopilotCLIAgentSessionChanges', applyChanges));
+	disposableStore.add(vscode.commands.registerCommand('ownrex.ai.chat.applyCopilotCLIAgentSessionChanges.apply', applyChanges));
 	return disposableStore;
 }

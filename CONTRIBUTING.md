@@ -345,7 +345,7 @@ You can run the extension from Code OSS Desktop, provided that you follow along 
 {
    "trustedExtensionAuthAccess": {
       "github": [
-         "github.copilot-chat"
+         "ownrex.ai-chat"
       ]
    }
 }
@@ -371,8 +371,8 @@ Object.assign(product, {
 		licenseUrl: 'https://github.com/microsoft/vscode/blob/main/LICENSE.txt',
 		serverLicenseUrl: 'https://github.com/microsoft/vscode/blob/main/LICENSE.txt',
 		defaultChatAgent: {
-			'extensionId': 'GitHub.copilot',
-			'chatExtensionId': 'GitHub.copilot-chat',
+			'extensionId': 'ownrex.ai',
+			'chatExtensionId': 'ownrex.ai-chat',
 			'documentationUrl': 'https://aka.ms/github-copilot-overview',
 			'termsStatementUrl': 'https://aka.ms/github-copilot-terms-statement',
 			'privacyStatementUrl': 'https://aka.ms/github-copilot-privacy-statement',
@@ -418,19 +418,19 @@ Object.assign(product, {
 			],
 			'entitlementUrl': 'https://api.github.com/copilot_internal/user',
 			'entitlementSignupLimitedUrl': 'https://api.github.com/copilot_internal/subscribe_limited_user',
-			'chatQuotaExceededContext': 'github.copilot.chat.quotaExceeded',
-			'completionsQuotaExceededContext': 'github.copilot.completions.quotaExceeded',
-			'walkthroughCommand': 'github.copilot.open.walkthrough',
-			'completionsMenuCommand': 'github.copilot.toggleStatusMenu',
-			'completionsRefreshTokenCommand': 'github.copilot.signIn',
-			'chatRefreshTokenCommand': 'github.copilot.refreshToken',
-			'completionsAdvancedSetting': 'github.copilot.advanced',
-			'completionsEnablementSetting': 'github.copilot.enable',
-			'nextEditSuggestionsSetting': 'github.copilot.nextEditSuggestions.enabled'
+			'chatQuotaExceededContext': 'ownrex.ai.chat.quotaExceeded',
+			'completionsQuotaExceededContext': 'ownrex.ai.completions.quotaExceeded',
+			'walkthroughCommand': 'ownrex.ai.open.walkthrough',
+			'completionsMenuCommand': 'ownrex.ai.toggleStatusMenu',
+			'completionsRefreshTokenCommand': 'ownrex.ai.signIn',
+			'chatRefreshTokenCommand': 'ownrex.ai.refreshToken',
+			'completionsAdvancedSetting': 'ownrex.ai.advanced',
+			'completionsEnablementSetting': 'ownrex.ai.enable',
+			'nextEditSuggestionsSetting': 'ownrex.ai.nextEditSuggestions.enabled'
 		},
 		trustedExtensionAuthAccess: {
 			'github': [
-				'github.copilot-chat'
+				'ownrex.ai-chat'
 			]
 		}
 	});

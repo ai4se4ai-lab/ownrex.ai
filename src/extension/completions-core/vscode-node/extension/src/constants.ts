@@ -10,35 +10,35 @@
 // - These IDs should be used in package.json
 // - These IDs should only be registered if they appear in the package.json (meaning the command palette) or if the command needs to be supported when both extensions are loaded/active.
 
-export const CMDOpenPanelClient = 'github.copilot.generate';
-export const CMDOpenPanelChat = 'github.copilot.chat.openSuggestionsPanel'; // "github.copilot.chat.generate" is already being used
+export const CMDOpenPanelClient = 'ownrex.ai.generate';
+export const CMDOpenPanelChat = 'ownrex.ai.chat.openSuggestionsPanel'; // "ownrex.ai.chat.generate" is already being used
 
-export const CMDAcceptCursorPanelSolutionClient = 'github.copilot.acceptCursorPanelSolution';
-export const CMDNavigatePreviousPanelSolutionClient = 'github.copilot.previousPanelSolution';
-export const CMDNavigateNextPanelSolutionClient = 'github.copilot.nextPanelSolution';
+export const CMDAcceptCursorPanelSolutionClient = 'ownrex.ai.acceptCursorPanelSolution';
+export const CMDNavigatePreviousPanelSolutionClient = 'ownrex.ai.previousPanelSolution';
+export const CMDNavigateNextPanelSolutionClient = 'ownrex.ai.nextPanelSolution';
 
-export const CMDToggleStatusMenuClient = 'github.copilot.toggleStatusMenu';
-export const CMDToggleStatusMenuChat = 'github.copilot.chat.toggleStatusMenu';
+export const CMDToggleStatusMenuClient = 'ownrex.ai.toggleStatusMenu';
+export const CMDToggleStatusMenuChat = 'ownrex.ai.chat.toggleStatusMenu';
 
 // Needs to be supported in both extensions when they are loaded/active. Requires a different ID.
-export const CMDSendCompletionsFeedbackChat = 'github.copilot.chat.sendCompletionFeedback';
+export const CMDSendCompletionsFeedbackChat = 'ownrex.ai.chat.sendCompletionFeedback';
 
-export const CMDEnableCompletionsChat = 'github.copilot.chat.completions.enable';
-export const CMDDisableCompletionsChat = 'github.copilot.chat.completions.disable';
-export const CMDToggleCompletionsChat = 'github.copilot.chat.completions.toggle';
-export const CMDEnableCompletionsClient = 'github.copilot.completions.enable';
-export const CMDDisableCompletionsClient = 'github.copilot.completions.disable';
-export const CMDToggleCompletionsClient = 'github.copilot.completions.toggle';
+export const CMDEnableCompletionsChat = 'ownrex.ai.chat.completions.enable';
+export const CMDDisableCompletionsChat = 'ownrex.ai.chat.completions.disable';
+export const CMDToggleCompletionsChat = 'ownrex.ai.chat.completions.toggle';
+export const CMDEnableCompletionsClient = 'ownrex.ai.completions.enable';
+export const CMDDisableCompletionsClient = 'ownrex.ai.completions.disable';
+export const CMDToggleCompletionsClient = 'ownrex.ai.completions.toggle';
 
-export const CMDOpenLogsClient = 'github.copilot.openLogs';
-export const CMDOpenDocumentationClient = 'github.copilot.openDocs';
+export const CMDOpenLogsClient = 'ownrex.ai.openLogs';
+export const CMDOpenDocumentationClient = 'ownrex.ai.openDocs';
 
 // Existing chat command reused for diagnostics
-export const CMDCollectDiagnosticsChat = 'github.copilot.debug.collectDiagnostics';
+export const CMDCollectDiagnosticsChat = 'ownrex.ai.debug.collectDiagnostics';
 
 // Context variable that enable/disable panel-specific commands
-export const CopilotPanelVisible = 'github.copilot.panelVisible';
-export const ComparisonPanelVisible = 'github.copilot.comparisonPanelVisible';
+export const CopilotPanelVisible = 'ownrex.ai.panelVisible';
+export const ComparisonPanelVisible = 'ownrex.ai.comparisonPanelVisible';
 
-export const CMDOpenModelPickerClient = 'github.copilot.openModelPicker';
-export const CMDOpenModelPickerChat = 'github.copilot.chat.openModelPicker';
+export const CMDOpenModelPickerClient = 'ownrex.ai.openModelPicker';
+export const CMDOpenModelPickerChat = 'ownrex.ai.chat.openModelPicker';

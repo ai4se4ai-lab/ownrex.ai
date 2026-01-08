@@ -113,7 +113,7 @@ export class NesRenameContribution implements vscode.Disposable {
 	) {
 		this.telemetrySender = new TelemetrySender(telemetryService, logService);
 		this.disposables = new DisposableStore();
-		this.disposables.add(vscode.commands.registerCommand('github.copilot.nes.prepareRename', async (uri: vscode.Uri | undefined, position: vscode.Position | undefined, oldName: string | undefined, newName: string | undefined, requestId: string | undefined): Promise<protocol.RenameKind> => {
+		this.disposables.add(vscode.commands.registerCommand('ownrex.ai.nes.prepareRename', async (uri: vscode.Uri | undefined, position: vscode.Position | undefined, oldName: string | undefined, newName: string | undefined, requestId: string | undefined): Promise<protocol.RenameKind> => {
 			const params = this.resolveParams(uri, position, oldName, newName, requestId);
 			if (params === undefined) {
 				return protocol.RenameKind.no;
@@ -149,7 +149,7 @@ export class NesRenameContribution implements vscode.Disposable {
 				tokenSource.dispose();
 			}
 		}));
-		this.disposables.add(vscode.commands.registerCommand('github.copilot.debug.validateNesRename', async () => {
+		this.disposables.add(vscode.commands.registerCommand('ownrex.ai.debug.validateNesRename', async () => {
 			const params = await this.getUserParams();
 			if (params === undefined) {
 				return;

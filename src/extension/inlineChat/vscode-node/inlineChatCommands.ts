@@ -246,7 +246,7 @@ ${message}`,
 		return vscode.commands.executeCommand('vscode.editorChat.start', { message: `/${InlineDocIntent.ID} `, autoSend: true, initialRange: vscode.window.activeTextEditor?.selection });
 	};
 	const doGenerateTests = (arg?: unknown) => {
-		// @ulugbekna: `github.copilot.chat.generateTests` is invoked from editor context menu, which means
+		// @ulugbekna: `ownrex.ai.chat.generateTests` is invoked from editor context menu, which means
 		// 	the first arguments can be a vscode.Uri
 		const context =
 			(arg && typeof arg === 'object' &&
@@ -280,37 +280,37 @@ ${message}`,
 	};
 
 	// register commands
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.explain', doExplain));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.explain.palette', () => doExplain(undefined, true)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review', () => instaService.createInstance(ReviewSession).review('selection', vscode.ProgressLocation.Notification)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.stagedChanges', () => instaService.createInstance(ReviewSession).review('index', vscode.ProgressLocation.Notification)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.unstagedChanges', () => instaService.createInstance(ReviewSession).review('workingTree', vscode.ProgressLocation.Notification)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.changes', () => instaService.createInstance(ReviewSession).review('all', vscode.ProgressLocation.Notification)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.stagedFileChange', (resource: vscode.SourceControlResourceState) => {
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.explain', doExplain));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.explain.palette', () => doExplain(undefined, true)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review', () => instaService.createInstance(ReviewSession).review('selection', vscode.ProgressLocation.Notification)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.stagedChanges', () => instaService.createInstance(ReviewSession).review('index', vscode.ProgressLocation.Notification)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.unstagedChanges', () => instaService.createInstance(ReviewSession).review('workingTree', vscode.ProgressLocation.Notification)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.changes', () => instaService.createInstance(ReviewSession).review('all', vscode.ProgressLocation.Notification)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.stagedFileChange', (resource: vscode.SourceControlResourceState) => {
 		return instaService.createInstance(ReviewSession).review({ group: 'index', file: resource.resourceUri }, vscode.ProgressLocation.Notification);
 	}));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.unstagedFileChange', (resource: vscode.SourceControlResourceState) => {
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.unstagedFileChange', (resource: vscode.SourceControlResourceState) => {
 		return instaService.createInstance(ReviewSession).review({ group: 'workingTree', file: resource.resourceUri }, vscode.ProgressLocation.Notification);
 	}));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.apply', doApplyReview));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.applyAndNext', (commentThread: vscode.CommentThread) => doApplyReview(commentThread, true)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.applyShort', (commentThread: vscode.CommentThread) => doApplyReview(commentThread, true)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.continueInInlineChat', doContinueInInlineChat));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.continueInChat', doContinueInChat));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.discard', doDiscardReview));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.discardAndNext', (commentThread: vscode.CommentThread) => doDiscardReview(commentThread, true)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.discardShort', (commentThread: vscode.CommentThread) => doDiscardReview(commentThread, true)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.discardAll', doDiscardAllReview));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.markHelpful', markReviewHelpful));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.markUnhelpful', markReviewUnhelpful));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.previous', thread => goToNextReview(thread, -1)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.next', thread => goToNextReview(thread, +1)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.review.current', thread => goToNextReview(thread, 0)));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.generate', doGenerate));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.generateDocs', doGenerateDocs));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.generateTests', doGenerateTests));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.fix', doFix));
-	disposables.add(vscode.commands.registerCommand('github.copilot.chat.generateAltText', doGenerateAltText));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.apply', doApplyReview));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.applyAndNext', (commentThread: vscode.CommentThread) => doApplyReview(commentThread, true)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.applyShort', (commentThread: vscode.CommentThread) => doApplyReview(commentThread, true)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.continueInInlineChat', doContinueInInlineChat));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.continueInChat', doContinueInChat));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.discard', doDiscardReview));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.discardAndNext', (commentThread: vscode.CommentThread) => doDiscardReview(commentThread, true)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.discardShort', (commentThread: vscode.CommentThread) => doDiscardReview(commentThread, true)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.discardAll', doDiscardAllReview));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.markHelpful', markReviewHelpful));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.markUnhelpful', markReviewUnhelpful));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.previous', thread => goToNextReview(thread, -1)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.next', thread => goToNextReview(thread, +1)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.review.current', thread => goToNextReview(thread, 0)));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.generate', doGenerate));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.generateDocs', doGenerateDocs));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.generateTests', doGenerateTests));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.fix', doFix));
+	disposables.add(vscode.commands.registerCommand('ownrex.ai.chat.generateAltText', doGenerateAltText));
 	// register code actions
 	disposables.add(vscode.languages.registerCodeActionsProvider('*', instaService.createInstance(QuickFixesProvider), {
 		providedCodeActionKinds: QuickFixesProvider.providedCodeActionKinds,

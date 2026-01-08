@@ -1755,7 +1755,7 @@ async function* mapAsyncIterable<T, U>(
 	}
 }
 
-const showContextInspectorViewContextKey = `github.copilot.chat.showContextInspectorView`;
+const showContextInspectorViewContextKey = `ownrex.ai.chat.showContextInspectorView`;
 export class InlineCompletionContribution implements vscode.Disposable, TokenBudgetProvider {
 
 	private disposables: DisposableStore;
@@ -1779,7 +1779,7 @@ export class InlineCompletionContribution implements vscode.Disposable, TokenBud
 
 		this.disposables = new DisposableStore();
 		if (languageContextService instanceof LanguageContextServiceImpl) {
-			this.disposables.add(vscode.commands.registerCommand('github.copilot.debug.showContextInspectorView', async () => {
+			this.disposables.add(vscode.commands.registerCommand('ownrex.ai.debug.showContextInspectorView', async () => {
 				await vscode.commands.executeCommand('setContext', showContextInspectorViewContextKey, true);
 				await vscode.commands.executeCommand('context-inspector.focus');
 			}));
@@ -2024,7 +2024,7 @@ export class InlineCompletionContribution implements vscode.Disposable, TokenBud
 	}
 
 	private async getCopilotApi(): Promise<Copilot.ContextProviderApiV1 | undefined> {
-		const copilotExtension = vscode.extensions.getExtension('GitHub.copilot');
+		const copilotExtension = vscode.extensions.getExtension('ownrex.ai');
 		if (copilotExtension === undefined) {
 			// this.telemetrySender.sendActivationFailedTelemetry(ErrorLocation.Client, ErrorPart.CopilotExtension, 'Copilot extension not found', undefined);
 			// this.logService.error('Copilot extension not found');

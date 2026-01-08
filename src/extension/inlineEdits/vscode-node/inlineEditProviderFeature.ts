@@ -32,7 +32,7 @@ import { InlineEditLogger } from './parts/inlineEditLogger';
 import { VSCodeWorkspace } from './parts/vscodeWorkspace';
 import { makeSettable } from './utils/observablesUtils';
 
-const useEnhancedNotebookNESContextKey = 'github.copilot.chat.enableEnhancedNotebookNES';
+const useEnhancedNotebookNESContextKey = 'ownrex.ai.chat.enableEnhancedNotebookNES';
 
 export class InlineEditProviderFeatureContribution extends Disposable implements IExtensionContribution {
 
@@ -173,14 +173,14 @@ export class InlineEditProviderFeature {
 				if (!excludes.includes('completions')) {
 					excludes.push('completions');
 				}
-				if (!excludes.includes('github.copilot')) {
-					excludes.push('github.copilot');
+				if (!excludes.includes('ownrex.ai')) {
+					excludes.push('ownrex.ai');
 				}
 			}
 
 			reader.store.add(languages.registerInlineCompletionItemProvider('*', provider, {
 				displayName: provider.displayName,
-				yieldTo: this._yieldToCopilot.read(reader) ? ['github.copilot'] : undefined,
+				yieldTo: this._yieldToCopilot.read(reader) ? ['ownrex.ai'] : undefined,
 				debounceDelayMs: 0, // set 0 debounce to ensure consistent delays/timings
 				groupId: 'nes',
 				excludes,
@@ -214,9 +214,9 @@ export class InlineEditProviderFeature {
 	}
 }
 
-export const learnMoreCommandId = 'github.copilot.debug.inlineEdit.learnMore';
+export const learnMoreCommandId = 'ownrex.ai.debug.inlineEdit.learnMore';
 
 export const learnMoreLink = 'https://aka.ms/vscode-nes';
 
-export const clearCacheCommandId = 'github.copilot.debug.inlineEdit.clearCache';
-export const reportNotebookNESIssueCommandId = 'github.copilot.debug.inlineEdit.reportNotebookNESIssue';
+export const clearCacheCommandId = 'ownrex.ai.debug.inlineEdit.clearCache';
+export const reportNotebookNESIssueCommandId = 'ownrex.ai.debug.inlineEdit.reportNotebookNESIssue';

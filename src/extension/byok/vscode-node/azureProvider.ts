@@ -72,7 +72,7 @@ export class AzureBYOKModelProvider extends CustomOAIBYOKModelProvider {
 	}
 
 	protected override async getModelsWithCredentials(silent: boolean): Promise<BYOKKnownModels> {
-		// Check user's authentication preference from settings github.copilot.chat.azureAuthType (default: AzureAuthMode.EntraId)
+		// Check user's authentication preference from settings ownrex.ai.chat.azureAuthType (default: AzureAuthMode.EntraId)
 		const authType = this._configurationService.getConfig(ConfigKey.AzureAuthType);
 
 		if (authType === AzureAuthMode.EntraId) {
