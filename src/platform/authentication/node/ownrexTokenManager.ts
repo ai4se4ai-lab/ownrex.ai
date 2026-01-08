@@ -136,9 +136,13 @@ export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManage
 		const now = Math.floor(Date.now() / 1000); // Current time in seconds
 
 		// Return cached token if still valid and not forced refresh
-		if (!force && this.cachedTokenInfo && this.tokenExpiresAt > now) {
-			this.logService.debug('[OwnrexTokenManager] Returning cached token info');
-			return this.cachedTokenInfo;
+		// Also allow using cached token if expired but less than 1 hour ago (grace period for rate limits)
+		const gracePeriod = 3600; // 1 hour grace period in seconds
+		if (!force && this.cachedTokenInfo) {
+			if (this.tokenExpiresAt > now || (this.tokenExpiresAt + gracePeriod > now)) {
+				this.logService.debug('[OwnrexTokenManager] Returning cached token info');
+				return this.cachedTokenInfo;
+			}
 		}
 
 		const apiKey = this.getApiKey();
@@ -147,7 +151,7 @@ export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManage
 		this.logService.info(`[OwnrexTokenManager] Fetching token info from backend: ${backendUrl}`);
 
 		try {
-			// Fetch token info from backend
+			// Fetch token info from backend (with retry logic and rate limit handling)
 			const tokenInfo = await this.backendTokenService.getTokenInfo(apiKey, backendUrl);
 
 			// Cache the token info
@@ -158,7 +162,42 @@ export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManage
 			this.logService.info('[OwnrexTokenManager] Token info fetched and cached successfully');
 			return tokenInfo;
 		} catch (error) {
-			this.logService.error(`[OwnrexTokenManager] Failed to fetch token info: ${error}`);
+			// If fetch failed but we have a cached token, use it as fallback
+			if (this.cachedTokenInfo) {
+				this.logService.warn(`[OwnrexTokenManager] Failed to fetch token info, using cached token: ${error}`);
+				return this.cachedTokenInfo;
+			}
+
+			// If rate limited and no cached token, create a minimal fallback token
+			const isRateLimitError = error instanceof Error && error.message.includes('429');
+			if (isRateLimitError) {
+				this.logService.warn(`[OwnrexTokenManager] Rate limited with no cached token, creating fallback token from configuration`);
+				const fallbackToken: BackendTokenInfo = {
+					token: apiKey,
+					endpoints: {
+						api: backendUrl,
+						proxy: backendUrl,
+						telemetry: backendUrl,
+						'origin-tracker': backendUrl
+					},
+					chat_enabled: true,
+					code_quote_enabled: false,
+					copilotignore_enabled: false,
+					individual: true,
+					sku: 'ownrex_free',
+					expires_at: now + 3600, // 1 hour expiration
+					refresh_in: 3600
+				};
+
+				// Cache the fallback token
+				this.cachedTokenInfo = fallbackToken;
+				this.tokenExpiresAt = fallbackToken.expires_at;
+
+				this.logService.warn(`[OwnrexTokenManager] Using fallback token. Extension may have limited functionality until rate limit resets.`);
+				return fallbackToken;
+			}
+
+			this.logService.error(`[OwnrexTokenManager] Failed to fetch token info and no cached token available: ${error}`);
 			throw error;
 		}
 	}
