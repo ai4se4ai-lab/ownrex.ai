@@ -55,16 +55,16 @@ export async function executeIntentTest(testingServiceCollection: TestingService
 
 function detectedParticipantToIntentId(detected: ChatParticipantDetectionResult) {
 	switch (detected.participant) {
-		case 'github.copilot.default':
+		case 'ownrex.ai.default':
 			return 'unknown';
-		case `github.copilot.${editingSessionAgentEditorName}`:
+		case `ownrex.ai.${editingSessionAgentEditorName}`:
 			if (detected.command) {
 				return detected.command;
 			}
 			return 'unknown';
-		case 'github.copilot.terminalPanel':
+		case 'ownrex.ai.terminalPanel':
 			return 'terminalExplain';
-		case 'github.copilot.workspace':
+		case 'ownrex.ai.workspace':
 			switch (detected.command) {
 				case 'new':
 					return 'new';
@@ -77,10 +77,10 @@ function detectedParticipantToIntentId(detected: ChatParticipantDetectionResult)
 				default:
 					return 'workspace';
 			}
-		case 'github.copilot.vscode':
+		case 'ownrex.ai.vscode':
 			return 'vscode';
-		case 'github.copilot-dynamic.platform':
-			return 'github.copilot-dynamic.platform';
+		case 'ownrex.ai-dynamic.platform':
+			return 'ownrex.ai-dynamic.platform';
 	}
 	throw new Error(`Unknown participant ${detected.participant} with command ${detected.command}`);
 }

@@ -53,7 +53,7 @@ export interface CrossChatSessionWithPR extends vscode.ChatSessionItem {
 	};
 }
 
-const CLOSE_SESSION_PR_CMD = 'github.copilot.cloud.sessions.proxy.closeChatSessionPullRequest';
+const CLOSE_SESSION_PR_CMD = 'ownrex.ai.cloud.sessions.proxy.closeChatSessionPullRequest';
 export class ChatSessionsContrib extends Disposable implements IExtensionContribution {
 	readonly id = 'chatSessions';
 	readonly copilotcliSessionType = 'copilotcli';
@@ -163,12 +163,12 @@ export class ChatSessionsContrib extends Disposable implements IExtensionContrib
 			)
 		);
 		this.copilotCloudRegistrations.add(
-			vscode.commands.registerCommand('github.copilot.cloud.resetWorkspaceConfirmations', () => {
+			vscode.commands.registerCommand('ownrex.ai.cloud.resetWorkspaceConfirmations', () => {
 				cloudSessionsProvider.resetWorkspaceContext();
 			})
 		);
 		this.copilotCloudRegistrations.add(
-			vscode.commands.registerCommand('github.copilot.cloud.sessions.openInBrowser', async (chatSessionItem: vscode.ChatSessionItem) => {
+			vscode.commands.registerCommand('ownrex.ai.cloud.sessions.openInBrowser', async (chatSessionItem: vscode.ChatSessionItem) => {
 				cloudSessionsProvider.openSessionsInBrowser(chatSessionItem);
 			})
 		);
@@ -195,7 +195,7 @@ export class ChatSessionsContrib extends Disposable implements IExtensionContrib
 			})
 		);
 		this.copilotCloudRegistrations.add(
-			vscode.commands.registerCommand('github.copilot.cloud.sessions.installPRExtension', async () => {
+			vscode.commands.registerCommand('ownrex.ai.cloud.sessions.installPRExtension', async () => {
 				await this.installPullRequestExtension();
 			})
 		);

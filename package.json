@@ -1,5 +1,5 @@
 {
-	"name": "ownrex-ai-chat",
+	"name": "copilot-chat",
 	"displayName": "Ownrex.ai - Take the ownership of your experties, develop it and transfer it to your next project!",
 	"description": "AI chat features powered by Ownrex.ai",
 	"version": "0.36.0",
@@ -9,7 +9,7 @@
 	"internalLargeStorageAriaKey": "ec712b3202c5462fb6877acae7f1f9d7-c19ad55e-3e3c-4f99-984b-827f6d95bd9e-6917",
 	"ariaKey": "0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255",
 	"buildType": "dev",
-	"publisher": "Ai4SE4AI-Lab",
+	"publisher": "GitHub",
 	"homepage": "https://github.com/ai4se4ai-lab/ownrex.ai",
 	"license": "SEE LICENSE IN LICENSE.txt",
 	"repository": {
@@ -480,18 +480,18 @@
 						"facts"
 					]
 				},
-				"when": "config.github.copilot.chat.enableUserPreferences"
+				"when": "config.ownrex.ai.chat.enableUserPreferences"
 			},
 			{
 				"name": "copilot_createNewWorkspace",
-				"displayName": "%github.copilot.tools.createNewWorkspace.name%",
+				"displayName": "%ownrex.ai.tools.createNewWorkspace.name%",
 				"toolReferenceName": "newWorkspace",
 				"legacyToolReferenceFullNames": [
 					"new/newWorkspace"
 				],
 				"icon": "$(new-folder)",
-				"userDescription": "%github.copilot.tools.createNewWorkspace.userDescription%",
-				"when": "config.github.copilot.chat.newWorkspaceCreation.enabled",
+				"userDescription": "%ownrex.ai.tools.createNewWorkspace.userDescription%",
+				"when": "config.ownrex.ai.chat.newWorkspaceCreation.enabled",
 				"modelDescription": "Get comprehensive setup steps to help the user create complete project structures in a VS Code workspace. This tool is designed for full project initialization and scaffolding, not for creating individual files.\n\nWhen to use this tool:\n- User wants to create a new complete project from scratch\n- Setting up entire project frameworks (TypeScript projects, React apps, Node.js servers, etc.)\n- Initializing Model Context Protocol (MCP) servers with full structure\n- Creating VS Code extensions with proper scaffolding\n- Setting up Next.js, Vite, or other framework-based projects\n- User asks for \"new project\", \"create a workspace\", \"set up a [framework] project\"\n- Need to establish complete development environment with dependencies, config files, and folder structure\n\nWhen NOT to use this tool:\n- Creating single files or small code snippets\n- Adding individual files to existing projects\n- Making modifications to existing codebases\n- User asks to \"create a file\" or \"add a component\"\n- Simple code examples or demonstrations\n- Debugging or fixing existing code\n\nThis tool provides complete project setup including:\n- Folder structure creation\n- Package.json and dependency management\n- Configuration files (tsconfig, eslint, etc.)\n- Initial boilerplate code\n- Development environment setup\n- Build and run instructions\n\nUse other file creation tools for individual files within existing projects.",
 				"inputSchema": {
 					"type": "object",
@@ -512,8 +512,8 @@
 			},
 			{
 				"name": "copilot_getProjectSetupInfo",
-				"displayName": "%github.copilot.tools.getProjectSetupInfo.name%",
-				"when": "config.github.copilot.chat.newWorkspaceCreation.enabled",
+				"displayName": "%ownrex.ai.tools.getProjectSetupInfo.name%",
+				"when": "config.ownrex.ai.chat.newWorkspaceCreation.enabled",
 				"toolReferenceName": "getProjectSetupInfo",
 				"legacyToolReferenceFullNames": [
 					"new/getProjectSetupInfo"
@@ -536,7 +536,7 @@
 			{
 				"name": "copilot_installExtension",
 				"displayName": "Install Extension in VS Code",
-				"when": "config.github.copilot.chat.newWorkspaceCreation.enabled",
+				"when": "config.ownrex.ai.chat.newWorkspaceCreation.enabled",
 				"toolReferenceName": "installExtension",
 				"legacyToolReferenceFullNames": [
 					"new/installExtension"
@@ -564,7 +564,7 @@
 			{
 				"name": "copilot_runVscodeCommand",
 				"displayName": "Run VS Code Command",
-				"when": "config.github.copilot.chat.newWorkspaceCreation.enabled",
+				"when": "config.ownrex.ai.chat.newWorkspaceCreation.enabled",
 				"toolReferenceName": "runCommand",
 				"legacyToolReferenceFullNames": [
 					"new/runVscodeCommand"
@@ -728,7 +728,7 @@
 				"toolReferenceName": "replaceString",
 				"displayName": "%copilot.tools.replaceString.name%",
 				"modelDescription": "This is a tool for making edits in an existing file in the workspace. For moving or renaming files, use run in terminal tool with the 'mv' command instead. For larger edits, split them into smaller edits and call the edit tool multiple times to ensure accuracy. Before editing, always ensure you have the context to understand the file's contents and context. To edit a file, provide: 1) filePath (absolute path), 2) oldString (MUST be the exact literal text to replace including all whitespace, indentation, newlines, and surrounding code etc), and 3) newString (MUST be the exact literal text to replace \\`oldString\\` with (also including all whitespace, indentation, newlines, and surrounding code etc.). Ensure the resulting code is correct and idiomatic.). Each use of this tool replaces exactly ONE occurrence of oldString.\n\nCRITICAL for \\`oldString\\`: Must uniquely identify the single instance to change. Include at least 3 lines of context BEFORE and AFTER the target text, matching whitespace and indentation precisely. If this string matches multiple locations, or does not match exactly, the tool will fail. Never use 'Lines 123-456 omitted' from summarized documents or ...existing code... comments in the oldString or newString.",
-				"when": "!config.github.copilot.chat.disableReplaceTool",
+				"when": "!config.ownrex.ai.chat.disableReplaceTool",
 				"inputSchema": {
 					"type": "object",
 					"properties": {
@@ -757,7 +757,7 @@
 				"toolReferenceName": "multiReplaceString",
 				"displayName": "%copilot.tools.multiReplaceString.name%",
 				"modelDescription": "This tool allows you to apply multiple replace_string_in_file operations in a single call, which is more efficient than calling replace_string_in_file multiple times. It takes an array of replacement operations and applies them sequentially. Each replacement operation has the same parameters as replace_string_in_file: filePath, oldString, newString, and explanation. This tool is ideal when you need to make multiple edits across different files or multiple edits in the same file. The tool will provide a summary of successful and failed operations.",
-				"when": "!config.github.copilot.chat.disableReplaceTool",
+				"when": "!config.ownrex.ai.chat.disableReplaceTool",
 				"inputSchema": {
 					"type": "object",
 					"properties": {
@@ -1037,9 +1037,9 @@
 			{
 				"name": "copilot_getSearchResults",
 				"toolReferenceName": "searchResults",
-				"displayName": "%github.copilot.tools.searchResults.name%",
+				"displayName": "%ownrex.ai.tools.searchResults.name%",
 				"icon": "$(search)",
-				"userDescription": "%github.copilot.tools.searchResults.description%",
+				"userDescription": "%ownrex.ai.tools.searchResults.description%",
 				"modelDescription": "The results from the search view"
 			},
 			{
@@ -1048,11 +1048,11 @@
 				"legacyToolReferenceFullNames": [
 					"githubRepo"
 				],
-				"displayName": "%github.copilot.tools.githubRepo.name%",
+				"displayName": "%ownrex.ai.tools.githubRepo.name%",
 				"modelDescription": "Searches a GitHub repository for relevant source code snippets. Only use this tool if the user is very clearly asking for code snippets from a specific GitHub repository. Do not use this tool for Github repos that the user has open in their workspace.",
-				"userDescription": "%github.copilot.tools.githubRepo.userDescription%",
+				"userDescription": "%ownrex.ai.tools.githubRepo.userDescription%",
 				"icon": "$(repo)",
-				"when": "!config.github.copilot.chat.githubMcpServer.enabled",
+				"when": "!config.ownrex.ai.chat.githubMcpServer.enabled",
 				"inputSchema": {
 					"type": "object",
 					"properties": {
@@ -1101,7 +1101,7 @@
 				"userDescription": "%copilot.tools.memory.description%",
 				"modelDescription": "Manage persistent memory across conversations. This tool allows you to create, view, update, and delete memory files that persist between chat sessions. Use this to remember important information about the user, their preferences, project context, or anything that should be recalled in future conversations. Available commands: view (list/read memories), create (new memory file), str_replace (edit content), insert (add content), delete (remove memory), rename (change filename).",
 				"icon": "$(database)",
-				"when": "config.github.copilot.chat.tools.memory.enabled",
+				"when": "config.ownrex.ai.chat.tools.memory.enabled",
 				"canBeReferencedInPrompt": true,
 				"tags": [],
 				"inputSchema": {
@@ -1248,7 +1248,7 @@
 		],
 		"chatParticipants": [
 			{
-				"id": "github.copilot.default",
+				"id": "ownrex.ai.default",
 				"name": "GitHubCopilot",
 				"fullName": "Ownrex.ai",
 				"description": "%copilot.description%",
@@ -1284,7 +1284,7 @@
 				]
 			},
 			{
-				"id": "github.copilot.editingSession",
+				"id": "ownrex.ai.editingSession",
 				"name": "GitHubCopilot",
 				"fullName": "Ownrex.ai",
 				"description": "%copilot.edits.description%",
@@ -1298,7 +1298,7 @@
 				"when": "!config.chat.edits2.enabled"
 			},
 			{
-				"id": "github.copilot.editingSessionEditor",
+				"id": "ownrex.ai.editingSessionEditor",
 				"name": "GitHubCopilot",
 				"fullName": "GitHub Copilot",
 				"description": "%copilot.edits.description%",
@@ -1380,7 +1380,7 @@
 				]
 			},
 			{
-				"id": "github.copilot.editingSession2",
+				"id": "ownrex.ai.editingSession2",
 				"name": "GitHubCopilot",
 				"fullName": "GitHub Copilot",
 				"description": "%copilot.edits.description%",
@@ -1394,7 +1394,7 @@
 				"when": "config.chat.edits2.enabled"
 			},
 			{
-				"id": "github.copilot.editsAgent",
+				"id": "ownrex.ai.editsAgent",
 				"name": "agent",
 				"fullName": "GitHub Copilot",
 				"description": "%copilot.agent.description%",
@@ -1412,12 +1412,12 @@
 					{
 						"name": "error",
 						"description": "Make a model request which will result in an error",
-						"when": "github.copilot.chat.debug"
+						"when": "ownrex.ai.chat.debug"
 					}
 				]
 			},
 			{
-				"id": "github.copilot.notebook",
+				"id": "ownrex.ai.notebook",
 				"name": "GitHubCopilot",
 				"fullName": "GitHub Copilot",
 				"description": "%copilot.description%",
@@ -1438,7 +1438,7 @@
 				]
 			},
 			{
-				"id": "github.copilot.notebookEditorAgent",
+				"id": "ownrex.ai.notebookEditorAgent",
 				"name": "GitHubCopilot",
 				"fullName": "GitHub Copilot",
 				"description": "%copilot.description%",
@@ -1459,11 +1459,11 @@
 				]
 			},
 			{
-				"id": "github.copilot.workspace",
+				"id": "ownrex.ai.workspace",
 				"name": "workspace",
 				"fullName": "Workspace",
 				"description": "%copilot.workspace.description%",
-				"when": "!github.copilot.interactiveSession.disabled",
+				"when": "!ownrex.ai.interactiveSession.disabled",
 				"sampleRequest": "%copilot.workspace.sampleRequest%",
 				"locations": [
 					"panel"
@@ -1499,7 +1499,7 @@
 					{
 						"name": "review",
 						"description": "%copilot.workspace.review.description%",
-						"when": "github.copilot.advanced.review.intent"
+						"when": "ownrex.ai.advanced.review.intent"
 					},
 					{
 						"name": "tests",
@@ -1554,13 +1554,13 @@
 						"name": "semanticSearch",
 						"description": "%copilot.workspace.semanticSearch.description%",
 						"sampleRequest": "%copilot.workspace.semanticSearch.sampleRequest%",
-						"when": "config.github.copilot.semanticSearch.enabled"
+						"when": "config.ownrex.ai.semanticSearch.enabled"
 					},
 					{
 						"name": "setupTests",
 						"description": "%copilot.vscode.setupTests.description%",
 						"sampleRequest": "%copilot.vscode.setupTests.sampleRequest%",
-						"when": "config.github.copilot.chat.setupTests.enabled",
+						"when": "config.ownrex.ai.chat.setupTests.enabled",
 						"disambiguation": [
 							{
 								"category": "set_up_tests",
@@ -1574,11 +1574,11 @@
 				]
 			},
 			{
-				"id": "github.copilot.vscode",
+				"id": "ownrex.ai.vscode",
 				"name": "vscode",
 				"fullName": "VS Code",
 				"description": "%copilot.vscode.description%",
-				"when": "!github.copilot.interactiveSession.disabled",
+				"when": "!ownrex.ai.interactiveSession.disabled",
 				"sampleRequest": "%copilot.vscode.sampleRequest%",
 				"locations": [
 					"panel"
@@ -1611,11 +1611,11 @@
 				]
 			},
 			{
-				"id": "github.copilot.terminal",
+				"id": "ownrex.ai.terminal",
 				"name": "terminal",
 				"fullName": "Terminal",
 				"description": "%copilot.terminal.description%",
-				"when": "!github.copilot.interactiveSession.disabled",
+				"when": "!ownrex.ai.interactiveSession.disabled",
 				"sampleRequest": "%copilot.terminal.sampleRequest%",
 				"isDefault": true,
 				"locations": [
@@ -1630,11 +1630,11 @@
 				]
 			},
 			{
-				"id": "github.copilot.terminalPanel",
+				"id": "ownrex.ai.terminalPanel",
 				"name": "terminal",
 				"fullName": "Terminal",
 				"description": "%copilot.terminalPanel.description%",
-				"when": "!github.copilot.interactiveSession.disabled",
+				"when": "!ownrex.ai.interactiveSession.disabled",
 				"sampleRequest": "%copilot.terminal.sampleRequest%",
 				"locations": [
 					"panel"
@@ -1657,7 +1657,7 @@
 				]
 			},
 			{
-				"id": "github.copilot.chatReplay",
+				"id": "ownrex.ai.chatReplay",
 				"name": "chatReplay",
 				"fullName": "Chat Replay",
 				"when": "debugType == 'vscode-chat-replay'",
@@ -1674,17 +1674,17 @@
 			{
 				"vendor": "azure",
 				"displayName": "Azure",
-				"managementCommand": "github.copilot.chat.manageBYOK"
+				"managementCommand": "ownrex.ai.chat.manageBYOK"
 			},
 			{
 				"vendor": "anthropic",
 				"displayName": "Anthropic",
-				"managementCommand": "github.copilot.chat.manageBYOK"
+				"managementCommand": "ownrex.ai.chat.manageBYOK"
 			},
 			{
 				"vendor": "xai",
 				"displayName": "xAI",
-				"managementCommand": "github.copilot.chat.manageBYOK"
+				"managementCommand": "ownrex.ai.chat.manageBYOK"
 			},
 			{
 				"vendor": "ollama",
@@ -1693,28 +1693,28 @@
 			{
 				"vendor": "openai",
 				"displayName": "OpenAI",
-				"managementCommand": "github.copilot.chat.manageBYOK"
+				"managementCommand": "ownrex.ai.chat.manageBYOK"
 			},
 			{
 				"vendor": "gemini",
 				"displayName": "Google",
-				"managementCommand": "github.copilot.chat.manageBYOK"
+				"managementCommand": "ownrex.ai.chat.manageBYOK"
 			},
 			{
 				"vendor": "groq",
 				"displayName": "Groq",
-				"managementCommand": "github.copilot.chat.manageBYOK"
+				"managementCommand": "ownrex.ai.chat.manageBYOK"
 			},
 			{
 				"vendor": "openrouter",
 				"displayName": "OpenRouter",
-				"managementCommand": "github.copilot.chat.manageBYOK"
+				"managementCommand": "ownrex.ai.chat.manageBYOK"
 			},
 			{
 				"vendor": "customoai",
 				"when": "productQualityType != 'stable'",
 				"displayName": "OpenAI Compatible",
-				"managementCommand": "github.copilot.chat.manageBYOK"
+				"managementCommand": "ownrex.ai.chat.manageBYOK"
 			}
 		],
 		"interactiveSession": [
@@ -1722,7 +1722,7 @@
 				"label": "GitHub Copilot",
 				"id": "copilot",
 				"icon": "",
-				"when": "!github.copilot.interactiveSession.disabled"
+				"when": "!ownrex.ai.interactiveSession.disabled"
 			}
 		],
 		"mcpServerDefinitionProviders": [
@@ -1734,592 +1734,592 @@
 		"viewsWelcome": [
 			{
 				"view": "debug",
-				"when": "github.copilot-chat.activated",
-				"contents": "%github.copilot.viewsWelcome.debug%"
+				"when": "ownrex.ai-chat.activated",
+				"contents": "%ownrex.ai.viewsWelcome.debug%"
 			}
 		],
 		"chatViewsWelcome": [
 			{
 				"icon": "$(chat-sparkle)",
 				"title": "%copilot.title%",
-				"content": "%github.copilot.viewsWelcome.individual.expired%",
-				"when": "github.copilot.interactiveSession.individual.expired"
+				"content": "%ownrex.ai.viewsWelcome.individual.expired%",
+				"when": "ownrex.ai.interactiveSession.individual.expired"
 			},
 			{
 				"icon": "$(chat-sparkle)",
 				"title": "%copilot.title%",
-				"content": "%github.copilot.viewsWelcome.enterprise%",
-				"when": "github.copilot.interactiveSession.enterprise.disabled"
+				"content": "%ownrex.ai.viewsWelcome.enterprise%",
+				"when": "ownrex.ai.interactiveSession.enterprise.disabled"
 			},
 			{
 				"icon": "$(chat-sparkle)",
 				"title": "%copilot.title%",
-				"content": "%github.copilot.viewsWelcome.offline%",
-				"when": "github.copilot.offline"
+				"content": "%ownrex.ai.viewsWelcome.offline%",
+				"when": "ownrex.ai.offline"
 			},
 			{
 				"icon": "$(chat-sparkle)",
 				"title": "%copilot.title%",
-				"content": "%github.copilot.viewsWelcome.contactSupport%",
-				"when": "github.copilot.interactiveSession.contactSupport"
+				"content": "%ownrex.ai.viewsWelcome.contactSupport%",
+				"when": "ownrex.ai.interactiveSession.contactSupport"
 			},
 			{
 				"icon": "$(chat-sparkle)",
 				"title": "%copilot.title%",
-				"content": "%github.copilot.viewsWelcome.chatDisabled%",
-				"when": "github.copilot.interactiveSession.chatDisabled"
+				"content": "%ownrex.ai.viewsWelcome.chatDisabled%",
+				"when": "ownrex.ai.interactiveSession.chatDisabled"
 			},
 			{
 				"icon": "$(chat-sparkle)",
 				"title": "%copilot.title%",
-				"content": "%github.copilot.viewsWelcome.switchToReleaseChannel%",
-				"when": "github.copilot.interactiveSession.switchToReleaseChannel"
+				"content": "%ownrex.ai.viewsWelcome.switchToReleaseChannel%",
+				"when": "ownrex.ai.interactiveSession.switchToReleaseChannel"
 			}
 		],
-	"commands": [
-		{
-			"command": "ownrex.setApiKey",
-			"title": "Ownrex.ai: Set API Key",
-			"category": "Ownrex.ai"
-		},
-		{
-			"command": "ownrex.testConnection",
-			"title": "Ownrex.ai: Test Backend Connection",
-			"category": "Ownrex.ai"
-		},
-		{
-			"command": "ownrex.openSettings",
-			"title": "Ownrex.ai: Open Settings",
-			"category": "Ownrex.ai"
-		},
-		{
-			"command": "github.copilot.chat.triggerPermissiveSignIn",
-			"title": "%github.copilot.command.triggerPermissiveSignIn%"
-		},
-		{
-				"command": "github.copilot.cli.sessions.delete",
-				"title": "%github.copilot.command.deleteAgentSession%",
+		"commands": [
+			{
+				"command": "ownrex.setApiKey",
+				"title": "Ownrex.ai: Set API Key",
+				"category": "Ownrex.ai"
+			},
+			{
+				"command": "ownrex.testConnection",
+				"title": "Ownrex.ai: Test Backend Connection",
+				"category": "Ownrex.ai"
+			},
+			{
+				"command": "ownrex.openSettings",
+				"title": "Ownrex.ai: Open Settings",
+				"category": "Ownrex.ai"
+			},
+			{
+				"command": "ownrex.ai.chat.triggerPermissiveSignIn",
+				"title": "%ownrex.ai.command.triggerPermissiveSignIn%"
+			},
+			{
+				"command": "ownrex.ai.cli.sessions.delete",
+				"title": "%ownrex.ai.command.deleteAgentSession%",
 				"icon": "$(close)",
 				"category": "Copilot CLI"
 			},
 			{
-				"command": "github.copilot.cli.sessions.resumeInTerminal",
-				"title": "%github.copilot.command.cli.sessions.resumeInTerminal%",
+				"command": "ownrex.ai.cli.sessions.resumeInTerminal",
+				"title": "%ownrex.ai.command.cli.sessions.resumeInTerminal%",
 				"icon": "$(terminal)",
 				"category": "Copilot CLI"
 			},
 			{
-				"command": "github.copilot.chat.replay",
+				"command": "ownrex.ai.chat.replay",
 				"title": "Start Chat Replay",
 				"icon": "$(debug-line-by-line)",
 				"enablement": "resourceFilename === 'benchRun.chatReplay.json' && !inDebugMode"
 			},
 			{
-				"command": "github.copilot.chat.replay.enableWorkspaceEditTracing",
-				"title": "%github.copilot.command.enableEditTracing%",
+				"command": "ownrex.ai.chat.replay.enableWorkspaceEditTracing",
+				"title": "%ownrex.ai.command.enableEditTracing%",
 				"category": "Developer",
-				"enablement": "!github.copilot.chat.replay.workspaceEditTracing"
+				"enablement": "!ownrex.ai.chat.replay.workspaceEditTracing"
 			},
 			{
-				"command": "github.copilot.chat.replay.disableWorkspaceEditTracing",
-				"title": "%github.copilot.command.disableEditTracing%",
+				"command": "ownrex.ai.chat.replay.disableWorkspaceEditTracing",
+				"title": "%ownrex.ai.command.disableEditTracing%",
 				"category": "Developer",
-				"enablement": "github.copilot.chat.replay.workspaceEditTracing"
+				"enablement": "ownrex.ai.chat.replay.workspaceEditTracing"
 			},
 			{
-				"command": "github.copilot.chat.explain",
-				"title": "%github.copilot.command.explainThis%",
-				"enablement": "!github.copilot.interactiveSession.disabled",
+				"command": "ownrex.ai.chat.explain",
+				"title": "%ownrex.ai.command.explainThis%",
+				"enablement": "!ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.explain.palette",
-				"title": "%github.copilot.command.explainThis%",
-				"enablement": "!github.copilot.interactiveSession.disabled && !editorReadonly",
+				"command": "ownrex.ai.chat.explain.palette",
+				"title": "%ownrex.ai.command.explainThis%",
+				"enablement": "!ownrex.ai.interactiveSession.disabled && !editorReadonly",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review",
-				"title": "%github.copilot.command.reviewAndComment%",
-				"enablement": "config.github.copilot.chat.reviewSelection.enabled && !github.copilot.interactiveSession.disabled",
+				"command": "ownrex.ai.chat.review",
+				"title": "%ownrex.ai.command.reviewAndComment%",
+				"enablement": "config.ownrex.ai.chat.reviewSelection.enabled && !ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.apply",
-				"title": "%github.copilot.command.applyReviewSuggestion%",
+				"command": "ownrex.ai.chat.review.apply",
+				"title": "%ownrex.ai.command.applyReviewSuggestion%",
 				"icon": "$(sparkle)",
 				"enablement": "commentThread =~ /hasSuggestion/",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.applyAndNext",
-				"title": "%github.copilot.command.applyReviewSuggestionAndNext%",
+				"command": "ownrex.ai.chat.review.applyAndNext",
+				"title": "%ownrex.ai.command.applyReviewSuggestionAndNext%",
 				"icon": "$(sparkle)",
 				"enablement": "commentThread =~ /hasSuggestion/",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.discard",
-				"title": "%github.copilot.command.discardReviewSuggestion%",
+				"command": "ownrex.ai.chat.review.discard",
+				"title": "%ownrex.ai.command.discardReviewSuggestion%",
 				"icon": "$(close)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.discardAndNext",
-				"title": "%github.copilot.command.discardReviewSuggestionAndNext%",
+				"command": "ownrex.ai.chat.review.discardAndNext",
+				"title": "%ownrex.ai.command.discardReviewSuggestionAndNext%",
 				"icon": "$(close)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.discardAll",
-				"title": "%github.copilot.command.discardAllReviewSuggestion%",
+				"command": "ownrex.ai.chat.review.discardAll",
+				"title": "%ownrex.ai.command.discardAllReviewSuggestion%",
 				"icon": "$(close-all)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.stagedChanges",
-				"title": "%github.copilot.command.reviewStagedChanges%",
+				"command": "ownrex.ai.chat.review.stagedChanges",
+				"title": "%ownrex.ai.command.reviewStagedChanges%",
 				"icon": "$(code-review)",
-				"enablement": "github.copilot.chat.reviewDiff.enabled && !github.copilot.interactiveSession.disabled",
+				"enablement": "ownrex.ai.chat.reviewDiff.enabled && !ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.unstagedChanges",
-				"title": "%github.copilot.command.reviewUnstagedChanges%",
+				"command": "ownrex.ai.chat.review.unstagedChanges",
+				"title": "%ownrex.ai.command.reviewUnstagedChanges%",
 				"icon": "$(code-review)",
-				"enablement": "github.copilot.chat.reviewDiff.enabled && !github.copilot.interactiveSession.disabled",
+				"enablement": "ownrex.ai.chat.reviewDiff.enabled && !ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.changes",
-				"title": "%github.copilot.command.reviewChanges%",
+				"command": "ownrex.ai.chat.review.changes",
+				"title": "%ownrex.ai.command.reviewChanges%",
 				"icon": "$(code-review)",
-				"enablement": "github.copilot.chat.reviewDiff.enabled && !github.copilot.interactiveSession.disabled",
+				"enablement": "ownrex.ai.chat.reviewDiff.enabled && !ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.stagedFileChange",
-				"title": "%github.copilot.command.reviewFileChange%",
+				"command": "ownrex.ai.chat.review.stagedFileChange",
+				"title": "%ownrex.ai.command.reviewFileChange%",
 				"icon": "$(code-review)",
-				"enablement": "github.copilot.chat.reviewDiff.enabled && !github.copilot.interactiveSession.disabled",
+				"enablement": "ownrex.ai.chat.reviewDiff.enabled && !ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.unstagedFileChange",
-				"title": "%github.copilot.command.reviewFileChange%",
+				"command": "ownrex.ai.chat.review.unstagedFileChange",
+				"title": "%ownrex.ai.command.reviewFileChange%",
 				"icon": "$(code-review)",
-				"enablement": "github.copilot.chat.reviewDiff.enabled && !github.copilot.interactiveSession.disabled",
+				"enablement": "ownrex.ai.chat.reviewDiff.enabled && !ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.previous",
-				"title": "%github.copilot.command.gotoPreviousReviewSuggestion%",
+				"command": "ownrex.ai.chat.review.previous",
+				"title": "%ownrex.ai.command.gotoPreviousReviewSuggestion%",
 				"icon": "$(arrow-up)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.next",
-				"title": "%github.copilot.command.gotoNextReviewSuggestion%",
+				"command": "ownrex.ai.chat.review.next",
+				"title": "%ownrex.ai.command.gotoNextReviewSuggestion%",
 				"icon": "$(arrow-down)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.continueInInlineChat",
-				"title": "%github.copilot.command.continueReviewInInlineChat%",
+				"command": "ownrex.ai.chat.review.continueInInlineChat",
+				"title": "%ownrex.ai.command.continueReviewInInlineChat%",
 				"icon": "$(comment-discussion)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.continueInChat",
-				"title": "%github.copilot.command.continueReviewInChat%",
+				"command": "ownrex.ai.chat.review.continueInChat",
+				"title": "%ownrex.ai.command.continueReviewInChat%",
 				"icon": "$(comment-discussion)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.review.markHelpful",
-				"title": "%github.copilot.command.helpfulReviewSuggestion%",
+				"command": "ownrex.ai.chat.review.markHelpful",
+				"title": "%ownrex.ai.command.helpfulReviewSuggestion%",
 				"icon": "$(thumbsup)",
 				"enablement": "!(commentThread =~ /markedAsHelpful/)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.openUserPreferences",
-				"title": "%github.copilot.command.openUserPreferences%",
+				"command": "ownrex.ai.chat.openUserPreferences",
+				"title": "%ownrex.ai.command.openUserPreferences%",
 				"category": "Chat",
-				"enablement": "config.github.copilot.chat.enableUserPreferences"
+				"enablement": "config.ownrex.ai.chat.enableUserPreferences"
 			},
 			{
-				"command": "github.copilot.chat.tools.memory.openFolder",
-				"title": "%github.copilot.command.openMemoryFolder%",
+				"command": "ownrex.ai.chat.tools.memory.openFolder",
+				"title": "%ownrex.ai.command.openMemoryFolder%",
 				"category": "Chat",
-				"enablement": "config.github.copilot.chat.tools.memory.enabled"
+				"enablement": "config.ownrex.ai.chat.tools.memory.enabled"
 			},
 			{
-				"command": "github.copilot.chat.review.markUnhelpful",
-				"title": "%github.copilot.command.unhelpfulReviewSuggestion%",
+				"command": "ownrex.ai.chat.review.markUnhelpful",
+				"title": "%ownrex.ai.command.unhelpfulReviewSuggestion%",
 				"icon": "$(thumbsdown)",
 				"enablement": "!(commentThread =~ /markedAsUnhelpful/)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.generate",
-				"title": "%github.copilot.command.generateThis%",
+				"command": "ownrex.ai.chat.generate",
+				"title": "%ownrex.ai.command.generateThis%",
 				"icon": "$(sparkle)",
-				"enablement": "!github.copilot.interactiveSession.disabled && !editorReadonly",
+				"enablement": "!ownrex.ai.interactiveSession.disabled && !editorReadonly",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.generateDocs",
-				"title": "%github.copilot.command.generateDocs%",
-				"enablement": "!github.copilot.interactiveSession.disabled && !editorReadonly",
+				"command": "ownrex.ai.chat.generateDocs",
+				"title": "%ownrex.ai.command.generateDocs%",
+				"enablement": "!ownrex.ai.interactiveSession.disabled && !editorReadonly",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.generateTests",
-				"title": "%github.copilot.command.generateTests%",
-				"enablement": "!github.copilot.interactiveSession.disabled && !editorReadonly",
+				"command": "ownrex.ai.chat.generateTests",
+				"title": "%ownrex.ai.command.generateTests%",
+				"enablement": "!ownrex.ai.interactiveSession.disabled && !editorReadonly",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.fix",
-				"title": "%github.copilot.command.fixThis%",
-				"enablement": "!github.copilot.interactiveSession.disabled && !editorReadonly",
+				"command": "ownrex.ai.chat.fix",
+				"title": "%ownrex.ai.command.fixThis%",
+				"enablement": "!ownrex.ai.interactiveSession.disabled && !editorReadonly",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.interactiveSession.feedback",
-				"title": "%github.copilot.command.sendChatFeedback%",
-				"enablement": "github.copilot-chat.activated && !github.copilot.interactiveSession.disabled",
+				"command": "ownrex.ai.interactiveSession.feedback",
+				"title": "%ownrex.ai.command.sendChatFeedback%",
+				"enablement": "ownrex.ai-chat.activated && !ownrex.ai.interactiveSession.disabled",
 				"icon": "$(feedback)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.debug.workbenchState",
-				"title": "%github.copilot.command.logWorkbenchState%",
+				"command": "ownrex.ai.debug.workbenchState",
+				"title": "%ownrex.ai.command.logWorkbenchState%",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.debug.showChatLogView",
-				"title": "%github.copilot.command.showChatLogView%",
+				"command": "ownrex.ai.debug.showChatLogView",
+				"title": "%ownrex.ai.command.showChatLogView%",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.debug.showOutputChannel",
-				"title": "%github.copilot.command.showOutputChannel%",
+				"command": "ownrex.ai.debug.showOutputChannel",
+				"title": "%ownrex.ai.command.showOutputChannel%",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.debug.showContextInspectorView",
-				"title": "%github.copilot.command.showContextInspectorView%",
+				"command": "ownrex.ai.debug.showContextInspectorView",
+				"title": "%ownrex.ai.command.showContextInspectorView%",
 				"icon": "$(inspect)",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.debug.validateNesRename",
-				"title": "%github.copilot.command.validateNesRename%",
+				"command": "ownrex.ai.debug.validateNesRename",
+				"title": "%ownrex.ai.command.validateNesRename%",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.debug.resetVirtualToolGroups",
-				"title": "%github.copilot.command.resetVirtualToolGroups%",
+				"command": "ownrex.ai.debug.resetVirtualToolGroups",
+				"title": "%ownrex.ai.command.resetVirtualToolGroups%",
 				"icon": "$(inspect)",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.terminal.explainTerminalLastCommand",
-				"title": "%github.copilot.command.explainTerminalLastCommand%",
+				"command": "ownrex.ai.terminal.explainTerminalLastCommand",
+				"title": "%ownrex.ai.command.explainTerminalLastCommand%",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.git.generateCommitMessage",
-				"title": "%github.copilot.git.generateCommitMessage%",
+				"command": "ownrex.ai.git.generateCommitMessage",
+				"title": "%ownrex.ai.git.generateCommitMessage%",
 				"icon": "$(sparkle)",
-				"enablement": "!github.copilot.interactiveSession.disabled",
+				"enablement": "!ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.git.resolveMergeConflicts",
-				"title": "%github.copilot.git.resolveMergeConflicts%",
+				"command": "ownrex.ai.git.resolveMergeConflicts",
+				"title": "%ownrex.ai.git.resolveMergeConflicts%",
 				"icon": "$(chat-sparkle)",
-				"enablement": "!github.copilot.interactiveSession.disabled",
+				"enablement": "!ownrex.ai.interactiveSession.disabled",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.devcontainer.generateDevContainerConfig",
-				"title": "%github.copilot.devcontainer.generateDevContainerConfig%",
+				"command": "ownrex.ai.devcontainer.generateDevContainerConfig",
+				"title": "%ownrex.ai.devcontainer.generateDevContainerConfig%",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.tests.fixTestFailure",
+				"command": "ownrex.ai.tests.fixTestFailure",
 				"icon": "$(sparkle)",
-				"title": "%github.copilot.command.fixTestFailure%",
+				"title": "%ownrex.ai.command.fixTestFailure%",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.tests.fixTestFailure.fromInline",
+				"command": "ownrex.ai.tests.fixTestFailure.fromInline",
 				"icon": "$(sparkle)",
-				"title": "%github.copilot.command.fixTestFailure%"
+				"title": "%ownrex.ai.command.fixTestFailure%"
 			},
 			{
-				"command": "github.copilot.chat.attachFile",
-				"title": "%github.copilot.chat.attachFile%",
+				"command": "ownrex.ai.chat.attachFile",
+				"title": "%ownrex.ai.chat.attachFile%",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.attachSelection",
-				"title": "%github.copilot.chat.attachSelection%",
+				"command": "ownrex.ai.chat.attachSelection",
+				"title": "%ownrex.ai.chat.attachSelection%",
 				"icon": "$(comment-discussion)",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.debug.collectDiagnostics",
-				"title": "%github.copilot.command.collectDiagnostics%",
+				"command": "ownrex.ai.debug.collectDiagnostics",
+				"title": "%ownrex.ai.command.collectDiagnostics%",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.debug.inlineEdit.clearCache",
-				"title": "%github.copilot.command.inlineEdit.clearCache%",
+				"command": "ownrex.ai.debug.inlineEdit.clearCache",
+				"title": "%ownrex.ai.command.inlineEdit.clearCache%",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.debug.inlineEdit.reportNotebookNESIssue",
-				"title": "%github.copilot.command.inlineEdit.reportNotebookNESIssue%",
-				"enablement": "config.github.copilot.chat.advanced.notebook.alternativeNESFormat.enabled || github.copilot.chat.enableEnhancedNotebookNES",
+				"command": "ownrex.ai.debug.inlineEdit.reportNotebookNESIssue",
+				"title": "%ownrex.ai.command.inlineEdit.reportNotebookNESIssue%",
+				"enablement": "config.ownrex.ai.chat.advanced.notebook.alternativeNESFormat.enabled || ownrex.ai.chat.enableEnhancedNotebookNES",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.debug.generateSTest",
-				"title": "%github.copilot.command.generateSTest%",
-				"enablement": "github.copilot.debugReportFeedback",
+				"command": "ownrex.ai.debug.generateSTest",
+				"title": "%ownrex.ai.command.generateSTest%",
+				"enablement": "ownrex.ai.debugReportFeedback",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.open.walkthrough",
-				"title": "%github.copilot.command.openWalkthrough%",
+				"command": "ownrex.ai.open.walkthrough",
+				"title": "%ownrex.ai.command.openWalkthrough%",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.debug.generateInlineEditTests",
+				"command": "ownrex.ai.debug.generateInlineEditTests",
 				"title": "Generate Inline Edit Tests",
 				"category": "Chat",
 				"enablement": "resourceScheme == 'ccreq'"
 			},
 			{
-				"command": "github.copilot.buildLocalWorkspaceIndex",
-				"title": "%github.copilot.command.buildLocalWorkspaceIndex%",
+				"command": "ownrex.ai.buildLocalWorkspaceIndex",
+				"title": "%ownrex.ai.command.buildLocalWorkspaceIndex%",
 				"category": "Chat",
-				"enablement": "github.copilot-chat.activated"
+				"enablement": "ownrex.ai-chat.activated"
 			},
 			{
-				"command": "github.copilot.buildRemoteWorkspaceIndex",
-				"title": "%github.copilot.command.buildRemoteWorkspaceIndex%",
+				"command": "ownrex.ai.buildRemoteWorkspaceIndex",
+				"title": "%ownrex.ai.command.buildRemoteWorkspaceIndex%",
 				"category": "Chat",
-				"enablement": "github.copilot-chat.activated"
+				"enablement": "ownrex.ai-chat.activated"
 			},
 			{
-				"command": "github.copilot.report",
+				"command": "ownrex.ai.report",
 				"title": "Report Issue",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.rerunWithCopilotDebug",
-				"title": "%github.copilot.command.rerunWithCopilotDebug%",
+				"command": "ownrex.ai.chat.rerunWithCopilotDebug",
+				"title": "%ownrex.ai.command.rerunWithCopilotDebug%",
 				"category": "Chat"
 			},
 			{
-				"command": "github.copilot.chat.startCopilotDebugCommand",
+				"command": "ownrex.ai.chat.startCopilotDebugCommand",
 				"title": "Start Copilot Debug"
 			},
 			{
-				"command": "github.copilot.chat.clearTemporalContext",
+				"command": "ownrex.ai.chat.clearTemporalContext",
 				"title": "Clear Temporal Context",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.search.markHelpful",
+				"command": "ownrex.ai.search.markHelpful",
 				"title": "Helpful",
 				"icon": "$(thumbsup)",
-				"enablement": "!github.copilot.search.feedback.sent"
+				"enablement": "!ownrex.ai.search.feedback.sent"
 			},
 			{
-				"command": "github.copilot.search.markUnhelpful",
+				"command": "ownrex.ai.search.markUnhelpful",
 				"title": "Unhelpful",
 				"icon": "$(thumbsdown)",
-				"enablement": "!github.copilot.search.feedback.sent"
+				"enablement": "!ownrex.ai.search.feedback.sent"
 			},
 			{
-				"command": "github.copilot.search.feedback",
+				"command": "ownrex.ai.search.feedback",
 				"title": "Feedback",
 				"icon": "$(feedback)",
-				"enablement": "!github.copilot.search.feedback.sent"
+				"enablement": "!ownrex.ai.search.feedback.sent"
 			},
 			{
-				"command": "github.copilot.chat.debug.showElements",
+				"command": "ownrex.ai.chat.debug.showElements",
 				"title": "Show Rendered Elements"
 			},
 			{
-				"command": "github.copilot.chat.debug.hideElements",
+				"command": "ownrex.ai.chat.debug.hideElements",
 				"title": "Hide Rendered Elements"
 			},
 			{
-				"command": "github.copilot.chat.debug.showTools",
+				"command": "ownrex.ai.chat.debug.showTools",
 				"title": "Show Tools"
 			},
 			{
-				"command": "github.copilot.chat.debug.hideTools",
+				"command": "ownrex.ai.chat.debug.hideTools",
 				"title": "Hide Tools"
 			},
 			{
-				"command": "github.copilot.chat.debug.showNesRequests",
+				"command": "ownrex.ai.chat.debug.showNesRequests",
 				"title": "Show NES Requests"
 			},
 			{
-				"command": "github.copilot.chat.debug.hideNesRequests",
+				"command": "ownrex.ai.chat.debug.hideNesRequests",
 				"title": "Hide NES Requests"
 			},
 			{
-				"command": "github.copilot.chat.debug.showGhostRequests",
+				"command": "ownrex.ai.chat.debug.showGhostRequests",
 				"title": "Show Ghost Requests"
 			},
 			{
-				"command": "github.copilot.chat.debug.hideGhostRequests",
+				"command": "ownrex.ai.chat.debug.hideGhostRequests",
 				"title": "Hide Ghost Requests"
 			},
 			{
-				"command": "github.copilot.chat.debug.showRawRequestBody",
+				"command": "ownrex.ai.chat.debug.showRawRequestBody",
 				"title": "Show Raw Request Body"
 			},
 			{
-				"command": "github.copilot.chat.debug.exportLogItem",
+				"command": "ownrex.ai.chat.debug.exportLogItem",
 				"title": "Export as...",
 				"icon": "$(export)"
 			},
 			{
-				"command": "github.copilot.chat.debug.exportPromptArchive",
+				"command": "ownrex.ai.chat.debug.exportPromptArchive",
 				"title": "Export All as Archive...",
 				"icon": "$(archive)"
 			},
 			{
-				"command": "github.copilot.chat.debug.exportPromptLogsAsJson",
+				"command": "ownrex.ai.chat.debug.exportPromptLogsAsJson",
 				"title": "Export All as JSON...",
 				"icon": "$(export)"
 			},
 			{
-				"command": "github.copilot.chat.debug.exportAllPromptLogsAsJson",
+				"command": "ownrex.ai.chat.debug.exportAllPromptLogsAsJson",
 				"title": "Export All Prompt Logs as JSON...",
 				"icon": "$(export)"
 			},
 			{
-				"command": "github.copilot.chat.showAsChatSession",
+				"command": "ownrex.ai.chat.showAsChatSession",
 				"title": "Show as chat session",
 				"icon": "$(chat-sparkle)"
 			},
 			{
-				"command": "github.copilot.debug.collectWorkspaceIndexDiagnostics",
-				"title": "%github.copilot.command.collectWorkspaceIndexDiagnostics%",
+				"command": "ownrex.ai.debug.collectWorkspaceIndexDiagnostics",
+				"title": "%ownrex.ai.command.collectWorkspaceIndexDiagnostics%",
 				"category": "Developer"
 			},
 			{
-				"command": "github.copilot.chat.mcp.setup.check",
+				"command": "ownrex.ai.chat.mcp.setup.check",
 				"title": "MCP Check: is supported"
 			},
 			{
-				"command": "github.copilot.chat.mcp.setup.validatePackage",
+				"command": "ownrex.ai.chat.mcp.setup.validatePackage",
 				"title": "MCP Check: validate package"
 			},
 			{
-				"command": "github.copilot.chat.mcp.setup.flow",
+				"command": "ownrex.ai.chat.mcp.setup.flow",
 				"title": "MCP Check: do prompts"
 			},
 			{
-				"command": "github.copilot.chat.generateAltText",
+				"command": "ownrex.ai.chat.generateAltText",
 				"title": "Generate/Refine Alt Text"
 			},
 			{
-				"command": "github.copilot.chat.notebook.enableFollowCellExecution",
+				"command": "ownrex.ai.chat.notebook.enableFollowCellExecution",
 				"title": "Enable Follow Cell Execution from Chat",
 				"shortTitle": "Follow",
 				"icon": "$(pinned)"
 			},
 			{
-				"command": "github.copilot.chat.notebook.disableFollowCellExecution",
+				"command": "ownrex.ai.chat.notebook.disableFollowCellExecution",
 				"title": "Disable Follow Cell Execution from Chat",
 				"shortTitle": "Unfollow",
 				"icon": "$(pinned-dirty)"
 			},
 			{
-				"command": "github.copilot.chat.manageBYOK",
+				"command": "ownrex.ai.chat.manageBYOK",
 				"title": "Manage Bring Your Own Key Vendor",
 				"enablement": "false"
 			},
 			{
-				"command": "github.copilot.chat.manageBYOKAPIKey",
+				"command": "ownrex.ai.chat.manageBYOKAPIKey",
 				"title": "Manage Bring Your Own Key API Key",
 				"enablement": "false"
 			},
 			{
-				"command": "github.copilot.cloud.resetWorkspaceConfirmations",
-				"title": "%github.copilot.command.resetCloudAgentWorkspaceConfirmations%"
+				"command": "ownrex.ai.cloud.resetWorkspaceConfirmations",
+				"title": "%ownrex.ai.command.resetCloudAgentWorkspaceConfirmations%"
 			},
 			{
-				"command": "github.copilot.cloud.sessions.openInBrowser",
-				"title": "%github.copilot.command.openCopilotAgentSessionsInBrowser%",
+				"command": "ownrex.ai.cloud.sessions.openInBrowser",
+				"title": "%ownrex.ai.command.openCopilotAgentSessionsInBrowser%",
 				"icon": "$(link-external)"
 			},
 			{
-				"command": "github.copilot.cloud.sessions.proxy.closeChatSessionPullRequest",
-				"title": "%github.copilot.command.closeChatSessionPullRequest.title%"
+				"command": "ownrex.ai.cloud.sessions.proxy.closeChatSessionPullRequest",
+				"title": "%ownrex.ai.command.closeChatSessionPullRequest.title%"
 			},
 			{
-				"command": "github.copilot.cloud.sessions.installPRExtension",
-				"title": "%github.copilot.command.installPRExtension.title%",
+				"command": "ownrex.ai.cloud.sessions.installPRExtension",
+				"title": "%ownrex.ai.command.installPRExtension.title%",
 				"icon": "$(extensions)"
 			},
 			{
-				"command": "github.copilot.chat.openSuggestionsPanel",
+				"command": "ownrex.ai.chat.openSuggestionsPanel",
 				"title": "Open Completions Panel",
-				"enablement": "github.copilot.extensionUnification.activated && !isWeb",
+				"enablement": "ownrex.ai.extensionUnification.activated && !isWeb",
 				"category": "GitHub Copilot"
 			},
 			{
-				"command": "github.copilot.chat.toggleStatusMenu",
+				"command": "ownrex.ai.chat.toggleStatusMenu",
 				"title": "Open Status Menu",
-				"enablement": "github.copilot.extensionUnification.activated",
+				"enablement": "ownrex.ai.extensionUnification.activated",
 				"category": "GitHub Copilot"
 			},
 			{
-				"command": "github.copilot.chat.completions.disable",
+				"command": "ownrex.ai.chat.completions.disable",
 				"title": "Disable Inline Suggestions",
-				"enablement": "github.copilot.extensionUnification.activated && github.copilot.activated && config.editor.inlineSuggest.enabled && github.copilot.completions.enabled",
+				"enablement": "ownrex.ai.extensionUnification.activated && ownrex.ai.activated && config.editor.inlineSuggest.enabled && ownrex.ai.completions.enabled",
 				"category": "GitHub Copilot"
 			},
 			{
-				"command": "github.copilot.chat.completions.enable",
+				"command": "ownrex.ai.chat.completions.enable",
 				"title": "Enable Inline Suggestions",
-				"enablement": "github.copilot.extensionUnification.activated && github.copilot.activated && !(config.editor.inlineSuggest.enabled && github.copilot.completions.enabled)",
+				"enablement": "ownrex.ai.extensionUnification.activated && ownrex.ai.activated && !(config.editor.inlineSuggest.enabled && ownrex.ai.completions.enabled)",
 				"category": "GitHub Copilot"
 			},
 			{
-				"command": "github.copilot.chat.completions.toggle",
+				"command": "ownrex.ai.chat.completions.toggle",
 				"title": "Toggle (Enable/Disable) Inline Suggestions",
-				"enablement": "github.copilot.extensionUnification.activated && github.copilot.activated",
+				"enablement": "ownrex.ai.extensionUnification.activated && ownrex.ai.activated",
 				"category": "GitHub Copilot"
 			},
 			{
-				"command": "github.copilot.chat.openModelPicker",
+				"command": "ownrex.ai.chat.openModelPicker",
 				"title": "Change Completions Model",
 				"category": "GitHub Copilot",
-				"enablement": "github.copilot.extensionUnification.activated && !isWeb"
+				"enablement": "ownrex.ai.extensionUnification.activated && !isWeb"
 			},
 			{
-				"command": "github.copilot.chat.applyCopilotCLIAgentSessionChanges",
-				"title": "%github.copilot.command.applyCopilotCLIAgentSessionChanges%",
+				"command": "ownrex.ai.chat.applyCopilotCLIAgentSessionChanges",
+				"title": "%ownrex.ai.command.applyCopilotCLIAgentSessionChanges%",
 				"icon": "$(git-stash-pop)",
 				"category": "GitHub Copilot"
 			},
 			{
-				"command": "github.copilot.chat.applyCopilotCLIAgentSessionChanges.apply",
-				"title": "%github.copilot.chat.applyCopilotCLIAgentSessionChanges.apply%",
+				"command": "ownrex.ai.chat.applyCopilotCLIAgentSessionChanges.apply",
+				"title": "%ownrex.ai.chat.applyCopilotCLIAgentSessionChanges.apply%",
 				"icon": "$(git-stash-pop)",
 				"category": "GitHub Copilot"
 			}
@@ -2380,32 +2380,32 @@
 				"title": "GitHub Copilot Chat",
 				"id": "stable",
 				"properties": {
-					"github.copilot.chat.backgroundAgent.enabled": {
+					"ownrex.ai.chat.backgroundAgent.enabled": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.backgroundAgent.enabled%"
+						"markdownDescription": "%ownrex.ai.config.backgroundAgent.enabled%"
 					},
-					"github.copilot.chat.cloudAgent.enabled": {
+					"ownrex.ai.chat.cloudAgent.enabled": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.cloudAgent.enabled%"
+						"markdownDescription": "%ownrex.ai.config.cloudAgent.enabled%"
 					},
-					"github.copilot.chat.codeGeneration.useInstructionFiles": {
+					"ownrex.ai.chat.codeGeneration.useInstructionFiles": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.codeGeneration.useInstructionFiles%"
+						"markdownDescription": "%ownrex.ai.config.codeGeneration.useInstructionFiles%"
 					},
-					"github.copilot.editor.enableCodeActions": {
+					"ownrex.ai.editor.enableCodeActions": {
 						"type": "boolean",
 						"default": true,
-						"description": "%github.copilot.config.enableCodeActions%"
+						"description": "%ownrex.ai.config.enableCodeActions%"
 					},
-					"github.copilot.renameSuggestions.triggerAutomatically": {
+					"ownrex.ai.renameSuggestions.triggerAutomatically": {
 						"type": "boolean",
 						"default": true,
-						"description": "%github.copilot.config.renameSuggestions.triggerAutomatically%"
+						"description": "%ownrex.ai.config.renameSuggestions.triggerAutomatically%"
 					},
-					"github.copilot.chat.localeOverride": {
+					"ownrex.ai.chat.localeOverride": {
 						"type": "string",
 						"enum": [
 							"auto",
@@ -2442,16 +2442,16 @@
 							"polski"
 						],
 						"default": "auto",
-						"markdownDescription": "%github.copilot.config.localeOverride%"
+						"markdownDescription": "%ownrex.ai.config.localeOverride%"
 					},
-					"github.copilot.chat.terminalChatLocation": {
+					"ownrex.ai.chat.terminalChatLocation": {
 						"type": "string",
 						"default": "chatView",
-						"markdownDescription": "%github.copilot.config.terminalChatLocation%",
+						"markdownDescription": "%ownrex.ai.config.terminalChatLocation%",
 						"markdownEnumDescriptions": [
-							"%github.copilot.config.terminalChatLocation.chatView%",
-							"%github.copilot.config.terminalChatLocation.quickChat%",
-							"%github.copilot.config.terminalChatLocation.terminal%"
+							"%ownrex.ai.config.terminalChatLocation.chatView%",
+							"%ownrex.ai.config.terminalChatLocation.quickChat%",
+							"%ownrex.ai.config.terminalChatLocation.terminal%"
 						],
 						"enum": [
 							"chatView",
@@ -2459,65 +2459,65 @@
 							"terminal"
 						]
 					},
-					"github.copilot.chat.scopeSelection": {
+					"ownrex.ai.chat.scopeSelection": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.scopeSelection%"
+						"markdownDescription": "%ownrex.ai.config.scopeSelection%"
 					},
-					"github.copilot.chat.useProjectTemplates": {
+					"ownrex.ai.chat.useProjectTemplates": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.useProjectTemplates%"
+						"markdownDescription": "%ownrex.ai.config.useProjectTemplates%"
 					},
-					"github.copilot.nextEditSuggestions.enabled": {
+					"ownrex.ai.nextEditSuggestions.enabled": {
 						"type": "boolean",
 						"default": false,
 						"tags": [
 							"nextEditSuggestions",
 							"onExp"
 						],
-						"markdownDescription": "%github.copilot.nextEditSuggestions.enabled%",
+						"markdownDescription": "%ownrex.ai.nextEditSuggestions.enabled%",
 						"scope": "language-overridable"
 					},
-					"github.copilot.nextEditSuggestions.fixes": {
+					"ownrex.ai.nextEditSuggestions.fixes": {
 						"type": "boolean",
 						"default": true,
 						"tags": [
 							"nextEditSuggestions",
 							"onExp"
 						],
-						"markdownDescription": "%github.copilot.nextEditSuggestions.fixes%",
+						"markdownDescription": "%ownrex.ai.nextEditSuggestions.fixes%",
 						"scope": "language-overridable"
 					},
-					"github.copilot.nextEditSuggestions.allowWhitespaceOnlyChanges": {
+					"ownrex.ai.nextEditSuggestions.allowWhitespaceOnlyChanges": {
 						"type": "boolean",
 						"default": true,
 						"tags": [
 							"nextEditSuggestions",
 							"onExp"
 						],
-						"markdownDescription": "%github.copilot.nextEditSuggestions.allowWhitespaceOnlyChanges%",
+						"markdownDescription": "%ownrex.ai.nextEditSuggestions.allowWhitespaceOnlyChanges%",
 						"scope": "language-overridable"
 					},
-					"github.copilot.chat.agent.autoFix": {
+					"ownrex.ai.chat.agent.autoFix": {
 						"type": "boolean",
 						"default": true,
-						"description": "%github.copilot.config.autoFix%",
+						"description": "%ownrex.ai.config.autoFix%",
 						"tags": [
 							"onExp"
 						]
 					},
-					"github.copilot.chat.customInstructionsInSystemMessage": {
+					"ownrex.ai.chat.customInstructionsInSystemMessage": {
 						"type": "boolean",
 						"default": true,
-						"description": "%github.copilot.config.customInstructionsInSystemMessage%"
+						"description": "%ownrex.ai.config.customInstructionsInSystemMessage%"
 					},
-					"github.copilot.chat.agent.currentEditorContext.enabled": {
+					"ownrex.ai.chat.agent.currentEditorContext.enabled": {
 						"type": "boolean",
 						"default": true,
-						"description": "%github.copilot.config.agent.currentEditorContext.enabled%"
+						"description": "%ownrex.ai.config.agent.currentEditorContext.enabled%"
 					},
-					"github.copilot.enable": {
+					"ownrex.ai.enable": {
 						"type": "object",
 						"scope": "window",
 						"default": {
@@ -2531,7 +2531,7 @@
 						},
 						"markdownDescription": "Enable or disable auto triggering of Copilot completions for specified [languages](https://code.visualstudio.com/docs/languages/identifiers). You can still trigger suggestions manually using `Alt + \\`"
 					},
-					"github.copilot.selectedCompletionModel": {
+					"ownrex.ai.selectedCompletionModel": {
 						"type": "string",
 						"default": "",
 						"markdownDescription": "The currently selected completion model ID. To select from a list of available models, use the __\"Change Completions Model\"__ command or open the model picker (from the Copilot menu in the VS Code title bar, select __\"Configure Code Completions\"__ then __\"Change Completions Model\"__. The value must be a valid model ID. An empty value indicates that the default model will be used."
@@ -2541,29 +2541,29 @@
 			{
 				"id": "preview",
 				"properties": {
-					"github.copilot.chat.reviewAgent.enabled": {
+					"ownrex.ai.chat.reviewAgent.enabled": {
 						"type": "boolean",
 						"default": true,
-						"description": "%github.copilot.config.reviewAgent.enabled%",
+						"description": "%ownrex.ai.config.reviewAgent.enabled%",
 						"tags": [
 							"preview"
 						]
 					},
-					"github.copilot.chat.reviewSelection.enabled": {
+					"ownrex.ai.chat.reviewSelection.enabled": {
 						"type": "boolean",
 						"default": true,
-						"description": "%github.copilot.config.reviewSelection.enabled%",
+						"description": "%ownrex.ai.config.reviewSelection.enabled%",
 						"tags": [
 							"preview"
 						]
 					},
-					"github.copilot.chat.reviewSelection.instructions": {
+					"ownrex.ai.chat.reviewSelection.instructions": {
 						"type": "array",
 						"items": {
 							"oneOf": [
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.reviewSelection.instruction.file%",
+									"markdownDescription": "%ownrex.ai.config.reviewSelection.instruction.file%",
 									"properties": {
 										"file": {
 											"type": "string",
@@ -2586,7 +2586,7 @@
 								},
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.reviewSelection.instruction.text%",
+									"markdownDescription": "%ownrex.ai.config.reviewSelection.instruction.text%",
 									"properties": {
 										"text": {
 											"type": "string",
@@ -2613,7 +2613,7 @@
 							]
 						},
 						"default": [],
-						"markdownDescription": "%github.copilot.config.reviewSelection.instructions%",
+						"markdownDescription": "%ownrex.ai.config.reviewSelection.instructions%",
 						"examples": [
 							[
 								{
@@ -2628,49 +2628,49 @@
 							"preview"
 						]
 					},
-					"github.copilot.chat.copilotDebugCommand.enabled": {
+					"ownrex.ai.chat.copilotDebugCommand.enabled": {
 						"type": "boolean",
 						"default": true,
 						"tags": [
 							"preview"
 						],
-						"description": "%github.copilot.chat.copilotDebugCommand.enabled%"
+						"description": "%ownrex.ai.chat.copilotDebugCommand.enabled%"
 					},
-					"github.copilot.chat.codesearch.enabled": {
+					"ownrex.ai.chat.codesearch.enabled": {
 						"type": "boolean",
 						"default": false,
 						"tags": [
 							"preview"
 						],
-						"markdownDescription": "%github.copilot.config.codesearch.enabled%"
+						"markdownDescription": "%ownrex.ai.config.codesearch.enabled%"
 					},
-					"github.copilot.chat.byok.ollamaEndpoint": {
+					"ownrex.ai.chat.byok.ollamaEndpoint": {
 						"type": "string",
 						"default": "http://localhost:11434",
 						"tags": [
 							"preview"
 						],
-						"markdownDescription": "%github.copilot.config.byok.ollamaEndpoint%"
+						"markdownDescription": "%ownrex.ai.config.byok.ollamaEndpoint%"
 					}
 				}
 			},
 			{
 				"id": "experimental",
 				"properties": {
-					"github.copilot.chat.githubMcpServer.enabled": {
+					"ownrex.ai.chat.githubMcpServer.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.githubMcpServer.enabled%",
+						"markdownDescription": "%ownrex.ai.config.githubMcpServer.enabled%",
 						"tags": [
 							"experimental"
 						]
 					},
-					"github.copilot.chat.githubMcpServer.toolsets": {
+					"ownrex.ai.chat.githubMcpServer.toolsets": {
 						"type": "array",
 						"default": [
 							"default"
 						],
-						"markdownDescription": "%github.copilot.config.githubMcpServer.toolsets%",
+						"markdownDescription": "%ownrex.ai.config.githubMcpServer.toolsets%",
 						"items": {
 							"type": "string"
 						},
@@ -2678,55 +2678,55 @@
 							"experimental"
 						]
 					},
-					"github.copilot.chat.githubMcpServer.readonly": {
+					"ownrex.ai.chat.githubMcpServer.readonly": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.githubMcpServer.readonly%",
+						"markdownDescription": "%ownrex.ai.config.githubMcpServer.readonly%",
 						"tags": [
 							"experimental"
 						]
 					},
-					"github.copilot.chat.githubMcpServer.lockdown": {
+					"ownrex.ai.chat.githubMcpServer.lockdown": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.githubMcpServer.lockdown%",
+						"markdownDescription": "%ownrex.ai.config.githubMcpServer.lockdown%",
 						"tags": [
 							"experimental"
 						]
 					},
-					"github.copilot.chat.imageUpload.enabled": {
+					"ownrex.ai.chat.imageUpload.enabled": {
 						"type": "boolean",
 						"default": true,
 						"tags": [
 							"experimental",
 							"onExp"
 						],
-						"markdownDescription": "%github.copilot.config.imageUpload.enabled%"
+						"markdownDescription": "%ownrex.ai.config.imageUpload.enabled%"
 					},
-					"github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": {
+					"ownrex.ai.chat.edits.suggestRelatedFilesFromGitHistory": {
 						"type": "boolean",
 						"default": true,
 						"tags": [
 							"experimental"
 						],
-						"markdownDescription": "%github.copilot.config.edits.suggestRelatedFilesFromGitHistory%"
+						"markdownDescription": "%ownrex.ai.config.edits.suggestRelatedFilesFromGitHistory%"
 					},
-					"github.copilot.chat.edits.suggestRelatedFilesForTests": {
+					"ownrex.ai.chat.edits.suggestRelatedFilesForTests": {
 						"type": "boolean",
 						"default": true,
 						"tags": [
 							"experimental"
 						],
-						"markdownDescription": "%github.copilot.chat.edits.suggestRelatedFilesForTests%"
+						"markdownDescription": "%ownrex.ai.chat.edits.suggestRelatedFilesForTests%"
 					},
-					"github.copilot.chat.codeGeneration.instructions": {
-						"markdownDeprecationMessage": "%github.copilot.config.codeGeneration.instructions.deprecated%",
+					"ownrex.ai.chat.codeGeneration.instructions": {
+						"markdownDeprecationMessage": "%ownrex.ai.config.codeGeneration.instructions.deprecated%",
 						"type": "array",
 						"items": {
 							"oneOf": [
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.codeGeneration.instruction.file%",
+									"markdownDescription": "%ownrex.ai.config.codeGeneration.instruction.file%",
 									"properties": {
 										"file": {
 											"type": "string",
@@ -2749,7 +2749,7 @@
 								},
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.codeGeneration.instruction.text%",
+									"markdownDescription": "%ownrex.ai.config.codeGeneration.instruction.text%",
 									"properties": {
 										"text": {
 											"type": "string",
@@ -2776,7 +2776,7 @@
 							]
 						},
 						"default": [],
-						"markdownDescription": "%github.copilot.config.codeGeneration.instructions%",
+						"markdownDescription": "%ownrex.ai.config.codeGeneration.instructions%",
 						"examples": [
 							[
 								{
@@ -2791,14 +2791,14 @@
 							"experimental"
 						]
 					},
-					"github.copilot.chat.testGeneration.instructions": {
-						"markdownDeprecationMessage": "%github.copilot.config.testGeneration.instructions.deprecated%",
+					"ownrex.ai.chat.testGeneration.instructions": {
+						"markdownDeprecationMessage": "%ownrex.ai.config.testGeneration.instructions.deprecated%",
 						"type": "array",
 						"items": {
 							"oneOf": [
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.experimental.testGeneration.instruction.file%",
+									"markdownDescription": "%ownrex.ai.config.experimental.testGeneration.instruction.file%",
 									"properties": {
 										"file": {
 											"type": "string",
@@ -2821,7 +2821,7 @@
 								},
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.experimental.testGeneration.instruction.text%",
+									"markdownDescription": "%ownrex.ai.config.experimental.testGeneration.instruction.text%",
 									"properties": {
 										"text": {
 											"type": "string",
@@ -2845,7 +2845,7 @@
 							]
 						},
 						"default": [],
-						"markdownDescription": "%github.copilot.config.testGeneration.instructions%",
+						"markdownDescription": "%ownrex.ai.config.testGeneration.instructions%",
 						"examples": [
 							[
 								{
@@ -2860,13 +2860,13 @@
 							"experimental"
 						]
 					},
-					"github.copilot.chat.commitMessageGeneration.instructions": {
+					"ownrex.ai.chat.commitMessageGeneration.instructions": {
 						"type": "array",
 						"items": {
 							"oneOf": [
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.commitMessageGeneration.instruction.file%",
+									"markdownDescription": "%ownrex.ai.config.commitMessageGeneration.instruction.file%",
 									"properties": {
 										"file": {
 											"type": "string",
@@ -2886,7 +2886,7 @@
 								},
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.commitMessageGeneration.instruction.text%",
+									"markdownDescription": "%ownrex.ai.config.commitMessageGeneration.instruction.text%",
 									"properties": {
 										"text": {
 											"type": "string",
@@ -2907,7 +2907,7 @@
 							]
 						},
 						"default": [],
-						"markdownDescription": "%github.copilot.config.commitMessageGeneration.instructions%",
+						"markdownDescription": "%ownrex.ai.config.commitMessageGeneration.instructions%",
 						"examples": [
 							[
 								{
@@ -2922,13 +2922,13 @@
 							"experimental"
 						]
 					},
-					"github.copilot.chat.pullRequestDescriptionGeneration.instructions": {
+					"ownrex.ai.chat.pullRequestDescriptionGeneration.instructions": {
 						"type": "array",
 						"items": {
 							"oneOf": [
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.pullRequestDescriptionGeneration.instruction.file%",
+									"markdownDescription": "%ownrex.ai.config.pullRequestDescriptionGeneration.instruction.file%",
 									"properties": {
 										"file": {
 											"type": "string",
@@ -2948,7 +2948,7 @@
 								},
 								{
 									"type": "object",
-									"markdownDescription": "%github.copilot.config.pullRequestDescriptionGeneration.instruction.text%",
+									"markdownDescription": "%ownrex.ai.config.pullRequestDescriptionGeneration.instruction.text%",
 									"properties": {
 										"text": {
 											"type": "string",
@@ -2969,7 +2969,7 @@
 							]
 						},
 						"default": [],
-						"markdownDescription": "%github.copilot.config.pullRequestDescriptionGeneration.instructions%",
+						"markdownDescription": "%ownrex.ai.config.pullRequestDescriptionGeneration.instructions%",
 						"examples": [
 							[
 								{
@@ -2984,23 +2984,23 @@
 							"experimental"
 						]
 					},
-					"github.copilot.chat.generateTests.codeLens": {
+					"ownrex.ai.chat.generateTests.codeLens": {
 						"type": "boolean",
 						"default": false,
-						"description": "%github.copilot.config.generateTests.codeLens%",
+						"description": "%ownrex.ai.config.generateTests.codeLens%",
 						"tags": [
 							"experimental"
 						]
 					},
-					"github.copilot.chat.setupTests.enabled": {
+					"ownrex.ai.chat.setupTests.enabled": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.setupTests.enabled%",
+						"markdownDescription": "%ownrex.ai.config.setupTests.enabled%",
 						"tags": [
 							"experimental"
 						]
 					},
-					"github.copilot.chat.languageContext.typescript.enabled": {
+					"ownrex.ai.chat.languageContext.typescript.enabled": {
 						"type": "boolean",
 						"default": false,
 						"scope": "resource",
@@ -3008,9 +3008,9 @@
 							"experimental",
 							"onExP"
 						],
-						"markdownDescription": "%github.copilot.chat.languageContext.typescript.enabled%"
+						"markdownDescription": "%ownrex.ai.chat.languageContext.typescript.enabled%"
 					},
-					"github.copilot.chat.languageContext.typescript.items": {
+					"ownrex.ai.chat.languageContext.typescript.items": {
 						"type": "string",
 						"enum": [
 							"minimal",
@@ -3024,9 +3024,9 @@
 							"experimental",
 							"onExP"
 						],
-						"markdownDescription": "%github.copilot.chat.languageContext.typescript.items%"
+						"markdownDescription": "%ownrex.ai.chat.languageContext.typescript.items%"
 					},
-					"github.copilot.chat.languageContext.typescript.includeDocumentation": {
+					"ownrex.ai.chat.languageContext.typescript.includeDocumentation": {
 						"type": "boolean",
 						"default": false,
 						"scope": "resource",
@@ -3034,9 +3034,9 @@
 							"experimental",
 							"onExP"
 						],
-						"markdownDescription": "%github.copilot.chat.languageContext.typescript.includeDocumentation%"
+						"markdownDescription": "%ownrex.ai.chat.languageContext.typescript.includeDocumentation%"
 					},
-					"github.copilot.chat.languageContext.typescript.cacheTimeout": {
+					"ownrex.ai.chat.languageContext.typescript.cacheTimeout": {
 						"type": "number",
 						"default": 500,
 						"scope": "resource",
@@ -3044,9 +3044,9 @@
 							"experimental",
 							"onExP"
 						],
-						"markdownDescription": "%github.copilot.chat.languageContext.typescript.cacheTimeout%"
+						"markdownDescription": "%ownrex.ai.chat.languageContext.typescript.cacheTimeout%"
 					},
-					"github.copilot.chat.languageContext.fix.typescript.enabled": {
+					"ownrex.ai.chat.languageContext.fix.typescript.enabled": {
 						"type": "boolean",
 						"default": false,
 						"scope": "resource",
@@ -3054,9 +3054,9 @@
 							"experimental",
 							"onExP"
 						],
-						"markdownDescription": "%github.copilot.chat.languageContext.fix.typescript.enabled%"
+						"markdownDescription": "%ownrex.ai.chat.languageContext.fix.typescript.enabled%"
 					},
-					"github.copilot.chat.languageContext.inline.typescript.enabled": {
+					"ownrex.ai.chat.languageContext.inline.typescript.enabled": {
 						"type": "boolean",
 						"default": false,
 						"scope": "resource",
@@ -3064,50 +3064,50 @@
 							"experimental",
 							"onExP"
 						],
-						"markdownDescription": "%github.copilot.chat.languageContext.inline.typescript.enabled%"
+						"markdownDescription": "%ownrex.ai.chat.languageContext.inline.typescript.enabled%"
 					},
-					"github.copilot.chat.newWorkspaceCreation.enabled": {
+					"ownrex.ai.chat.newWorkspaceCreation.enabled": {
 						"type": "boolean",
 						"default": true,
 						"tags": [
 							"experimental"
 						],
-						"description": "%github.copilot.config.newWorkspaceCreation.enabled%"
+						"description": "%ownrex.ai.config.newWorkspaceCreation.enabled%"
 					},
-					"github.copilot.chat.newWorkspace.useContext7": {
+					"ownrex.ai.chat.newWorkspace.useContext7": {
 						"type": "boolean",
 						"default": false,
 						"tags": [
 							"experimental"
 						],
-						"markdownDescription": "%github.copilot.config.newWorkspace.useContext7%"
+						"markdownDescription": "%ownrex.ai.config.newWorkspace.useContext7%"
 					},
-					"github.copilot.chat.notebook.followCellExecution.enabled": {
+					"ownrex.ai.chat.notebook.followCellExecution.enabled": {
 						"type": "boolean",
 						"default": false,
 						"tags": [
 							"experimental"
 						],
-						"description": "%github.copilot.config.notebook.followCellExecution%"
+						"description": "%ownrex.ai.config.notebook.followCellExecution%"
 					},
-					"github.copilot.chat.notebook.enhancedNextEditSuggestions.enabled": {
+					"ownrex.ai.chat.notebook.enhancedNextEditSuggestions.enabled": {
 						"type": "boolean",
 						"default": false,
 						"tags": [
 							"experimental",
 							"onExp"
 						],
-						"description": "%github.copilot.config.notebook.enhancedNextEditSuggestions%"
+						"description": "%ownrex.ai.config.notebook.enhancedNextEditSuggestions%"
 					},
-					"github.copilot.chat.summarizeAgentConversationHistory.enabled": {
+					"ownrex.ai.chat.summarizeAgentConversationHistory.enabled": {
 						"type": "boolean",
 						"default": true,
 						"tags": [
 							"experimental"
 						],
-						"description": "%github.copilot.config.summarizeAgentConversationHistory.enabled%"
+						"description": "%ownrex.ai.config.summarizeAgentConversationHistory.enabled%"
 					},
-					"github.copilot.chat.virtualTools.threshold": {
+					"ownrex.ai.chat.virtualTools.threshold": {
 						"type": "number",
 						"minimum": 0,
 						"maximum": 128,
@@ -3115,25 +3115,25 @@
 						"tags": [
 							"experimental"
 						],
-						"markdownDescription": "%github.copilot.config.virtualTools.threshold%"
+						"markdownDescription": "%ownrex.ai.config.virtualTools.threshold%"
 					},
-					"github.copilot.chat.azureAuthType": {
+					"ownrex.ai.chat.azureAuthType": {
 						"type": "string",
 						"enum": [
 							"entraId",
 							"apiKey"
 						],
 						"enumDescriptions": [
-							"%github.copilot.config.azureAuthType.entraId%",
-							"%github.copilot.config.azureAuthType.apiKey%"
+							"%ownrex.ai.config.azureAuthType.entraId%",
+							"%ownrex.ai.config.azureAuthType.apiKey%"
 						],
 						"default": "entraId",
 						"tags": [
 							"experimental"
 						],
-						"markdownDescription": "%github.copilot.config.azureAuthType%"
+						"markdownDescription": "%ownrex.ai.config.azureAuthType%"
 					},
-					"github.copilot.chat.azureModels": {
+					"ownrex.ai.chat.azureModels": {
 						"type": "object",
 						"default": {},
 						"tags": [
@@ -3148,7 +3148,7 @@
 								},
 								"url": {
 									"type": "string",
-									"markdownDescription": "URL endpoint for the Azure model.\n\n**Important:** Base URLs default to Chat Completions API. Explicit API paths including `/responses` or `/chat/completions` are respected. Both behaviors are independent of the `#github.copilot.chat.useResponsesApi#` setting."
+									"markdownDescription": "URL endpoint for the Azure model.\n\n**Important:** Base URLs default to Chat Completions API. Explicit API paths including `/responses` or `/chat/completions` are respected. Both behaviors are independent of the `#ownrex.ai.chat.useResponsesApi#` setting."
 								},
 								"toolCalling": {
 									"type": "boolean",
@@ -3196,7 +3196,7 @@
 						},
 						"markdownDescription": "Configure custom Azure OpenAI models. Each key should be a unique model ID, and the value should be an object with model configuration including name, url, toolCalling, vision, maxInputTokens, and maxOutputTokens properties."
 					},
-					"github.copilot.chat.customOAIModels": {
+					"ownrex.ai.chat.customOAIModels": {
 						"type": "object",
 						"default": {},
 						"tags": [
@@ -3211,7 +3211,7 @@
 								},
 								"url": {
 									"type": "string",
-									"markdownDescription": "URL endpoint for the custom OpenAI-compatible model.\n\n**Important:** Base URLs default to Chat Completions API. Explicit API paths including `/responses` or `/chat/completions` are respected. Both behaviors are independent of the `#github.copilot.chat.useResponsesApi#` setting."
+									"markdownDescription": "URL endpoint for the custom OpenAI-compatible model.\n\n**Important:** Base URLs default to Chat Completions API. Explicit API paths including `/responses` or `/chat/completions` are respected. Both behaviors are independent of the `#ownrex.ai.chat.useResponsesApi#` setting."
 								},
 								"toolCalling": {
 									"type": "boolean",
@@ -3278,36 +3278,36 @@
 						},
 						"markdownDescription": "Configure custom OpenAI-compatible models. Each key should be a unique model ID, and the value should be an object with model configuration including name, url, toolCalling, vision, maxInputTokens, and maxOutputTokens properties."
 					},
-					"github.copilot.chat.alternateGptPrompt.enabled": {
+					"ownrex.ai.chat.alternateGptPrompt.enabled": {
 						"type": "boolean",
 						"default": false,
 						"tags": [
 							"experimental"
 						],
-						"description": "%github.copilot.config.alternateGptPrompt.enabled%"
+						"description": "%ownrex.ai.config.alternateGptPrompt.enabled%"
 					},
-					"github.copilot.chat.alternateGeminiModelFPrompt.enabled": {
+					"ownrex.ai.chat.alternateGeminiModelFPrompt.enabled": {
 						"type": "boolean",
 						"default": false,
 						"tags": [
 							"experimental",
 							"onExp"
 						],
-						"description": "%github.copilot.config.alternateGeminiModelFPrompt.enabled%"
+						"description": "%ownrex.ai.config.alternateGeminiModelFPrompt.enabled%"
 					},
-					"github.copilot.chat.useResponsesApi": {
+					"ownrex.ai.chat.useResponsesApi": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.useResponsesApi%",
+						"markdownDescription": "%ownrex.ai.config.useResponsesApi%",
 						"tags": [
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.responsesApiReasoningEffort": {
+					"ownrex.ai.chat.responsesApiReasoningEffort": {
 						"type": "string",
 						"default": "default",
-						"markdownDescription": "%github.copilot.config.responsesApiReasoningEffort%",
+						"markdownDescription": "%ownrex.ai.config.responsesApiReasoningEffort%",
 						"tags": [
 							"experimental",
 							"onExp"
@@ -3319,10 +3319,10 @@
 							"default"
 						]
 					},
-					"github.copilot.chat.responsesApiReasoningSummary": {
+					"ownrex.ai.chat.responsesApiReasoningSummary": {
 						"type": "string",
 						"default": "detailed",
-						"markdownDescription": "%github.copilot.config.responsesApiReasoningSummary%",
+						"markdownDescription": "%ownrex.ai.config.responsesApiReasoningSummary%",
 						"tags": [
 							"experimental",
 							"onExp"
@@ -3332,9 +3332,9 @@
 							"detailed"
 						]
 					},
-					"github.copilot.chat.anthropic.thinking.budgetTokens": {
+					"ownrex.ai.chat.anthropic.thinking.budgetTokens": {
 						"type": "number",
-						"markdownDescription": "%github.copilot.config.anthropic.thinking.budgetTokens%",
+						"markdownDescription": "%ownrex.ai.config.anthropic.thinking.budgetTokens%",
 						"minimum": 0,
 						"maximum": 32000,
 						"default": 4000,
@@ -3343,29 +3343,29 @@
 							"onExp"
 						]
 					},
-					"github.copilot.chat.anthropic.tools.websearch.enabled": {
+					"ownrex.ai.chat.anthropic.tools.websearch.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.anthropic.tools.websearch.enabled%",
+						"markdownDescription": "%ownrex.ai.config.anthropic.tools.websearch.enabled%",
 						"tags": [
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.anthropic.tools.websearch.maxUses": {
+					"ownrex.ai.chat.anthropic.tools.websearch.maxUses": {
 						"type": "number",
 						"default": 5,
-						"markdownDescription": "%github.copilot.config.anthropic.tools.websearch.maxUses%",
+						"markdownDescription": "%ownrex.ai.config.anthropic.tools.websearch.maxUses%",
 						"minimum": 1,
 						"maximum": 20,
 						"tags": [
 							"experimental"
 						]
 					},
-					"github.copilot.chat.anthropic.tools.websearch.allowedDomains": {
+					"ownrex.ai.chat.anthropic.tools.websearch.allowedDomains": {
 						"type": "array",
 						"default": [],
-						"markdownDescription": "%github.copilot.config.anthropic.tools.websearch.allowedDomains%",
+						"markdownDescription": "%ownrex.ai.config.anthropic.tools.websearch.allowedDomains%",
 						"items": {
 							"type": "string"
 						},
@@ -3373,10 +3373,10 @@
 							"experimental"
 						]
 					},
-					"github.copilot.chat.anthropic.tools.websearch.blockedDomains": {
+					"ownrex.ai.chat.anthropic.tools.websearch.blockedDomains": {
 						"type": "array",
 						"default": [],
-						"markdownDescription": "%github.copilot.config.anthropic.tools.websearch.blockedDomains%",
+						"markdownDescription": "%ownrex.ai.config.anthropic.tools.websearch.blockedDomains%",
 						"items": {
 							"type": "string"
 						},
@@ -3384,13 +3384,13 @@
 							"experimental"
 						]
 					},
-					"github.copilot.chat.anthropic.tools.websearch.userLocation": {
+					"ownrex.ai.chat.anthropic.tools.websearch.userLocation": {
 						"type": [
 							"object",
 							"null"
 						],
 						"default": null,
-						"markdownDescription": "%github.copilot.config.anthropic.tools.websearch.userLocation%",
+						"markdownDescription": "%ownrex.ai.config.anthropic.tools.websearch.userLocation%",
 						"properties": {
 							"city": {
 								"type": "string",
@@ -3413,21 +3413,21 @@
 							"experimental"
 						]
 					},
-					"github.copilot.chat.tools.memory.enabled": {
+					"ownrex.ai.chat.tools.memory.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.tools.memory.enabled%",
+						"markdownDescription": "%ownrex.ai.config.tools.memory.enabled%",
 						"tags": [
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.completionsFetcher": {
+					"ownrex.ai.chat.completionsFetcher": {
 						"type": [
 							"string",
 							"null"
 						],
-						"markdownDescription": "%github.copilot.config.completionsFetcher%",
+						"markdownDescription": "%ownrex.ai.config.completionsFetcher%",
 						"tags": [
 							"experimental",
 							"onExp"
@@ -3437,12 +3437,12 @@
 							"node-fetch"
 						]
 					},
-					"github.copilot.chat.nesFetcher": {
+					"ownrex.ai.chat.nesFetcher": {
 						"type": [
 							"string",
 							"null"
 						],
-						"markdownDescription": "%github.copilot.config.nesFetcher%",
+						"markdownDescription": "%ownrex.ai.config.nesFetcher%",
 						"tags": [
 							"experimental",
 							"onExp"
@@ -3452,10 +3452,10 @@
 							"node-fetch"
 						]
 					},
-					"github.copilot.chat.customAgents.showOrganizationAndEnterpriseAgents": {
+					"ownrex.ai.chat.customAgents.showOrganizationAndEnterpriseAgents": {
 						"type": "boolean",
 						"default": false,
-						"description": "%github.copilot.config.customAgents.showOrganizationAndEnterpriseAgents%",
+						"description": "%ownrex.ai.config.customAgents.showOrganizationAndEnterpriseAgents%",
 						"tags": [
 							"experimental"
 						]
@@ -3465,18 +3465,18 @@
 			{
 				"id": "advanced",
 				"properties": {
-					"github.copilot.chat.debug.overrideChatEngine": {
+					"ownrex.ai.chat.debug.overrideChatEngine": {
 						"type": [
 							"string",
 							"null"
 						],
-						"markdownDescription": "%github.copilot.config.debug.overrideChatEngine%",
+						"markdownDescription": "%ownrex.ai.config.debug.overrideChatEngine%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.edits.gemini3MultiReplaceString": {
+					"ownrex.ai.chat.edits.gemini3MultiReplaceString": {
 						"type": "boolean",
 						"default": false,
 						"markdownDescription": "Enable the modern `multi_replace_string_in_file` edit tool when generating edits with Gemini 3 models.",
@@ -3486,457 +3486,457 @@
 							"onExp"
 						]
 					},
-					"github.copilot.chat.projectLabels.expanded": {
+					"ownrex.ai.chat.projectLabels.expanded": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.projectLabels.expanded%",
+						"markdownDescription": "%ownrex.ai.config.projectLabels.expanded%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.projectLabels.chat": {
+					"ownrex.ai.chat.projectLabels.chat": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.projectLabels.chat%",
+						"markdownDescription": "%ownrex.ai.config.projectLabels.chat%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.projectLabels.inline": {
+					"ownrex.ai.chat.projectLabels.inline": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.projectLabels.inline%",
+						"markdownDescription": "%ownrex.ai.config.projectLabels.inline%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.workspace.maxLocalIndexSize": {
+					"ownrex.ai.chat.workspace.maxLocalIndexSize": {
 						"type": "number",
 						"default": 100000,
-						"markdownDescription": "%github.copilot.config.workspace.maxLocalIndexSize%",
+						"markdownDescription": "%ownrex.ai.config.workspace.maxLocalIndexSize%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.workspace.enableFullWorkspace": {
+					"ownrex.ai.chat.workspace.enableFullWorkspace": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.workspace.enableFullWorkspace%",
+						"markdownDescription": "%ownrex.ai.config.workspace.enableFullWorkspace%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.workspace.enableCodeSearch": {
+					"ownrex.ai.chat.workspace.enableCodeSearch": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.workspace.enableCodeSearch%",
+						"markdownDescription": "%ownrex.ai.config.workspace.enableCodeSearch%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.workspace.enableEmbeddingsSearch": {
+					"ownrex.ai.chat.workspace.enableEmbeddingsSearch": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.workspace.enableEmbeddingsSearch%",
+						"markdownDescription": "%ownrex.ai.config.workspace.enableEmbeddingsSearch%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.workspace.preferredEmbeddingsModel": {
+					"ownrex.ai.chat.workspace.preferredEmbeddingsModel": {
 						"type": "string",
 						"default": "",
-						"markdownDescription": "%github.copilot.config.workspace.preferredEmbeddingsModel%",
+						"markdownDescription": "%ownrex.ai.config.workspace.preferredEmbeddingsModel%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.workspace.prototypeAdoCodeSearchEndpointOverride": {
+					"ownrex.ai.chat.workspace.prototypeAdoCodeSearchEndpointOverride": {
 						"type": "string",
 						"default": "",
-						"markdownDescription": "%github.copilot.config.workspace.prototypeAdoCodeSearchEndpointOverride%",
+						"markdownDescription": "%ownrex.ai.config.workspace.prototypeAdoCodeSearchEndpointOverride%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.feedback.onChange": {
+					"ownrex.ai.chat.feedback.onChange": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.feedback.onChange%",
+						"markdownDescription": "%ownrex.ai.config.feedback.onChange%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.review.intent": {
+					"ownrex.ai.chat.review.intent": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.review.intent%",
+						"markdownDescription": "%ownrex.ai.config.review.intent%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.notebook.summaryExperimentEnabled": {
+					"ownrex.ai.chat.notebook.summaryExperimentEnabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.notebook.summaryExperimentEnabled%",
+						"markdownDescription": "%ownrex.ai.config.notebook.summaryExperimentEnabled%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.notebook.variableFilteringEnabled": {
+					"ownrex.ai.chat.notebook.variableFilteringEnabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.notebook.variableFilteringEnabled%",
+						"markdownDescription": "%ownrex.ai.config.notebook.variableFilteringEnabled%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.notebook.alternativeFormat": {
+					"ownrex.ai.chat.notebook.alternativeFormat": {
 						"type": "string",
 						"default": "xml",
 						"enum": [
 							"xml",
 							"markdown"
 						],
-						"markdownDescription": "%github.copilot.config.notebook.alternativeFormat%",
+						"markdownDescription": "%ownrex.ai.config.notebook.alternativeFormat%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.notebook.alternativeNESFormat.enabled": {
+					"ownrex.ai.chat.notebook.alternativeNESFormat.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.notebook.alternativeNESFormat.enabled%",
+						"markdownDescription": "%ownrex.ai.config.notebook.alternativeNESFormat.enabled%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.debugTerminalCommandPatterns": {
+					"ownrex.ai.chat.debugTerminalCommandPatterns": {
 						"type": "array",
 						"default": [],
 						"items": {
 							"type": "string"
 						},
-						"markdownDescription": "%github.copilot.config.debugTerminalCommandPatterns%",
+						"markdownDescription": "%ownrex.ai.config.debugTerminalCommandPatterns%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.localWorkspaceRecording.enabled": {
+					"ownrex.ai.chat.localWorkspaceRecording.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.localWorkspaceRecording.enabled%",
+						"markdownDescription": "%ownrex.ai.config.localWorkspaceRecording.enabled%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.editRecording.enabled": {
+					"ownrex.ai.chat.editRecording.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.editRecording.enabled%",
+						"markdownDescription": "%ownrex.ai.config.editRecording.enabled%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.inlineChat.selectionRatioThreshold": {
+					"ownrex.ai.chat.inlineChat.selectionRatioThreshold": {
 						"type": "number",
 						"default": 0,
-						"markdownDescription": "%github.copilot.config.inlineChat.selectionRatioThreshold%",
+						"markdownDescription": "%ownrex.ai.config.inlineChat.selectionRatioThreshold%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.debug.requestLogger.maxEntries": {
+					"ownrex.ai.chat.debug.requestLogger.maxEntries": {
 						"type": "number",
 						"default": 100,
-						"markdownDescription": "%github.copilot.config.debug.requestLogger.maxEntries%",
+						"markdownDescription": "%ownrex.ai.config.debug.requestLogger.maxEntries%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.inlineEdits.diagnosticsContextProvider.enabled": {
+					"ownrex.ai.chat.inlineEdits.diagnosticsContextProvider.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.inlineEdits.diagnosticsContextProvider.enabled%",
+						"markdownDescription": "%ownrex.ai.config.inlineEdits.diagnosticsContextProvider.enabled%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.codesearch.agent.enabled": {
+					"ownrex.ai.chat.codesearch.agent.enabled": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.codesearch.agent.enabled%",
+						"markdownDescription": "%ownrex.ai.config.codesearch.agent.enabled%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.agent.temperature": {
+					"ownrex.ai.chat.agent.temperature": {
 						"type": [
 							"number",
 							"null"
 						],
-						"markdownDescription": "%github.copilot.config.agent.temperature%",
+						"markdownDescription": "%ownrex.ai.config.agent.temperature%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.instantApply.shortContextModelName": {
+					"ownrex.ai.chat.instantApply.shortContextModelName": {
 						"type": "string",
 						"default": "gpt-4o-instant-apply-full-ft-v66-short",
-						"markdownDescription": "%github.copilot.config.instantApply.shortContextModelName%",
+						"markdownDescription": "%ownrex.ai.config.instantApply.shortContextModelName%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.instantApply.shortContextLimit": {
+					"ownrex.ai.chat.instantApply.shortContextLimit": {
 						"type": "number",
 						"default": 8000,
-						"markdownDescription": "%github.copilot.config.instantApply.shortContextLimit%",
+						"markdownDescription": "%ownrex.ai.config.instantApply.shortContextLimit%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.enableUserPreferences": {
+					"ownrex.ai.chat.enableUserPreferences": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.enableUserPreferences%",
+						"markdownDescription": "%ownrex.ai.config.enableUserPreferences%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.summarizeAgentConversationHistoryThreshold": {
+					"ownrex.ai.chat.summarizeAgentConversationHistoryThreshold": {
 						"type": [
 							"number",
 							"null"
 						],
-						"markdownDescription": "%github.copilot.config.summarizeAgentConversationHistoryThreshold%",
+						"markdownDescription": "%ownrex.ai.config.summarizeAgentConversationHistoryThreshold%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.agentHistorySummarizationMode": {
+					"ownrex.ai.chat.agentHistorySummarizationMode": {
 						"type": [
 							"string",
 							"null"
 						],
-						"markdownDescription": "%github.copilot.config.agentHistorySummarizationMode%",
+						"markdownDescription": "%ownrex.ai.config.agentHistorySummarizationMode%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.agentHistorySummarizationWithPromptCache": {
+					"ownrex.ai.chat.agentHistorySummarizationWithPromptCache": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.agentHistorySummarizationWithPromptCache%",
+						"markdownDescription": "%ownrex.ai.config.agentHistorySummarizationWithPromptCache%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.agentHistorySummarizationForceGpt41": {
+					"ownrex.ai.chat.agentHistorySummarizationForceGpt41": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.agentHistorySummarizationForceGpt41%",
+						"markdownDescription": "%ownrex.ai.config.agentHistorySummarizationForceGpt41%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.useResponsesApiTruncation": {
+					"ownrex.ai.chat.useResponsesApiTruncation": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.useResponsesApiTruncation%",
+						"markdownDescription": "%ownrex.ai.config.useResponsesApiTruncation%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.omitBaseAgentInstructions": {
+					"ownrex.ai.chat.omitBaseAgentInstructions": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.omitBaseAgentInstructions%",
+						"markdownDescription": "%ownrex.ai.config.omitBaseAgentInstructions%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.promptFileContextProvider.enabled": {
+					"ownrex.ai.chat.promptFileContextProvider.enabled": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.promptFileContextProvider.enabled%",
+						"markdownDescription": "%ownrex.ai.config.promptFileContextProvider.enabled%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.tools.defaultToolsGrouped": {
+					"ownrex.ai.chat.tools.defaultToolsGrouped": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.tools.defaultToolsGrouped%",
+						"markdownDescription": "%ownrex.ai.config.tools.defaultToolsGrouped%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.claudeCode.enabled": {
+					"ownrex.ai.chat.claudeCode.enabled": {
 						"type": [
 							"boolean",
 							"string"
 						],
 						"default": false,
-						"markdownDescription": "%github.copilot.config.claudeCode.enabled%",
+						"markdownDescription": "%ownrex.ai.config.claudeCode.enabled%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.claudeCode.debug": {
+					"ownrex.ai.chat.claudeCode.debug": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.claudeCode.debug%",
+						"markdownDescription": "%ownrex.ai.config.claudeCode.debug%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.gpt5AlternativePatch": {
+					"ownrex.ai.chat.gpt5AlternativePatch": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.gpt5AlternativePatch%",
+						"markdownDescription": "%ownrex.ai.config.gpt5AlternativePatch%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.inlineEdits.triggerOnEditorChangeAfterSeconds": {
+					"ownrex.ai.chat.inlineEdits.triggerOnEditorChangeAfterSeconds": {
 						"type": [
 							"number",
 							"null"
 						],
-						"markdownDescription": "%github.copilot.config.inlineEdits.triggerOnEditorChangeAfterSeconds%",
+						"markdownDescription": "%ownrex.ai.config.inlineEdits.triggerOnEditorChangeAfterSeconds%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.inlineEdits.nextCursorPrediction.displayLine": {
+					"ownrex.ai.chat.inlineEdits.nextCursorPrediction.displayLine": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.inlineEdits.nextCursorPrediction.displayLine%",
+						"markdownDescription": "%ownrex.ai.config.inlineEdits.nextCursorPrediction.displayLine%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.inlineEdits.nextCursorPrediction.currentFileMaxTokens": {
+					"ownrex.ai.chat.inlineEdits.nextCursorPrediction.currentFileMaxTokens": {
 						"type": "number",
 						"default": 2000,
-						"markdownDescription": "%github.copilot.config.inlineEdits.nextCursorPrediction.currentFileMaxTokens%",
+						"markdownDescription": "%ownrex.ai.config.inlineEdits.nextCursorPrediction.currentFileMaxTokens%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.inlineEdits.renameSymbolSuggestions": {
+					"ownrex.ai.chat.inlineEdits.renameSymbolSuggestions": {
 						"type": "boolean",
 						"default": true,
-						"markdownDescription": "%github.copilot.config.inlineEdits.renameSymbolSuggestions%",
+						"markdownDescription": "%ownrex.ai.config.inlineEdits.renameSymbolSuggestions%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.nextEditSuggestions.preferredModel": {
+					"ownrex.ai.nextEditSuggestions.preferredModel": {
 						"type": "string",
 						"default": "none",
-						"markdownDescription": "%github.copilot.config.nextEditSuggestions.preferredModel%",
+						"markdownDescription": "%ownrex.ai.config.nextEditSuggestions.preferredModel%",
 						"tags": [
 							"advanced",
 							"experimental",
 							"onExp"
 						]
 					},
-					"github.copilot.chat.suggestRelatedFilesFromGitHistory.useEmbeddings": {
+					"ownrex.ai.chat.suggestRelatedFilesFromGitHistory.useEmbeddings": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.suggestRelatedFilesFromGitHistory.useEmbeddings%",
+						"markdownDescription": "%ownrex.ai.config.suggestRelatedFilesFromGitHistory.useEmbeddings%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.cli.customAgents.enabled": {
+					"ownrex.ai.chat.cli.customAgents.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.cli.customAgents.enabled%",
+						"markdownDescription": "%ownrex.ai.config.cli.customAgents.enabled%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.cli.mcp.enabled": {
+					"ownrex.ai.chat.cli.mcp.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.cli.mcp.enabled%",
+						"markdownDescription": "%ownrex.ai.config.cli.mcp.enabled%",
 						"tags": [
 							"advanced",
 							"experimental"
 						]
 					},
-					"github.copilot.chat.cli.autoCommit.enabled": {
+					"ownrex.ai.chat.cli.autoCommit.enabled": {
 						"type": "boolean",
 						"default": false,
-						"markdownDescription": "%github.copilot.config.cli.autoCommit.enabled%",
+						"markdownDescription": "%ownrex.ai.config.cli.autoCommit.enabled%",
 						"tags": [
 							"advanced",
 							"experimental"
@@ -3948,23 +3948,23 @@
 		"submenus": [
 			{
 				"id": "copilot/reviewComment/additionalActions/applyAndNext",
-				"label": "%github.copilot.submenu.reviewComment.applyAndNext.label%"
+				"label": "%ownrex.ai.submenu.reviewComment.applyAndNext.label%"
 			},
 			{
 				"id": "copilot/reviewComment/additionalActions/discardAndNext",
-				"label": "%github.copilot.submenu.reviewComment.discardAndNext.label%"
+				"label": "%ownrex.ai.submenu.reviewComment.discardAndNext.label%"
 			},
 			{
 				"id": "copilot/reviewComment/additionalActions/discard",
-				"label": "%github.copilot.submenu.reviewComment.discard.label%"
+				"label": "%ownrex.ai.submenu.reviewComment.discard.label%"
 			},
 			{
-				"id": "github.copilot.chat.debug.filter",
+				"id": "ownrex.ai.chat.debug.filter",
 				"label": "Filter",
 				"icon": "$(filter)"
 			},
 			{
-				"id": "github.copilot.chat.debug.exportAllPromptLogsAsJson",
+				"id": "ownrex.ai.chat.debug.exportAllPromptLogsAsJson",
 				"label": "Export All Logs as JSON",
 				"icon": "$(file-export)"
 			}
@@ -3972,404 +3972,404 @@
 		"menus": {
 			"editor/title": [
 				{
-					"command": "github.copilot.debug.generateInlineEditTests",
+					"command": "ownrex.ai.debug.generateInlineEditTests",
 					"when": "resourceScheme == 'ccreq'"
 				},
 				{
-					"command": "github.copilot.chat.notebook.enableFollowCellExecution",
-					"when": "config.github.copilot.chat.notebook.followCellExecution.enabled && !github.copilot.notebookFollowInSessionEnabled && github.copilot.notebookAgentModeUsage && !config.notebook.globalToolbar",
+					"command": "ownrex.ai.chat.notebook.enableFollowCellExecution",
+					"when": "config.ownrex.ai.chat.notebook.followCellExecution.enabled && !ownrex.ai.notebookFollowInSessionEnabled && ownrex.ai.notebookAgentModeUsage && !config.notebook.globalToolbar",
 					"group": "navigation@10"
 				},
 				{
-					"command": "github.copilot.chat.notebook.disableFollowCellExecution",
-					"when": "config.github.copilot.chat.notebook.followCellExecution.enabled && github.copilot.notebookFollowInSessionEnabled && github.copilot.notebookAgentModeUsage && !config.notebook.globalToolbar",
+					"command": "ownrex.ai.chat.notebook.disableFollowCellExecution",
+					"when": "config.ownrex.ai.chat.notebook.followCellExecution.enabled && ownrex.ai.notebookFollowInSessionEnabled && ownrex.ai.notebookAgentModeUsage && !config.notebook.globalToolbar",
 					"group": "navigation@10"
 				},
 				{
-					"command": "github.copilot.chat.replay",
+					"command": "ownrex.ai.chat.replay",
 					"group": "navigation@9",
 					"when": "resourceFilename === 'benchRun.chatReplay.json'"
 				},
 				{
-					"command": "github.copilot.chat.showAsChatSession",
+					"command": "ownrex.ai.chat.showAsChatSession",
 					"group": "navigation@9",
 					"when": "resourceFilename === 'benchRun.chatReplay.json' || resourceFilename === 'chat-export-logs.json'"
 				},
 				{
-					"command": "github.copilot.chat.applyCopilotCLIAgentSessionChanges",
+					"command": "ownrex.ai.chat.applyCopilotCLIAgentSessionChanges",
 					"group": "navigation@1",
 					"when": "resourceScheme == copilotcli-worktree-changes"
 				}
 			],
 			"explorer/context": [
 				{
-					"command": "github.copilot.chat.showAsChatSession",
+					"command": "ownrex.ai.chat.showAsChatSession",
 					"when": "resourceFilename === 'benchRun.chatReplay.json' || resourceFilename === 'chat-export-logs.json'",
 					"group": "2_copilot@1"
 				}
 			],
 			"editor/context": [
 				{
-					"command": "github.copilot.chat.explain",
-					"when": "!github.copilot.interactiveSession.disabled",
+					"command": "ownrex.ai.chat.explain",
+					"when": "!ownrex.ai.interactiveSession.disabled",
 					"group": "1_chat@4"
 				}
 			],
 			"editor/context/chat": [
 				{
-					"command": "github.copilot.chat.fix",
-					"when": "!github.copilot.interactiveSession.disabled && !editorReadonly",
+					"command": "ownrex.ai.chat.fix",
+					"when": "!ownrex.ai.interactiveSession.disabled && !editorReadonly",
 					"group": "copilotAction@1"
 				},
 				{
-					"command": "github.copilot.chat.review",
-					"when": "config.github.copilot.chat.reviewSelection.enabled && !github.copilot.interactiveSession.disabled && resourceScheme != 'vscode-chat-code-block'",
+					"command": "ownrex.ai.chat.review",
+					"when": "config.ownrex.ai.chat.reviewSelection.enabled && !ownrex.ai.interactiveSession.disabled && resourceScheme != 'vscode-chat-code-block'",
 					"group": "copilotAction@2"
 				},
 				{
-					"command": "github.copilot.chat.generateDocs",
-					"when": "!github.copilot.interactiveSession.disabled && !editorReadonly",
+					"command": "ownrex.ai.chat.generateDocs",
+					"when": "!ownrex.ai.interactiveSession.disabled && !editorReadonly",
 					"group": "copilotGenerate@1"
 				},
 				{
-					"command": "github.copilot.chat.generateTests",
-					"when": "!github.copilot.interactiveSession.disabled && !editorReadonly",
+					"command": "ownrex.ai.chat.generateTests",
+					"when": "!ownrex.ai.interactiveSession.disabled && !editorReadonly",
 					"group": "copilotGenerate@2"
 				}
 			],
 			"chat/input/editing/sessionToolbar": [
 				{
-					"command": "github.copilot.chat.applyCopilotCLIAgentSessionChanges.apply",
+					"command": "ownrex.ai.chat.applyCopilotCLIAgentSessionChanges.apply",
 					"when": "chatSessionType == copilotcli",
 					"group": "navigation@0"
 				}
 			],
 			"testing/item/result": [
 				{
-					"command": "github.copilot.tests.fixTestFailure.fromInline",
+					"command": "ownrex.ai.tests.fixTestFailure.fromInline",
 					"when": "testResultState == failed && !testResultOutdated",
 					"group": "inline@2"
 				}
 			],
 			"testing/item/context": [
 				{
-					"command": "github.copilot.tests.fixTestFailure.fromInline",
+					"command": "ownrex.ai.tests.fixTestFailure.fromInline",
 					"when": "testResultState == failed && !testResultOutdated",
 					"group": "inline@2"
 				}
 			],
 			"commandPalette": [
 				{
-					"command": "github.copilot.chat.triggerPermissiveSignIn",
+					"command": "ownrex.ai.chat.triggerPermissiveSignIn",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.interactiveSession.feedback",
-					"when": "github.copilot-chat.activated && !github.copilot.interactiveSession.disabled"
+					"command": "ownrex.ai.interactiveSession.feedback",
+					"when": "ownrex.ai-chat.activated && !ownrex.ai.interactiveSession.disabled"
 				},
 				{
-					"command": "github.copilot.debug.workbenchState",
+					"command": "ownrex.ai.debug.workbenchState",
 					"when": "true"
 				},
 				{
-					"command": "github.copilot.chat.rerunWithCopilotDebug",
+					"command": "ownrex.ai.chat.rerunWithCopilotDebug",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.startCopilotDebugCommand",
+					"command": "ownrex.ai.chat.startCopilotDebugCommand",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.git.generateCommitMessage",
+					"command": "ownrex.ai.git.generateCommitMessage",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.git.resolveMergeConflicts",
+					"command": "ownrex.ai.git.resolveMergeConflicts",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.explain",
+					"command": "ownrex.ai.chat.explain",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review",
-					"when": "!github.copilot.interactiveSession.disabled"
+					"command": "ownrex.ai.chat.review",
+					"when": "!ownrex.ai.interactiveSession.disabled"
 				},
 				{
-					"command": "github.copilot.chat.review.apply",
+					"command": "ownrex.ai.chat.review.apply",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.applyAndNext",
+					"command": "ownrex.ai.chat.review.applyAndNext",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.discard",
+					"command": "ownrex.ai.chat.review.discard",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.discardAndNext",
+					"command": "ownrex.ai.chat.review.discardAndNext",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.discardAll",
+					"command": "ownrex.ai.chat.review.discardAll",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.stagedChanges",
+					"command": "ownrex.ai.chat.review.stagedChanges",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.unstagedChanges",
+					"command": "ownrex.ai.chat.review.unstagedChanges",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.changes",
+					"command": "ownrex.ai.chat.review.changes",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.stagedFileChange",
+					"command": "ownrex.ai.chat.review.stagedFileChange",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.unstagedFileChange",
+					"command": "ownrex.ai.chat.review.unstagedFileChange",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.previous",
+					"command": "ownrex.ai.chat.review.previous",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.next",
+					"command": "ownrex.ai.chat.review.next",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.continueInInlineChat",
+					"command": "ownrex.ai.chat.review.continueInInlineChat",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.continueInChat",
+					"command": "ownrex.ai.chat.review.continueInChat",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.markHelpful",
+					"command": "ownrex.ai.chat.review.markHelpful",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.review.markUnhelpful",
+					"command": "ownrex.ai.chat.review.markUnhelpful",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.devcontainer.generateDevContainerConfig",
+					"command": "ownrex.ai.devcontainer.generateDevContainerConfig",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.tests.fixTestFailure",
+					"command": "ownrex.ai.tests.fixTestFailure",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.tests.fixTestFailure.fromInline",
+					"command": "ownrex.ai.tests.fixTestFailure.fromInline",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.search.markHelpful",
+					"command": "ownrex.ai.search.markHelpful",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.search.markUnhelpful",
+					"command": "ownrex.ai.search.markUnhelpful",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.search.feedback",
+					"command": "ownrex.ai.search.feedback",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.showElements",
+					"command": "ownrex.ai.chat.debug.showElements",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.hideElements",
+					"command": "ownrex.ai.chat.debug.hideElements",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.showTools",
+					"command": "ownrex.ai.chat.debug.showTools",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.hideTools",
+					"command": "ownrex.ai.chat.debug.hideTools",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.showNesRequests",
+					"command": "ownrex.ai.chat.debug.showNesRequests",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.hideNesRequests",
+					"command": "ownrex.ai.chat.debug.hideNesRequests",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.showGhostRequests",
+					"command": "ownrex.ai.chat.debug.showGhostRequests",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.hideGhostRequests",
+					"command": "ownrex.ai.chat.debug.hideGhostRequests",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.exportLogItem",
+					"command": "ownrex.ai.chat.debug.exportLogItem",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.exportPromptArchive",
+					"command": "ownrex.ai.chat.debug.exportPromptArchive",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.exportPromptLogsAsJson",
+					"command": "ownrex.ai.chat.debug.exportPromptLogsAsJson",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.exportAllPromptLogsAsJson",
+					"command": "ownrex.ai.chat.debug.exportAllPromptLogsAsJson",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.mcp.setup.check",
+					"command": "ownrex.ai.chat.mcp.setup.check",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.mcp.setup.validatePackage",
+					"command": "ownrex.ai.chat.mcp.setup.validatePackage",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.mcp.setup.flow",
+					"command": "ownrex.ai.chat.mcp.setup.flow",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.debug.showRawRequestBody",
+					"command": "ownrex.ai.chat.debug.showRawRequestBody",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.debug.showOutputChannel",
+					"command": "ownrex.ai.debug.showOutputChannel",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.cli.sessions.delete",
+					"command": "ownrex.ai.cli.sessions.delete",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.cli.sessions.resumeInTerminal",
+					"command": "ownrex.ai.cli.sessions.resumeInTerminal",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.cloud.sessions.openInBrowser",
+					"command": "ownrex.ai.cloud.sessions.openInBrowser",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.cloud.sessions.proxy.closeChatSessionPullRequest",
+					"command": "ownrex.ai.cloud.sessions.proxy.closeChatSessionPullRequest",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.cloud.sessions.installPRExtension",
+					"command": "ownrex.ai.cloud.sessions.installPRExtension",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.applyCopilotCLIAgentSessionChanges",
+					"command": "ownrex.ai.chat.applyCopilotCLIAgentSessionChanges",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.applyCopilotCLIAgentSessionChanges.apply",
+					"command": "ownrex.ai.chat.applyCopilotCLIAgentSessionChanges.apply",
 					"when": "false"
 				},
 				{
-					"command": "github.copilot.chat.showAsChatSession",
+					"command": "ownrex.ai.chat.showAsChatSession",
 					"when": "false"
 				}
 			],
 			"view/title": [
 				{
-					"submenu": "github.copilot.chat.debug.filter",
+					"submenu": "ownrex.ai.chat.debug.filter",
 					"when": "view == copilot-chat",
 					"group": "navigation"
 				},
 				{
-					"command": "github.copilot.chat.debug.exportAllPromptLogsAsJson",
+					"command": "ownrex.ai.chat.debug.exportAllPromptLogsAsJson",
 					"when": "view == copilot-chat",
 					"group": "export@1"
 				},
 				{
-					"command": "github.copilot.debug.showOutputChannel",
+					"command": "ownrex.ai.debug.showOutputChannel",
 					"when": "view == copilot-chat",
 					"group": "3_show@1"
 				},
 				{
-					"command": "github.copilot.debug.showChatLogView",
+					"command": "ownrex.ai.debug.showChatLogView",
 					"when": "view == workbench.panel.chat.view.copilot",
 					"group": "3_show"
 				}
 			],
 			"view/item/context": [
 				{
-					"command": "github.copilot.chat.debug.showRawRequestBody",
+					"command": "ownrex.ai.chat.debug.showRawRequestBody",
 					"when": "view == copilot-chat && viewItem == request",
 					"group": "export@0"
 				},
 				{
-					"command": "github.copilot.chat.debug.exportLogItem",
+					"command": "ownrex.ai.chat.debug.exportLogItem",
 					"when": "view == copilot-chat && (viewItem == toolcall || viewItem == request)",
 					"group": "export@1"
 				},
 				{
-					"command": "github.copilot.chat.debug.exportPromptArchive",
+					"command": "ownrex.ai.chat.debug.exportPromptArchive",
 					"when": "view == copilot-chat && viewItem == chatprompt",
 					"group": "export@2"
 				},
 				{
-					"command": "github.copilot.chat.debug.exportPromptLogsAsJson",
+					"command": "ownrex.ai.chat.debug.exportPromptLogsAsJson",
 					"when": "view == copilot-chat && viewItem == chatprompt",
 					"group": "export@3"
 				}
 			],
 			"searchPanel/aiResults/commands": [
 				{
-					"command": "github.copilot.search.markHelpful",
+					"command": "ownrex.ai.search.markHelpful",
 					"group": "inline@0",
 					"when": "aiResultsTitle && aiResultsRequested"
 				},
 				{
-					"command": "github.copilot.search.markUnhelpful",
+					"command": "ownrex.ai.search.markUnhelpful",
 					"group": "inline@1",
 					"when": "aiResultsTitle && aiResultsRequested"
 				},
 				{
-					"command": "github.copilot.search.feedback",
+					"command": "ownrex.ai.search.feedback",
 					"group": "inline@2",
-					"when": "aiResultsTitle && aiResultsRequested && github.copilot.debugReportFeedback"
+					"when": "aiResultsTitle && aiResultsRequested && ownrex.ai.debugReportFeedback"
 				}
 			],
 			"comments/comment/title": [
 				{
-					"command": "github.copilot.chat.review.markHelpful",
+					"command": "ownrex.ai.chat.review.markHelpful",
 					"group": "inline@0",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.markUnhelpful",
+					"command": "ownrex.ai.chat.review.markUnhelpful",
 					"group": "inline@1",
 					"when": "commentController == github-copilot-review"
 				}
 			],
 			"commentsView/commentThread/context": [
 				{
-					"command": "github.copilot.chat.review.apply",
+					"command": "ownrex.ai.chat.review.apply",
 					"group": "context@1",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.discard",
+					"command": "ownrex.ai.chat.review.discard",
 					"group": "context@2",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.discardAll",
+					"command": "ownrex.ai.chat.review.discardAll",
 					"group": "context@3",
 					"when": "commentController == github-copilot-review"
 				}
@@ -4378,260 +4378,260 @@
 				{
 					"submenu": "copilot/reviewComment/additionalActions/applyAndNext",
 					"group": "inline@1",
-					"when": "commentController == github-copilot-review && github.copilot.chat.review.numberOfComments > 1"
+					"when": "commentController == github-copilot-review && ownrex.ai.chat.review.numberOfComments > 1"
 				},
 				{
-					"command": "github.copilot.chat.review.apply",
+					"command": "ownrex.ai.chat.review.apply",
 					"group": "inline@1",
-					"when": "commentController == github-copilot-review && github.copilot.chat.review.numberOfComments == 1"
+					"when": "commentController == github-copilot-review && ownrex.ai.chat.review.numberOfComments == 1"
 				},
 				{
 					"submenu": "copilot/reviewComment/additionalActions/discardAndNext",
 					"group": "inline@2",
-					"when": "commentController == github-copilot-review && github.copilot.chat.review.numberOfComments > 1"
+					"when": "commentController == github-copilot-review && ownrex.ai.chat.review.numberOfComments > 1"
 				},
 				{
 					"submenu": "copilot/reviewComment/additionalActions/discard",
 					"group": "inline@2",
-					"when": "commentController == github-copilot-review && github.copilot.chat.review.numberOfComments == 1"
+					"when": "commentController == github-copilot-review && ownrex.ai.chat.review.numberOfComments == 1"
 				}
 			],
 			"copilot/reviewComment/additionalActions/applyAndNext": [
 				{
-					"command": "github.copilot.chat.review.applyAndNext",
+					"command": "ownrex.ai.chat.review.applyAndNext",
 					"group": "inline@1",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.apply",
+					"command": "ownrex.ai.chat.review.apply",
 					"group": "inline@2",
 					"when": "commentController == github-copilot-review"
 				}
 			],
 			"copilot/reviewComment/additionalActions/discardAndNext": [
 				{
-					"command": "github.copilot.chat.review.discardAndNext",
+					"command": "ownrex.ai.chat.review.discardAndNext",
 					"group": "inline@1",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.discard",
+					"command": "ownrex.ai.chat.review.discard",
 					"group": "inline@2",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.continueInInlineChat",
+					"command": "ownrex.ai.chat.review.continueInInlineChat",
 					"group": "inline@3",
 					"when": "commentController == github-copilot-review"
 				}
 			],
 			"copilot/reviewComment/additionalActions/discard": [
 				{
-					"command": "github.copilot.chat.review.discard",
+					"command": "ownrex.ai.chat.review.discard",
 					"group": "inline@2",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.continueInInlineChat",
+					"command": "ownrex.ai.chat.review.continueInInlineChat",
 					"group": "inline@3",
 					"when": "commentController == github-copilot-review"
 				}
 			],
 			"comments/commentThread/title": [
 				{
-					"command": "github.copilot.chat.review.previous",
+					"command": "ownrex.ai.chat.review.previous",
 					"group": "inline@1",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.next",
+					"command": "ownrex.ai.chat.review.next",
 					"group": "inline@2",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.continueInChat",
+					"command": "ownrex.ai.chat.review.continueInChat",
 					"group": "inline@3",
 					"when": "commentController == github-copilot-review"
 				},
 				{
-					"command": "github.copilot.chat.review.discardAll",
+					"command": "ownrex.ai.chat.review.discardAll",
 					"group": "inline@4",
 					"when": "commentController == github-copilot-review"
 				}
 			],
 			"scm/title": [
 				{
-					"command": "github.copilot.chat.review.changes",
+					"command": "ownrex.ai.chat.review.changes",
 					"group": "navigation",
-					"when": "config.github.copilot.chat.reviewAgent.enabled && github.copilot.chat.reviewDiff.enabled && scmProvider == git && scmProviderRootUri in github.copilot.chat.reviewDiff.enabledRootUris"
+					"when": "config.ownrex.ai.chat.reviewAgent.enabled && ownrex.ai.chat.reviewDiff.enabled && scmProvider == git && scmProviderRootUri in ownrex.ai.chat.reviewDiff.enabledRootUris"
 				}
 			],
 			"scm/resourceGroup/context": [
 				{
-					"command": "github.copilot.chat.review.stagedChanges",
-					"when": "config.github.copilot.chat.reviewAgent.enabled && github.copilot.chat.reviewDiff.enabled && scmProvider == git && scmResourceGroup == index",
+					"command": "ownrex.ai.chat.review.stagedChanges",
+					"when": "config.ownrex.ai.chat.reviewAgent.enabled && ownrex.ai.chat.reviewDiff.enabled && scmProvider == git && scmResourceGroup == index",
 					"group": "inline@-3"
 				},
 				{
-					"command": "github.copilot.chat.review.unstagedChanges",
-					"when": "config.github.copilot.chat.reviewAgent.enabled && github.copilot.chat.reviewDiff.enabled && scmProvider == git && scmResourceGroup == workingTree",
+					"command": "ownrex.ai.chat.review.unstagedChanges",
+					"when": "config.ownrex.ai.chat.reviewAgent.enabled && ownrex.ai.chat.reviewDiff.enabled && scmProvider == git && scmResourceGroup == workingTree",
 					"group": "inline@-3"
 				}
 			],
 			"scm/resourceState/context": [
 				{
-					"command": "github.copilot.git.resolveMergeConflicts",
+					"command": "ownrex.ai.git.resolveMergeConflicts",
 					"when": "scmProvider == git && scmResourceGroup == merge && git.activeResourceHasMergeConflicts",
 					"group": "z_chat@1"
 				},
 				{
-					"command": "github.copilot.chat.review.stagedFileChange",
+					"command": "ownrex.ai.chat.review.stagedFileChange",
 					"group": "3_copilot",
-					"when": "config.github.copilot.chat.reviewAgent.enabled && github.copilot.chat.reviewDiff.enabled && scmProvider == git && scmResourceGroup == index"
+					"when": "config.ownrex.ai.chat.reviewAgent.enabled && ownrex.ai.chat.reviewDiff.enabled && scmProvider == git && scmResourceGroup == index"
 				},
 				{
-					"command": "github.copilot.chat.review.unstagedFileChange",
+					"command": "ownrex.ai.chat.review.unstagedFileChange",
 					"group": "3_copilot",
-					"when": "config.github.copilot.chat.reviewAgent.enabled && github.copilot.chat.reviewDiff.enabled && scmProvider == git && scmResourceGroup == workingTree"
+					"when": "config.ownrex.ai.chat.reviewAgent.enabled && ownrex.ai.chat.reviewDiff.enabled && scmProvider == git && scmResourceGroup == workingTree"
 				}
 			],
 			"scm/inputBox": [
 				{
-					"command": "github.copilot.git.generateCommitMessage",
+					"command": "ownrex.ai.git.generateCommitMessage",
 					"when": "scmProvider == git"
 				}
 			],
 			"testing/message/context": [
 				{
-					"command": "github.copilot.tests.fixTestFailure",
+					"command": "ownrex.ai.tests.fixTestFailure",
 					"when": "testing.testItemHasUri",
 					"group": "inline@1"
 				}
 			],
 			"issue/reporter": [
 				{
-					"command": "github.copilot.report"
+					"command": "ownrex.ai.report"
 				}
 			],
-			"github.copilot.chat.debug.filter": [
+			"ownrex.ai.chat.debug.filter": [
 				{
-					"command": "github.copilot.chat.debug.showElements",
-					"when": "github.copilot.chat.debug.elementsHidden",
+					"command": "ownrex.ai.chat.debug.showElements",
+					"when": "ownrex.ai.chat.debug.elementsHidden",
 					"group": "commands@0"
 				},
 				{
-					"command": "github.copilot.chat.debug.hideElements",
-					"when": "!github.copilot.chat.debug.elementsHidden",
+					"command": "ownrex.ai.chat.debug.hideElements",
+					"when": "!ownrex.ai.chat.debug.elementsHidden",
 					"group": "commands@0"
 				},
 				{
-					"command": "github.copilot.chat.debug.showTools",
-					"when": "github.copilot.chat.debug.toolsHidden",
+					"command": "ownrex.ai.chat.debug.showTools",
+					"when": "ownrex.ai.chat.debug.toolsHidden",
 					"group": "commands@1"
 				},
 				{
-					"command": "github.copilot.chat.debug.hideTools",
-					"when": "!github.copilot.chat.debug.toolsHidden",
+					"command": "ownrex.ai.chat.debug.hideTools",
+					"when": "!ownrex.ai.chat.debug.toolsHidden",
 					"group": "commands@1"
 				},
 				{
-					"command": "github.copilot.chat.debug.showNesRequests",
-					"when": "github.copilot.chat.debug.nesRequestsHidden",
+					"command": "ownrex.ai.chat.debug.showNesRequests",
+					"when": "ownrex.ai.chat.debug.nesRequestsHidden",
 					"group": "commands@2"
 				},
 				{
-					"command": "github.copilot.chat.debug.hideNesRequests",
-					"when": "!github.copilot.chat.debug.nesRequestsHidden",
+					"command": "ownrex.ai.chat.debug.hideNesRequests",
+					"when": "!ownrex.ai.chat.debug.nesRequestsHidden",
 					"group": "commands@2"
 				},
 				{
-					"command": "github.copilot.chat.debug.showGhostRequests",
-					"when": "github.copilot.chat.debug.ghostRequestsHidden",
+					"command": "ownrex.ai.chat.debug.showGhostRequests",
+					"when": "ownrex.ai.chat.debug.ghostRequestsHidden",
 					"group": "commands@3"
 				},
 				{
-					"command": "github.copilot.chat.debug.hideGhostRequests",
-					"when": "!github.copilot.chat.debug.ghostRequestsHidden",
+					"command": "ownrex.ai.chat.debug.hideGhostRequests",
+					"when": "!ownrex.ai.chat.debug.ghostRequestsHidden",
 					"group": "commands@3"
 				}
 			],
 			"notebook/toolbar": [
 				{
-					"command": "github.copilot.chat.notebook.enableFollowCellExecution",
-					"when": "config.github.copilot.chat.notebook.followCellExecution.enabled && !github.copilot.notebookFollowInSessionEnabled && github.copilot.notebookAgentModeUsage && config.notebook.globalToolbar",
+					"command": "ownrex.ai.chat.notebook.enableFollowCellExecution",
+					"when": "config.ownrex.ai.chat.notebook.followCellExecution.enabled && !ownrex.ai.notebookFollowInSessionEnabled && ownrex.ai.notebookAgentModeUsage && config.notebook.globalToolbar",
 					"group": "navigation/execute@15"
 				},
 				{
-					"command": "github.copilot.chat.notebook.disableFollowCellExecution",
-					"when": "config.github.copilot.chat.notebook.followCellExecution.enabled && github.copilot.notebookFollowInSessionEnabled && github.copilot.notebookAgentModeUsage && config.notebook.globalToolbar",
+					"command": "ownrex.ai.chat.notebook.disableFollowCellExecution",
+					"when": "config.ownrex.ai.chat.notebook.followCellExecution.enabled && ownrex.ai.notebookFollowInSessionEnabled && ownrex.ai.notebookAgentModeUsage && config.notebook.globalToolbar",
 					"group": "navigation/execute@15"
 				}
 			],
 			"editor/content": [
 				{
-					"command": "github.copilot.git.resolveMergeConflicts",
+					"command": "ownrex.ai.git.resolveMergeConflicts",
 					"group": "z_chat@1",
 					"when": "config.git.enabled && !git.missing && !isInDiffEditor && !isMergeEditor && resource in git.mergeChanges && git.activeResourceHasMergeConflicts"
 				}
 			],
 			"multiDiffEditor/content": [
 				{
-					"command": "github.copilot.chat.applyCopilotCLIAgentSessionChanges",
+					"command": "ownrex.ai.chat.applyCopilotCLIAgentSessionChanges",
 					"when": "resourceScheme == copilotcli-worktree-changes"
 				}
 			],
 			"chat/chatSessions": [
 				{
-					"command": "github.copilot.chat.applyCopilotCLIAgentSessionChanges",
+					"command": "ownrex.ai.chat.applyCopilotCLIAgentSessionChanges",
 					"when": "chatSessionType == copilotcli",
 					"group": "inline@0"
 				},
 				{
-					"command": "github.copilot.cli.sessions.resumeInTerminal",
+					"command": "ownrex.ai.cli.sessions.resumeInTerminal",
 					"when": "chatSessionType == copilotcli",
 					"group": "inline@1"
 				},
 				{
-					"command": "github.copilot.cli.sessions.delete",
+					"command": "ownrex.ai.cli.sessions.delete",
 					"when": "chatSessionType == copilotcli",
 					"group": "1_edit@10"
 				},
 				{
-					"command": "github.copilot.cloud.sessions.openInBrowser",
+					"command": "ownrex.ai.cloud.sessions.openInBrowser",
 					"when": "chatSessionType == copilot-cloud-agent",
 					"group": "navigation@10"
 				},
 				{
-					"command": "github.copilot.cloud.sessions.proxy.closeChatSessionPullRequest",
+					"command": "ownrex.ai.cloud.sessions.proxy.closeChatSessionPullRequest",
 					"when": "chatSessionType == copilot-cloud-agent",
 					"group": "1_edit@10"
 				}
 			],
 			"chat/multiDiff/context": [
 				{
-					"command": "github.copilot.cloud.sessions.installPRExtension",
-					"when": "chatSessionType == copilot-cloud-agent && !github.copilot.prExtensionInstalled",
+					"command": "ownrex.ai.cloud.sessions.installPRExtension",
+					"when": "chatSessionType == copilot-cloud-agent && !ownrex.ai.prExtensionInstalled",
 					"group": "inline@1"
 				}
 			]
 		},
 		"icons": {
 			"copilot-logo": {
-				"description": "%github.copilot.icon%",
+				"description": "%ownrex.ai.icon%",
 				"default": {
 					"fontPath": "assets/copilot.woff",
 					"fontCharacter": "\\0041"
 				}
 			},
 			"copilot-warning": {
-				"description": "%github.copilot.icon%",
+				"description": "%ownrex.ai.icon%",
 				"default": {
 					"fontPath": "assets/copilot.woff",
 					"fontCharacter": "\\0042"
 				}
 			},
 			"copilot-notconnected": {
-				"description": "%github.copilot.icon%",
+				"description": "%ownrex.ai.icon%",
 				"default": {
 					"fontPath": "assets/copilot.woff",
 					"fontCharacter": "\\0043"
@@ -4720,7 +4720,7 @@
 					"id": "copilot-chat",
 					"name": "Chat Debug",
 					"icon": "assets/debug-icon.svg",
-					"when": "github.copilot.chat.showLogView"
+					"when": "ownrex.ai.chat.showLogView"
 				}
 			],
 			"context-inspector": [
@@ -4728,7 +4728,7 @@
 					"id": "context-inspector",
 					"name": "Language Context Inspector",
 					"icon": "$(inspect)",
-					"when": "github.copilot.chat.showContextInspectorView"
+					"when": "ownrex.ai.chat.showContextInspectorView"
 				}
 			]
 		},
@@ -4753,24 +4753,24 @@
 		},
 		"keybindings": [
 			{
-				"command": "github.copilot.chat.rerunWithCopilotDebug",
+				"command": "ownrex.ai.chat.rerunWithCopilotDebug",
 				"key": "ctrl+alt+.",
 				"mac": "cmd+alt+.",
-				"when": "github.copilot-chat.activated && terminalShellIntegrationEnabled && terminalFocus && !terminalAltBufferActive"
+				"when": "ownrex.ai-chat.activated && terminalShellIntegrationEnabled && terminalFocus && !terminalAltBufferActive"
 			}
 		],
 		"walkthroughs": [
 			{
 				"id": "copilotWelcome",
-				"title": "%github.copilot.walkthrough.title%",
-				"description": "%github.copilot.walkthrough.description%",
+				"title": "%ownrex.ai.walkthrough.title%",
+				"description": "%ownrex.ai.walkthrough.description%",
 				"when": "!isWeb",
 				"steps": [
 					{
 						"id": "copilot.setup.signIn",
-						"title": "%github.copilot.walkthrough.setup.signIn.title%",
-						"description": "%github.copilot.walkthrough.setup.signIn.description%",
-						"when": "chatEntitlementSignedOut && !view.workbench.panel.chat.view.copilot.visible && !github.copilot-chat.activated && !github.copilot.offline && !github.copilot.interactiveSession.individual.disabled && !github.copilot.interactiveSession.individual.expired && !github.copilot.interactiveSession.enterprise.disabled && !github.copilot.interactiveSession.contactSupport",
+						"title": "%ownrex.ai.walkthrough.setup.signIn.title%",
+						"description": "%ownrex.ai.walkthrough.setup.signIn.description%",
+						"when": "chatEntitlementSignedOut && !view.workbench.panel.chat.view.copilot.visible && !ownrex.ai-chat.activated && !ownrex.ai.offline && !ownrex.ai.interactiveSession.individual.disabled && !ownrex.ai.interactiveSession.individual.expired && !ownrex.ai.interactiveSession.enterprise.disabled && !ownrex.ai.interactiveSession.contactSupport",
 						"media": {
 							"video": {
 								"dark": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace.mp4",
@@ -4778,14 +4778,14 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.panelChat.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.panelChat.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.setup.signInNoAction",
-						"title": "%github.copilot.walkthrough.setup.signIn.title%",
-						"description": "%github.copilot.walkthrough.setup.noAction.description%",
-						"when": "chatEntitlementSignedOut && view.workbench.panel.chat.view.copilot.visible && !github.copilot-chat.activated && !github.copilot.offline && !github.copilot.interactiveSession.individual.disabled && !github.copilot.interactiveSession.individual.expired && !github.copilot.interactiveSession.enterprise.disabled && !github.copilot.interactiveSession.contactSupport",
+						"title": "%ownrex.ai.walkthrough.setup.signIn.title%",
+						"description": "%ownrex.ai.walkthrough.setup.noAction.description%",
+						"when": "chatEntitlementSignedOut && view.workbench.panel.chat.view.copilot.visible && !ownrex.ai-chat.activated && !ownrex.ai.offline && !ownrex.ai.interactiveSession.individual.disabled && !ownrex.ai.interactiveSession.individual.expired && !ownrex.ai.interactiveSession.enterprise.disabled && !ownrex.ai.interactiveSession.contactSupport",
 						"media": {
 							"video": {
 								"dark": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace.mp4",
@@ -4793,14 +4793,14 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.panelChat.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.panelChat.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.setup.signUp",
-						"title": "%github.copilot.walkthrough.setup.signUp.title%",
-						"description": "%github.copilot.walkthrough.setup.signUp.description%",
-						"when": "chatPlanCanSignUp && !view.workbench.panel.chat.view.copilot.visible && !github.copilot-chat.activated && !github.copilot.offline && (github.copilot.interactiveSession.individual.disabled || github.copilot.interactiveSession.individual.expired) && !github.copilot.interactiveSession.enterprise.disabled && !github.copilot.interactiveSession.contactSupport",
+						"title": "%ownrex.ai.walkthrough.setup.signUp.title%",
+						"description": "%ownrex.ai.walkthrough.setup.signUp.description%",
+						"when": "chatPlanCanSignUp && !view.workbench.panel.chat.view.copilot.visible && !ownrex.ai-chat.activated && !ownrex.ai.offline && (ownrex.ai.interactiveSession.individual.disabled || ownrex.ai.interactiveSession.individual.expired) && !ownrex.ai.interactiveSession.enterprise.disabled && !ownrex.ai.interactiveSession.contactSupport",
 						"media": {
 							"video": {
 								"dark": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace.mp4",
@@ -4808,14 +4808,14 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.panelChat.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.panelChat.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.setup.signUpNoAction",
-						"title": "%github.copilot.walkthrough.setup.signUp.title%",
-						"description": "%github.copilot.walkthrough.setup.noAction.description%",
-						"when": "chatPlanCanSignUp && view.workbench.panel.chat.view.copilot.visible && !github.copilot-chat.activated && !github.copilot.offline && (github.copilot.interactiveSession.individual.disabled || github.copilot.interactiveSession.individual.expired) && !github.copilot.interactiveSession.enterprise.disabled && !github.copilot.interactiveSession.contactSupport",
+						"title": "%ownrex.ai.walkthrough.setup.signUp.title%",
+						"description": "%ownrex.ai.walkthrough.setup.noAction.description%",
+						"when": "chatPlanCanSignUp && view.workbench.panel.chat.view.copilot.visible && !ownrex.ai-chat.activated && !ownrex.ai.offline && (ownrex.ai.interactiveSession.individual.disabled || ownrex.ai.interactiveSession.individual.expired) && !ownrex.ai.interactiveSession.enterprise.disabled && !ownrex.ai.interactiveSession.contactSupport",
 						"media": {
 							"video": {
 								"dark": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace.mp4",
@@ -4823,13 +4823,13 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.panelChat.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.panelChat.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.panelChat",
-						"title": "%github.copilot.walkthrough.panelChat.title%",
-						"description": "%github.copilot.walkthrough.panelChat.description%",
+						"title": "%ownrex.ai.walkthrough.panelChat.title%",
+						"description": "%ownrex.ai.walkthrough.panelChat.description%",
 						"when": "!chatEntitlementSignedOut || chatIsEnabled ",
 						"media": {
 							"video": {
@@ -4838,13 +4838,13 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/workspace-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.panelChat.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.panelChat.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.edits",
-						"title": "%github.copilot.walkthrough.edits.title%",
-						"description": "%github.copilot.walkthrough.edits.description%",
+						"title": "%ownrex.ai.walkthrough.edits.title%",
+						"description": "%ownrex.ai.walkthrough.edits.description%",
 						"when": "!chatEntitlementSignedOut || chatIsEnabled ",
 						"media": {
 							"video": {
@@ -4853,13 +4853,13 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/edits-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/edits-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.edits.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.edits.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.firstSuggest",
-						"title": "%github.copilot.walkthrough.firstSuggest.title%",
-						"description": "%github.copilot.walkthrough.firstSuggest.description%",
+						"title": "%ownrex.ai.walkthrough.firstSuggest.title%",
+						"description": "%ownrex.ai.walkthrough.firstSuggest.description%",
 						"when": "!chatEntitlementSignedOut || chatIsEnabled ",
 						"media": {
 							"video": {
@@ -4868,13 +4868,13 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/ghost-text-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/ghost-text-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.firstSuggest.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.firstSuggest.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.inlineChatNotMac",
-						"title": "%github.copilot.walkthrough.inlineChatNotMac.title%",
-						"description": "%github.copilot.walkthrough.inlineChatNotMac.description%",
+						"title": "%ownrex.ai.walkthrough.inlineChatNotMac.title%",
+						"description": "%ownrex.ai.walkthrough.inlineChatNotMac.description%",
 						"when": "!isMac && (!chatEntitlementSignedOut || chatIsEnabled )",
 						"media": {
 							"video": {
@@ -4883,13 +4883,13 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/inline-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/inline-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.inlineChatNotMac.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.inlineChatNotMac.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.inlineChatMac",
-						"title": "%github.copilot.walkthrough.inlineChatMac.title%",
-						"description": "%github.copilot.walkthrough.inlineChatMac.description%",
+						"title": "%ownrex.ai.walkthrough.inlineChatMac.title%",
+						"description": "%ownrex.ai.walkthrough.inlineChatMac.description%",
 						"when": "isMac && (!chatEntitlementSignedOut || chatIsEnabled )",
 						"media": {
 							"video": {
@@ -4898,13 +4898,13 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/inline-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/inline-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.inlineChatMac.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.inlineChatMac.media.altText%"
 						}
 					},
 					{
 						"id": "copilot.sparkle",
-						"title": "%github.copilot.walkthrough.sparkle.title%",
-						"description": "%github.copilot.walkthrough.sparkle.description%",
+						"title": "%ownrex.ai.walkthrough.sparkle.title%",
+						"description": "%ownrex.ai.walkthrough.sparkle.description%",
 						"when": "!chatEntitlementSignedOut || chatIsEnabled",
 						"media": {
 							"video": {
@@ -4913,7 +4913,7 @@
 								"hc": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/git-commit-hc.mp4",
 								"hcLight": "https://vscodewalkthroughs.z1.web.core.windows.net/v0.26/git-commit-hclight.mp4"
 							},
-							"altText": "%github.copilot.walkthrough.sparkle.media.altText%"
+							"altText": "%ownrex.ai.walkthrough.sparkle.media.altText%"
 						}
 					}
 				]
@@ -4942,7 +4942,7 @@
 				"inputPlaceholder": "Run local tasks with Claude Code, type `#` for adding context",
 				"order": 3,
 				"description": "The Claude Code Agent works on your local machine",
-				"when": "config.github.copilot.chat.claudeCode.enabled",
+				"when": "config.ownrex.ai.chat.claudeCode.enabled",
 				"canDelegate": true,
 				"capabilities": {
 					"supportsFileAttachments": true
@@ -4981,7 +4981,7 @@
 				"order": 2,
 				"canDelegate": true,
 				"description": "Delegate tasks to a background agent.",
-				"when": "config.github.copilot.chat.backgroundAgent.enabled",
+				"when": "config.ownrex.ai.chat.backgroundAgent.enabled",
 				"capabilities": {
 					"supportsFileAttachments": true,
 					"supportsProblemAttachments": true,
@@ -4994,7 +4994,7 @@
 					{
 						"name": "delegate",
 						"description": "Delegate chat session to cloud agent and create associated PR",
-						"when": "config.github.copilot.chat.cloudAgent.enabled"
+						"when": "config.ownrex.ai.chat.cloudAgent.enabled"
 					}
 				]
 			},
@@ -5012,7 +5012,7 @@
 				"order": 1,
 				"canDelegate": true,
 				"description": "Delegate tasks to the GitHub Copilot Cloud Agent. The agent works asynchronously in the cloud to implement changes, iterates via chat, and can create or update pull requests as needed.",
-				"when": "config.github.copilot.chat.cloudAgent.enabled",
+				"when": "config.ownrex.ai.chat.cloudAgent.enabled",
 				"capabilities": {
 					"supportsFileAttachments": true
 				}
@@ -5063,7 +5063,7 @@
 		]
 	},
 	"extensionPack": [
-		"GitHub.copilot"
+		"ownrex.ai"
 	],
 	"prettier": {
 		"useTabs": true,

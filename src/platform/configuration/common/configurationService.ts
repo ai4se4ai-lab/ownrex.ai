@@ -23,7 +23,7 @@ import { AlternativeNotebookFormat } from '../../notebook/common/alternativeCont
 import { IExperimentationService } from '../../telemetry/common/nullExperimentationService';
 import { IValidator, vBoolean, vString } from './validator';
 
-export const CopilotConfigPrefix = 'github.copilot';
+export const CopilotConfigPrefix = 'ownrex.ai';
 
 export const IConfigurationService = createServiceIdentifier<IConfigurationService>('IConfigurationService');
 
@@ -359,13 +359,13 @@ export namespace ConfigValueValidators {
 
 export interface BaseConfig<T> {
 	/**
-	 * Key as it appears in settings.json minus the "github.copilot." prefix.
+	 * Key as it appears in settings.json minus the "ownrex.ai." prefix.
 	 * e.g. "advanced.debug.overrideProxyUrl"
 	 */
 	readonly id: string;
 
 	/**
-	 * The old key as it appears in settings.json minus the "github.copilot." prefix.
+	 * The old key as it appears in settings.json minus the "ownrex.ai." prefix.
 	 */
 	readonly oldId?: string;
 
@@ -375,18 +375,18 @@ export interface BaseConfig<T> {
 	readonly isPublic: boolean;
 
 	/**
-	 * The fully qualified id, e.g. "github.copilot.advanced.debug.overrideProxyUrl".
+	 * The fully qualified id, e.g. "ownrex.ai.advanced.debug.overrideProxyUrl".
 	 * Use this with `affectsConfiguration` from the ConfigurationChangeEvent
 	 */
 	readonly fullyQualifiedId: string;
 
 	/**
-	 * The fully qualified old id, e.g. "github.copilot.advanced.debug.overrideProxyUrl".
+	 * The fully qualified old id, e.g. "ownrex.ai.advanced.debug.overrideProxyUrl".
 	 */
 	readonly fullyQualifiedOldId?: string | undefined;
 
 	/**
-	 * The `X` in `github.copilot.advanced.X` settings.
+	 * The `X` in `ownrex.ai.advanced.X` settings.
 	 */
 	readonly advancedSubKey: string | undefined;
 
@@ -467,13 +467,13 @@ function toBaseConfig<T>(key: string, defaultValue: ConfigDefaultValue<T>, optio
 			throw new BugIndicatingError(`The expiration date for setting ${key} is not a valid date`);
 		}
 	}
-	const advancedSubKey = fullyQualifiedId.startsWith('github.copilot.advanced.') ? fullyQualifiedId.substring('github.copilot.advanced.'.length) : undefined;
+	const advancedSubKey = fullyQualifiedId.startsWith('ownrex.ai.advanced.') ? fullyQualifiedId.substring('ownrex.ai.advanced.'.length) : undefined;
 	return { id: key, oldId: options?.oldKey, isPublic, fullyQualifiedId, fullyQualifiedOldId, advancedSubKey, defaultValue, options };
 }
 
 class ConfigRegistry {
 	/**
-	 * A map of all registered configs, keyed by their full id, eg `github.copilot.advanced.debug.overrideProxyUrl`.
+	 * A map of all registered configs, keyed by their full id, eg `ownrex.ai.advanced.debug.overrideProxyUrl`.
 	 */
 	public readonly configs: Map<string, Config<any> | ExperimentBasedConfig<any>> = new Map();
 
@@ -514,7 +514,7 @@ function defineSetting<T extends ExperimentBasedConfigType>(key: string, configT
 	if (configType === ConfigType.ExperimentBased) {
 		const value: ExperimentBasedConfig<T> = { ...toBaseConfig(key, defaultValue, options), configType: ConfigType.ExperimentBased, experimentName: expOptions?.experimentName, validator };
 		if (value.advancedSubKey) {
-			// This is a `github.copilot.advanced.*` setting
+			// This is a `ownrex.ai.advanced.*` setting
 			throw new BugIndicatingError('Shared settings cannot be experiment based');
 		}
 		globalConfigRegistry.registerConfig(value);

@@ -20,12 +20,12 @@ import { ensureNodePtyShim } from './nodePtyShim';
 import { PermissionRequest } from './permissionHelpers';
 import { ensureRipgrepShim } from './ripgrepShim';
 
-const COPILOT_CLI_MODEL_MEMENTO_KEY = 'github.copilot.cli.sessionModel';
-const COPILOT_CLI_REQUEST_MAP_KEY = 'github.copilot.cli.requestMap';
+const COPILOT_CLI_MODEL_MEMENTO_KEY = 'ownrex.ai.cli.sessionModel';
+const COPILOT_CLI_REQUEST_MAP_KEY = 'ownrex.ai.cli.requestMap';
 // Store last used Agent per workspace.
-const COPILOT_CLI_AGENT_MEMENTO_KEY = 'github.copilot.cli.customAgent';
+const COPILOT_CLI_AGENT_MEMENTO_KEY = 'ownrex.ai.cli.customAgent';
 // Store last used Agent for a Session.
-const COPILOT_CLI_SESSION_AGENTS_MEMENTO_KEY = 'github.copilot.cli.sessionAgents';
+const COPILOT_CLI_SESSION_AGENTS_MEMENTO_KEY = 'ownrex.ai.cli.sessionAgents';
 export const COPILOT_CLI_DEFAULT_AGENT_ID = '___vscode_default___';
 
 export class CopilotCLISessionOptions {

@@ -20,7 +20,7 @@
 				"dbaeumer.vscode-eslint",
 				"esbenp.prettier-vscode",
 				"connor4312.esbuild-problem-matchers",
-				"GitHub.copilot@prerelease",
+				"ownrex.ai@prerelease",
 				"ms-vscode.extension-test-runner"
 			]
 		}

@@ -22,9 +22,9 @@ export class UserInfoStore extends Disposable {
 	private _onDidChangeUserInfo = this._register(new Emitter<void>());
 	readonly onDidChangeUserInfo = this._onDidChangeUserInfo.event;
 
-	static INTERNAL_ORG_STORAGE_KEY = 'exp.github.copilot.internalOrg';
-	static SKU_STORAGE_KEY = 'exp.github.copilot.sku';
-	static IS_FCV1_STORAGE_KEY = 'exp.github.copilot.isFcv1';
+	static INTERNAL_ORG_STORAGE_KEY = 'exp.ownrex.ai.internalOrg';
+	static SKU_STORAGE_KEY = 'exp.ownrex.ai.sku';
+	static IS_FCV1_STORAGE_KEY = 'exp.ownrex.ai.isFcv1';
 	constructor(private readonly context: IVSCodeExtensionContext, copilotTokenStore: ICopilotTokenStore) {
 		super();
 

@@ -16,15 +16,15 @@ export class SearchPanelCommands extends Disposable {
 		@IFeedbackReporter private readonly feedbackReporter: IFeedbackReporter,
 	) {
 		super();
-		this._register(vscode.commands.registerCommand('github.copilot.search.markHelpful', () => {
+		this._register(vscode.commands.registerCommand('ownrex.ai.search.markHelpful', () => {
 			this.sendFeedback(SearchFeedbackKind.Helpful);
 		}));
-		this._register(vscode.commands.registerCommand('github.copilot.search.markUnhelpful', () => {
+		this._register(vscode.commands.registerCommand('ownrex.ai.search.markUnhelpful', () => {
 			this.sendFeedback(SearchFeedbackKind.Unhelpful);
 		}));
-		this._register(vscode.commands.registerCommand('github.copilot.search.feedback', () => {
+		this._register(vscode.commands.registerCommand('ownrex.ai.search.feedback', () => {
 			this.sendFeedback(SearchFeedbackKind.Feedback);
-			vscode.commands.executeCommand('github.copilot.report', `Copilot search feedback: "${SemanticSearchTextSearchProvider.latestQuery}"`);
+			vscode.commands.executeCommand('ownrex.ai.report', `Copilot search feedback: "${SemanticSearchTextSearchProvider.latestQuery}"`);
 		}));
 	}
 

@@ -49,16 +49,65 @@ export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManage
 		// Try to get from Ownrex-specific config first
 		const ownrexUrl = this.configurationService.getConfig<string>('ownrex.backendUrl' as unknown);
 		if (ownrexUrl) {
-			return ownrexUrl;
+			// Validate and sanitize URL
+			const sanitized = this._sanitizeUrl(ownrexUrl);
+			if (sanitized) {
+				return sanitized;
+			}
+			this.logService.warn(`[OwnrexTokenManager] Invalid backend URL in config: ${ownrexUrl}, using default`);
 		}
 
 		// Fall back to environment variable
 		if (typeof process !== 'undefined' && process.env.OWNREX_BACKEND_URL) {
-			return process.env.OWNREX_BACKEND_URL;
+			const sanitized = this._sanitizeUrl(process.env.OWNREX_BACKEND_URL);
+			if (sanitized) {
+				return sanitized;
+			}
+			this.logService.warn(`[OwnrexTokenManager] Invalid backend URL in env: ${process.env.OWNREX_BACKEND_URL}, using default`);
 		}
 
 		// Default to localhost
 		return 'http://localhost:8000';
+	}
+
+	/**
+	 * Sanitize and validate a URL string
+	 */
+	private _sanitizeUrl(url: string | undefined): string | undefined {
+		if (!url || typeof url !== 'string') {
+			return undefined;
+		}
+
+		// Trim whitespace
+		url = url.trim();
+
+		// Remove any invalid characters that could cause URI parsing errors
+		// Ensure it starts with http:// or https://
+		if (!/^https?:\/\//i.test(url)) {
+			// If it doesn't start with http:// or https://, try to fix it
+			if (url.startsWith('//')) {
+				url = 'http:' + url;
+			} else if (!url.includes('://')) {
+				// Assume http:// if no scheme
+				url = 'http://' + url;
+			} else {
+				// Invalid scheme, return undefined
+				return undefined;
+			}
+		}
+
+		// Remove trailing slash for consistency
+		url = url.replace(/\/$/, '');
+
+		// Basic validation - check for invalid characters in scheme
+		try {
+			// Try to create a URL object to validate
+			new URL(url);
+			return url;
+		} catch (e) {
+			this.logService.warn(`[OwnrexTokenManager] URL validation failed: ${url}`, e);
+			return undefined;
+		}
 	}
 
 	/**
@@ -87,9 +136,13 @@ export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManage
 		const now = Math.floor(Date.now() / 1000); // Current time in seconds
 
 		// Return cached token if still valid and not forced refresh
-		if (!force && this.cachedTokenInfo && this.tokenExpiresAt > now) {
-			this.logService.debug('[OwnrexTokenManager] Returning cached token info');
-			return this.cachedTokenInfo;
+		// Also allow using cached token if expired but less than 1 hour ago (grace period for rate limits)
+		const gracePeriod = 3600; // 1 hour grace period in seconds
+		if (!force && this.cachedTokenInfo) {
+			if (this.tokenExpiresAt > now || (this.tokenExpiresAt + gracePeriod > now)) {
+				this.logService.debug('[OwnrexTokenManager] Returning cached token info');
+				return this.cachedTokenInfo;
+			}
 		}
 
 		const apiKey = this.getApiKey();
@@ -98,7 +151,7 @@ export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManage
 		this.logService.info(`[OwnrexTokenManager] Fetching token info from backend: ${backendUrl}`);
 
 		try {
-			// Fetch token info from backend
+			// Fetch token info from backend (with retry logic and rate limit handling)
 			const tokenInfo = await this.backendTokenService.getTokenInfo(apiKey, backendUrl);
 
 			// Cache the token info
@@ -109,7 +162,42 @@ export class OwnrexTokenManager extends Disposable implements IOwnrexTokenManage
 			this.logService.info('[OwnrexTokenManager] Token info fetched and cached successfully');
 			return tokenInfo;
 		} catch (error) {
-			this.logService.error(`[OwnrexTokenManager] Failed to fetch token info: ${error}`);
+			// If fetch failed but we have a cached token, use it as fallback
+			if (this.cachedTokenInfo) {
+				this.logService.warn(`[OwnrexTokenManager] Failed to fetch token info, using cached token: ${error}`);
+				return this.cachedTokenInfo;
+			}
+
+			// If rate limited and no cached token, create a minimal fallback token
+			const isRateLimitError = error instanceof Error && error.message.includes('429');
+			if (isRateLimitError) {
+				this.logService.warn(`[OwnrexTokenManager] Rate limited with no cached token, creating fallback token from configuration`);
+				const fallbackToken: BackendTokenInfo = {
+					token: apiKey,
+					endpoints: {
+						api: backendUrl,
+						proxy: backendUrl,
+						telemetry: backendUrl,
+						'origin-tracker': backendUrl
+					},
+					chat_enabled: true,
+					code_quote_enabled: false,
+					copilotignore_enabled: false,
+					individual: true,
+					sku: 'ownrex_free',
+					expires_at: now + 3600, // 1 hour expiration
+					refresh_in: 3600
+				};
+
+				// Cache the fallback token
+				this.cachedTokenInfo = fallbackToken;
+				this.tokenExpiresAt = fallbackToken.expires_at;
+
+				this.logService.warn(`[OwnrexTokenManager] Using fallback token. Extension may have limited functionality until rate limit resets.`);
+				return fallbackToken;
+			}
+
+			this.logService.error(`[OwnrexTokenManager] Failed to fetch token info and no cached token available: ${error}`);
 			throw error;
 		}
 	}

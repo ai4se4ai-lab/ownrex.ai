@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { commands, extensions, window } from 'vscode';
 import { IAuthenticationService, MinimalModeError } from '../../../platform/authentication/common/authentication';
+import { isOwnrexEnabled } from '../../../platform/authentication/node/ownrexServices';
 import { ConfigKey, IConfigurationService } from '../../../platform/configuration/common/configurationService';
 import { IEnvService } from '../../../platform/env/common/envService';
 import { ILogService } from '../../../platform/log/common/logService';
@@ -13,30 +14,29 @@ import { TelemetryData } from '../../../platform/telemetry/common/telemetryData'
 import { Disposable } from '../../../util/vs/base/common/lifecycle';
 import { autorun } from '../../../util/vs/base/common/observableInternal';
 import { GHPR_EXTENSION_ID } from '../../chatSessions/vscode/chatSessionsUriHandler';
-import { isOwnrexEnabled } from '../../../platform/authentication/node/ownrexServices';
 
 const welcomeViewContextKeys = {
-	Activated: 'github.copilot-chat.activated',
-	Offline: 'github.copilot.offline',
-	IndividualDisabled: 'github.copilot.interactiveSession.individual.disabled',
-	IndividualExpired: 'github.copilot.interactiveSession.individual.expired',
-	ContactSupport: 'github.copilot.interactiveSession.contactSupport',
-	EnterpriseDisabled: 'github.copilot.interactiveSession.enterprise.disabled',
-	CopilotChatDisabled: 'github.copilot.interactiveSession.chatDisabled'
+	Activated: 'ownrex.ai-chat.activated',
+	Offline: 'ownrex.ai.offline',
+	IndividualDisabled: 'ownrex.ai.interactiveSession.individual.disabled',
+	IndividualExpired: 'ownrex.ai.interactiveSession.individual.expired',
+	ContactSupport: 'ownrex.ai.interactiveSession.contactSupport',
+	EnterpriseDisabled: 'ownrex.ai.interactiveSession.enterprise.disabled',
+	CopilotChatDisabled: 'ownrex.ai.interactiveSession.chatDisabled'
 };
 
-const chatQuotaExceededContextKey = 'github.copilot.chat.quotaExceeded';
+const chatQuotaExceededContextKey = 'ownrex.ai.chat.quotaExceeded';
 
-const showLogViewContextKey = `github.copilot.chat.showLogView`;
-const debugReportFeedbackContextKey = 'github.copilot.debugReportFeedback';
+const showLogViewContextKey = `ownrex.ai.chat.showLogView`;
+const debugReportFeedbackContextKey = 'ownrex.ai.debugReportFeedback';
 
-const previewFeaturesDisabledContextKey = 'github.copilot.previewFeaturesDisabled';
+const previewFeaturesDisabledContextKey = 'ownrex.ai.previewFeaturesDisabled';
 
-const debugContextKey = 'github.copilot.chat.debug';
+const debugContextKey = 'ownrex.ai.chat.debug';
 
-const missingPermissiveSessionContextKey = 'github.copilot.auth.missingPermissiveSession';
+const missingPermissiveSessionContextKey = 'ownrex.ai.auth.missingPermissiveSession';
 
-export const prExtensionInstalledContextKey = 'github.copilot.prExtensionInstalled';
+export const prExtensionInstalledContextKey = 'ownrex.ai.prExtensionInstalled';
 
 export class ContextKeysContribution extends Disposable {
 
@@ -54,11 +54,19 @@ export class ContextKeysContribution extends Disposable {
 	) {
 		super();
 
+		// Set activated context key immediately so VS Code knows the extension is ready
+		// This prevents VS Code from showing the "Chat took too long to get ready" error
+		// We'll update it later based on actual token status
+		if (isOwnrexEnabled()) {
+			commands.executeCommand('setContext', welcomeViewContextKeys.Activated, true);
+			this._logService.info('[context keys] Ownrex.ai extension activated - setting context key immediately');
+		}
+
 		void this._inspectContext().catch(console.error);
 		void this._updatePermissiveSessionContext().catch(console.error);
 		this._register(_authenticationService.onDidAuthenticationChange(async () => await this._onAuthenticationChange()));
-		this._register(commands.registerCommand('github.copilot.refreshToken', async () => await this._inspectContext()));
-		this._register(commands.registerCommand('github.copilot.debug.showChatLogView', async () => {
+		this._register(commands.registerCommand('ownrex.ai.refreshToken', async () => await this._inspectContext()));
+		this._register(commands.registerCommand('ownrex.ai.debug.showChatLogView', async () => {
 			this._showLogView = true;
 			await commands.executeCommand('setContext', showLogViewContextKey, true);
 			await commands.executeCommand('copilot-chat.focus');

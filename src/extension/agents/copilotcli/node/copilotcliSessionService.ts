@@ -27,7 +27,7 @@ import { CopilotCLISession, ICopilotCLISession } from './copilotcliSession';
 import { getCopilotLogger } from './logger';
 import { ICopilotCLIMCPHandler } from './mcpHandler';
 
-const COPILOT_CLI_WORKSPACE_JSON_FILE_KEY = 'github.copilot.cli.workspaceSessionFile';
+const COPILOT_CLI_WORKSPACE_JSON_FILE_KEY = 'ownrex.ai.cli.workspaceSessionFile';
 
 export interface ICopilotCLISessionItem {
 	readonly id: string;

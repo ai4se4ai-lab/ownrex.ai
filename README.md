@@ -54,6 +54,62 @@ Your code is yours. We follow responsible practices to ensure that your code sni
 
 To get the latest security fixes, please use the latest version of the extension and VS Code.
 
+## Development
+
+### Prerequisites
+
+- Node.js >= 22.14.0
+- npm >= 9.0.0
+- Visual Studio Code >= 1.95.0
+
+### Building and Running the Extension
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+   Note: If you encounter build errors related to native modules (like `sqlite3`), you can install with `--ignore-scripts` flag:
+   ```bash
+   npm install --ignore-scripts
+   ```
+
+2. **Build the extension:**
+   ```bash
+   npm run compile    # Development build
+   # or
+   npm run build      # Production build
+   ```
+
+3. **Run the extension:**
+
+   **Option A: Using VS Code (Recommended)**
+   - Open the project in VS Code
+   - Press `F5` or go to Run and Debug (`Ctrl+Shift+D`)
+   - Select "Run Extension" from the dropdown
+   - A new Extension Development Host window will open with the extension loaded
+
+   **Option B: Using Command Line**
+   ```bash
+   code --extensionDevelopmentPath="<path-to-extension-folder>"
+   ```
+
+   For example:
+   ```bash
+   code --extensionDevelopmentPath="C:\Users\babaei\Desktop\Research\Ai4SE4AI\ownrex.ai"
+   ```
+
+   Or on Unix/Mac:
+   ```bash
+   code --extensionDevelopmentPath="$(pwd)"
+   ```
+
+4. **Development with Watch Mode:**
+   ```bash
+   npm run watch
+   ```
+   This will automatically rebuild the extension when you make changes. Then press `F5` in VS Code to launch the extension.
+
 ### Resources & next steps
 * **Get started with [Ownrex.ai on GitHub](https://github.com/ai4se4ai-lab/ownrex.ai)**
 * **[Feedback](https://github.com/ai4se4ai-lab/ownrex.ai/issues)**: We'd love to get your help in making Ownrex.ai better!
@@ -61,6 +117,61 @@ To get the latest security fixes, please use the latest version of the extension
 ## Data and telemetry
 
 The Ownrex.ai Extension for Visual Studio Code collects usage data to help improve our products and services. This extension respects the `telemetry.telemetryLevel` setting which you can learn more about at https://code.visualstudio.com/docs/supporting/faq#_how-to-disable-telemetry-reporting.
+
+## Troubleshooting
+
+### Known Issues
+
+#### GitHub Copilot Extension Conflicts
+
+If you see errors like `command 'ownrex.ai.interactiveSession.feedback' already exists` in the VS Code console, this is due to conflicts with the GitHub Copilot extension. These are third-party extension issues and cannot be fixed in this codebase.
+
+**Workaround:**
+1. Disable and re-enable the GitHub Copilot extension
+2. Restart VS Code
+3. If the issue persists, try disabling one of the conflicting extensions temporarily
+
+#### "No default agent registered" Error
+
+This error appears to be a VS Code internal chat service configuration issue and is not directly related to Ownrex.ai. If you encounter this:
+
+1. Check that VS Code is up to date
+2. Try restarting VS Code
+3. Check VS Code's extension host logs for more details
+
+#### Command ID Conflicts
+
+If you see errors like `Cannot register two commands with the same id: workbench.action.chat.openPlan`, this is a VS Code internal issue where commands are being registered multiple times. This typically occurs when:
+
+- Multiple extensions try to register the same VS Code internal command
+- VS Code's workbench contributions are loaded multiple times
+- Extension host is restarted while extensions are still initializing
+
+**Workaround:**
+1. Restart VS Code completely (close all windows)
+2. Check for extension conflicts in the Extensions view
+3. Try disabling other chat-related extensions temporarily
+4. Update VS Code to the latest version
+
+#### SQLite Experimental Warning
+
+The warning `(node:xxxx) ExperimentalWarning: SQLite is an experimental feature and might change at any time` is informational only. This is a Node.js warning about SQLite being an experimental feature and does not affect functionality. It can be safely ignored.
+
+#### Punycode Deprecation Warning
+
+The warning `[DEP0040] DeprecationWarning: The 'punycode' module is deprecated` is a Node.js deprecation notice. This warning comes from Node.js itself or a transitive dependency (not directly from Ownrex.ai code). The `punycode` module is being deprecated in favor of userland alternatives, but this does not affect current functionality. This warning can be safely ignored and will be resolved when dependencies update to use the new alternatives.
+
+### Extension Runtime Errors
+
+If you encounter runtime errors related to Git repositories or observable arrays:
+
+- The extension now includes defensive programming to handle edge cases
+- Errors should be logged but won't crash the extension
+- Check the VS Code Developer Console (Help > Toggle Developer Tools) for detailed error messages
+
+#### Observable Event Handling Errors
+
+If you see errors related to `observableFromEvent` or event subscriptions (e.g., in `completionsUnificationContribution.ts`), these have been fixed to properly handle cases where optional events may not be available. The extension now uses `Event.None` as a fallback for missing events, preventing runtime errors.
 
 ## Trademarks
 

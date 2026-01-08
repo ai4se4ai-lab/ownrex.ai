@@ -112,51 +112,51 @@ export class ConfigurationMigrationContribution implements IExtensionContributio
 }
 
 ConfigurationMigrationRegistry.registerConfigurationMigrations([{
-	key: 'github.copilot.chat.experimental.setupTests.enabled',
+	key: 'ownrex.ai.chat.experimental.setupTests.enabled',
 	migrateFn: async (value: any) => {
 		return [
-			['github.copilot.chat.setupTests.enabled', { value }],
-			['github.copilot.chat.experimental.setupTests.enabled', { value: undefined }]
+			['ownrex.ai.chat.setupTests.enabled', { value }],
+			['ownrex.ai.chat.experimental.setupTests.enabled', { value: undefined }]
 		];
 	}
 }]);
 
 ConfigurationMigrationRegistry.registerConfigurationMigrations([{
-	key: 'github.copilot.chat.experimental.codeGeneration.instructions',
+	key: 'ownrex.ai.chat.experimental.codeGeneration.instructions',
 	migrateFn: async (value: any) => {
 		return [
-			['github.copilot.chat.codeGeneration.instructions', { value }],
-			['github.copilot.chat.experimental.codeGeneration.instructions', { value: undefined }]
+			['ownrex.ai.chat.codeGeneration.instructions', { value }],
+			['ownrex.ai.chat.experimental.codeGeneration.instructions', { value: undefined }]
 		];
 	}
 }]);
 
 ConfigurationMigrationRegistry.registerConfigurationMigrations([{
-	key: 'github.copilot.chat.experimental.codeGeneration.useInstructionFiles',
+	key: 'ownrex.ai.chat.experimental.codeGeneration.useInstructionFiles',
 	migrateFn: async (value: any) => {
 		return [
-			['github.copilot.chat.codeGeneration.useInstructionFiles', { value }],
-			['github.copilot.chat.experimental.codeGeneration.useInstructionFiles', { value: undefined }]
+			['ownrex.ai.chat.codeGeneration.useInstructionFiles', { value }],
+			['ownrex.ai.chat.experimental.codeGeneration.useInstructionFiles', { value: undefined }]
 		];
 	}
 }]);
 
 ConfigurationMigrationRegistry.registerConfigurationMigrations([{
-	key: 'github.copilot.chat.experimental.testGeneration.instructions',
+	key: 'ownrex.ai.chat.experimental.testGeneration.instructions',
 	migrateFn: async (value: any) => {
 		return [
-			['github.copilot.chat.testGeneration.instructions', { value }],
-			['github.copilot.chat.experimental.testGeneration.instructions', { value: undefined }]
+			['ownrex.ai.chat.testGeneration.instructions', { value }],
+			['ownrex.ai.chat.experimental.testGeneration.instructions', { value: undefined }]
 		];
 	}
 }]);
 
 ConfigurationMigrationRegistry.registerConfigurationMigrations([{
-	key: 'github.copilot.chat.experimental.generateTests.codeLens',
+	key: 'ownrex.ai.chat.experimental.generateTests.codeLens',
 	migrateFn: async (value: any) => {
 		return [
-			['github.copilot.chat.generateTests.codeLens', { value }],
-			['github.copilot.chat.experimental.generateTests.codeLens', { value: undefined }]
+			['ownrex.ai.chat.generateTests.codeLens', { value }],
+			['ownrex.ai.chat.experimental.generateTests.codeLens', { value: undefined }]
 		];
 	}
 }]);
