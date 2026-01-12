@@ -8,21 +8,53 @@
  */
 
 import rateLimit, { RateLimitRequestHandler, Options } from 'express-rate-limit';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
+// Import config first to ensure dotenv.config() is called before we check env vars
 import { getConfig } from '../config';
 import { getLogger } from '../utils/logger';
 import { RATE_LIMIT, HTTP_STATUS, ERROR_TYPES } from '../config/constants';
 
 const logger = getLogger();
 
+// Check if rate limiting is disabled via environment variable (checked at module load time)
+// Also check at runtime to handle cases where env var is set after module load
+const isRateLimitDisabled = (): boolean => {
+	const disabled = process.env.DISABLE_RATE_LIMIT === 'true';
+	if (disabled) {
+		logger.debug('Rate limiting check: DISABLE_RATE_LIMIT=' + process.env.DISABLE_RATE_LIMIT + ', disabled=' + disabled);
+	}
+	return disabled;
+};
+
+const rateLimitDisabled = isRateLimitDisabled();
+
+if (rateLimitDisabled) {
+	logger.info('✅ Rate limiting is DISABLED via DISABLE_RATE_LIMIT environment variable');
+	logger.info('   DISABLE_RATE_LIMIT=' + process.env.DISABLE_RATE_LIMIT);
+} else {
+	logger.warn('⚠️  Rate limiting is ENABLED. DISABLE_RATE_LIMIT=' + (process.env.DISABLE_RATE_LIMIT || 'not set'));
+	logger.warn('   To disable rate limiting, set DISABLE_RATE_LIMIT=true in your .env file and restart the server');
+}
+
+/**
+ * No-op middleware when rate limiting is disabled
+ * Also checks at runtime to handle cases where env var changes
+ */
+const noOpRateLimiter = (_req: Request, _res: Response, next: NextFunction): void => {
+	// Double-check at runtime in case env var was set after module load
+	const currentlyDisabled = isRateLimitDisabled();
+	if (!currentlyDisabled && rateLimitDisabled) {
+		logger.warn('Rate limiting was enabled at runtime but module was loaded with it disabled. Restart server to apply changes.');
+	}
+	// Always allow the request through when using no-op middleware
+	next();
+};
+
 /**
  * Create a rate limiter with custom options
  */
 function createLimiter(options: Partial<Options> = {}): RateLimitRequestHandler {
 	const config = getConfig();
-
-	// Check if rate limiting is disabled via environment variable
-	const rateLimitDisabled = process.env.DISABLE_RATE_LIMIT === 'true';
 
 	return rateLimit({
 		windowMs: config.rateLimit.windowMs,
@@ -59,10 +91,7 @@ function createLimiter(options: Partial<Options> = {}): RateLimitRequestHandler 
 			});
 		},
 		skip: (req: Request): boolean => {
-			// Skip rate limiting if disabled or for health checks
-			if (rateLimitDisabled) {
-				return true;
-			}
+			// Skip rate limiting for health checks
 			return req.path === '/health' || req.path === '/v1/health';
 		},
 		...options
@@ -71,13 +100,16 @@ function createLimiter(options: Partial<Options> = {}): RateLimitRequestHandler 
 
 /**
  * Default rate limiter for all endpoints
+ * Returns no-op middleware if rate limiting is disabled
+ * Uses a function to check at runtime as well
  */
-export const defaultRateLimiter = createLimiter();
+export const defaultRateLimiter: RateLimitRequestHandler | ((req: Request, res: Response, next: NextFunction) => void) = rateLimitDisabled ? noOpRateLimiter : createLimiter();
 
 /**
  * Stricter rate limiter for chat endpoints
+ * Returns no-op middleware if rate limiting is disabled
  */
-export const chatRateLimiter = createLimiter({
+export const chatRateLimiter = rateLimitDisabled ? noOpRateLimiter : createLimiter({
 	max: RATE_LIMIT.CHAT_MAX_REQUESTS,
 	message: {
 		error: {
@@ -90,8 +122,9 @@ export const chatRateLimiter = createLimiter({
 
 /**
  * Stricter rate limiter for completion endpoints
+ * Returns no-op middleware if rate limiting is disabled
  */
-export const completionsRateLimiter = createLimiter({
+export const completionsRateLimiter = rateLimitDisabled ? noOpRateLimiter : createLimiter({
 	max: RATE_LIMIT.COMPLETIONS_MAX_REQUESTS,
 	message: {
 		error: {
@@ -104,8 +137,9 @@ export const completionsRateLimiter = createLimiter({
 
 /**
  * More lenient rate limiter for embeddings
+ * Returns no-op middleware if rate limiting is disabled
  */
-export const embeddingsRateLimiter = createLimiter({
+export const embeddingsRateLimiter = rateLimitDisabled ? noOpRateLimiter : createLimiter({
 	max: RATE_LIMIT.EMBEDDINGS_MAX_REQUESTS,
 	message: {
 		error: {
